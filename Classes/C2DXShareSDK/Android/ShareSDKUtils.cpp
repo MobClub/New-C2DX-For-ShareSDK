@@ -50,7 +50,7 @@ void callBackComplete(int reqID, int action, int platformId, __Dictionary* res){
 		infoCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
 	} else if (action == 9 && NULL != shareCb) { // 9 = ACTION_SHARE
 		shareCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, NULL);
-	} else if (action == 6 && NULL != followCb) { // 6 = FOLLOW_FRIEND
+	} else if (action == 6 && NULL != followFriendCb) { // 6 = FOLLOW_FRIEND
 		followFriendCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
 	} else if (action == 2 && NULL != getFriendsCb){ // 2 = ACTION_GET_FRIEND_LIST
 		getFriendsCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
@@ -64,7 +64,7 @@ void callBackError(int reqID, int action, int platformId, __Dictionary* res){
 		infoCb(reqID, C2DXResponseStateFail, (C2DXPlatType) platformId, res);
 	} else if (action == 9 && NULL != shareCb) { // 9 = ACTION_SHARE
 		shareCb(reqID, C2DXResponseStateFail, (C2DXPlatType) platformId, res);
-	} else if (action == 6 && NULL != followCb) { // 6 = FOLLOW_FRIEND
+	} else if (action == 6 && NULL != followFriendCb) { // 6 = FOLLOW_FRIEND
 		followFriendCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
 	} else if (action == 2 && NULL != getFriendsCb){ // 2 = ACTION_GET_FRIEND_LIST
 		getFriendsCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
@@ -78,7 +78,7 @@ void callBackCancel(int reqID, int action, int platformId, __Dictionary* res){
 		infoCb(reqID, C2DXResponseStateCancel, (C2DXPlatType) platformId, NULL);
 	} else if (action == 9 && NULL != shareCb) { // 9 = ACTION_SHARE
 		shareCb(reqID, C2DXResponseStateCancel, (C2DXPlatType) platformId, NULL);
-	} else if (action == 6 && NULL != followCb) { // 6 = FOLLOW_FRIEND
+	} else if (action == 6 && NULL != followFriendCb) { // 6 = FOLLOW_FRIEND
 		followFriendCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, NULL);
 	} else if (action == 2 && NULL != getFriendsCb){ // 2 = ACTION_GET_FRIEND_LIST
 		getFriendsCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, NULL);
@@ -90,10 +90,48 @@ bool getMethod(JniMethodInfo &mi, const char *methodName, const char *paramCode)
 }
 
 void releaseMethod(JniMethodInfo &mi) {
-	mi.env->DeleteLocalRef(mi.classID);
+	if(mi.classID != NULL)
+		mi.env->DeleteLocalRef(mi.classID);
 }
 
-bool rigisterAppAndSetPlatformConfig(const char* appKey, __Dictionary *platformInfos) {
+bool initSDKJNI(const char* appKey) {
+	JniMethodInfo mi;\
+	bool result = false;
+	bool isHave = getMethod(mi, "initSDK","(Ljava/lang/String;)V");
+	if(!isHave) {
+		return false;
+	}
+
+	jstring jKey = NULL;
+	if(appKey != NULL) {
+		jKey = mi.env->NewStringUTF(appKey);
+		mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jKey);
+		result = true;
+	}
+	releaseMethod(mi);
+	return result;
+}
+
+bool setPlatformConfigJNI(int platformId, __Dictionary *platConfig) {
+	JniMethodInfo mi;
+	bool isHave = getMethod(mi, "setPlatformConfig","(ILjava/lang/String;)V");
+	if(!isHave) {
+		return false;
+	}
+	jstring jConfig = NULL;
+	if(platConfig != NULL) {
+		CCJSONConverter* json = CCJSONConverter::sharedConverter();
+		const char* ccConfig = json->strFrom(platConfig);
+		jConfig = mi.env->NewStringUTF(ccConfig);
+	}
+
+	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, platformId, jConfig);
+	
+	releaseMethod(mi);
+	return true;
+}
+
+bool rigisterAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {
@@ -101,18 +139,20 @@ bool rigisterAppAndSetPlatformConfig(const char* appKey, __Dictionary *platformI
 	}
 	
 	jstring jInfo = NULL;
+	jstring jAppKey = NULL;
 	if (platformInfos != NULL) {
 		CCJSONConverter* json = CCJSONConverter::sharedConverter();
-		const char* ccInfo = json->strFrom(info);
+		const char* ccInfo = json->strFrom(platformInfos);
 		jInfo = mi.env->NewStringUTF(ccInfo);
 	}
-	
-	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, appKey, jInfo);
+	jAppKey = mi.env->NewStringUTF(appKey);
+
+	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jAppKey, jInfo);
 	releaseMethod(mi);
 	return true;
 }
 
-bool authorize(int reqID, int platformId, C2DXAuthResultEvent callback) {
+bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "authorize", "(II)V");
 	if (!isHave) {
@@ -125,7 +165,7 @@ bool authorize(int reqID, int platformId, C2DXAuthResultEvent callback) {
 	return true;
 }
 
-bool cancelAuthorize(int platformId) {
+bool cancelAuthorizeJNI(int platformId) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "removeAccount", "(I)V");
 	if (!isHave) {
@@ -137,7 +177,7 @@ bool cancelAuthorize(int platformId) {
 	return true;
 }
 
-bool isAuthorizedValid(int platformId) {
+bool isAuthorizedValidJNI(int platformId) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "isAuthValid", "(I)Z");
 	if (!isHave) {
@@ -149,7 +189,7 @@ bool isAuthorizedValid(int platformId) {
 	return valid == JNI_TRUE;
 }
 
-bool isClientValid(int platformId) {
+bool isClientValidJNI(int platformId) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "isClientValid", "(I)Z");
 	if (!isHave) {
@@ -161,7 +201,7 @@ bool isClientValid(int platformId) {
 	return valid == JNI_TRUE;
 }
 
-bool getUserInfo(int reqID, int platformId, C2DXGetUserInfoResultEvent callback){
+bool getUserInfoJNI(int reqID, int platformId, C2DXGetUserInfoResultEvent callback){
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "showUser", "(II)V");
 	if (!isHave) {
@@ -173,7 +213,7 @@ bool getUserInfo(int reqID, int platformId, C2DXGetUserInfoResultEvent callback)
 	return true;
 }
 
-bool addFriend(int reqID, int platformId, const char* account, C2DXAddFriendResultEvent callback){
+bool addFriendJNI(int reqID, int platformId, const char* account, C2DXAddFriendResultEvent callback){
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "followFriend", "(IILjava/lang/String;)V");
 	if(!isHave){
@@ -182,12 +222,12 @@ bool addFriend(int reqID, int platformId, const char* account, C2DXAddFriendResu
 	jstring jContent = mi.env->NewStringUTF(account);
 	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, reqID, platformId, jContent);
 	releaseMethod(mi);
-	followCb = callback;
+	followFriendCb = callback;
 
 	return true;
 }
 
-__Dictionary* getAuthInfo(int platformId){
+__Dictionary* getAuthInfoJNI(int platformId){
 	JniMethodInfo mi;
 	__Dictionary* dic;
 	bool isHave = getMethod(mi, "getAuthInfo", "(I)Ljava/lang/String;");
@@ -201,7 +241,7 @@ __Dictionary* getAuthInfo(int platformId){
 	return dic;
 }
 
-bool shareContent(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback){
+bool shareContentJNI(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback){
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "shareContent", "(IILjava/lang/String;)V");
 	if (!isHave) {
@@ -213,13 +253,21 @@ bool shareContent(int reqID, __Array *platTypes, __Dictionary *content, C2DXShar
 	jstring jContent = mi.env->NewStringUTF(ccContent);
 	// free(ccContent);
 
-	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, reqID, platTypes, jContent);
+	int platformId;
+	Integer* platform;
+	Ref* obj = NULL;
+	CCARRAY_FOREACH(platTypes,obj) {
+		platform = static_cast<Integer*>(obj);
+		platformId = platform->getValue();
+		mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, reqID, platformId, jContent);
+	}
+
 	releaseMethod(mi);
 	shareCb = callback;
 	return true;
 }
 
-bool getFriendList(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback){
+bool getFriendListJNI(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback){
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "getFriendList", "(IIII)V");
 	if (!isHave) {
@@ -231,7 +279,7 @@ bool getFriendList(int reqID, int platformId, int count, int page, C2DXGetFriend
 	return true;
 }
 
-bool onekeyShare(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback) {
+bool onekeyShareJNI(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "onekeyShare", "(IILjava/lang/String;)V");
 	if (!isHave) {
@@ -249,7 +297,7 @@ bool onekeyShare(int reqID, int platformId, __Dictionary *content, C2DXShareResu
 	return true;
 }
 
-void toastShow(const char *msg) {
+void toastShowJNI(const char *msg) {
     JniMethodInfo mi;
     bool isHave = getMethod(mi, "toast", "(Ljava/lang/String;)V");
 

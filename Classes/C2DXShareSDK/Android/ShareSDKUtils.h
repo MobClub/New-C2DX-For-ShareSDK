@@ -42,29 +42,34 @@ bool getMethod(JniMethodInfo &mi, const char *methodName, const char *paramCode)
 
 void releaseMethod(JniMethodInfo &mi);
 
-bool rigisterAppAndSetPlatformConfig(const char* appKey, __Dictionary *platformInfos);
+//jni methods
+bool initSDKJNI(const char* appKey);
 
-bool authorize(int reqID, int platformId, C2DXAuthResultEvent callback);
+bool setPlatformConfigJNI(int platformId,__Dictionary *platConfig);
 
-bool cancelAuthorize(int platformId);
+bool rigisterAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos);
 
-bool isAuthorizedValid(int platformId);
+bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback);
 
-bool isClientValid(int platformId);
+bool cancelAuthorizeJNI(int platformId);
 
-bool getUserInfo(int reqID, int platformId, C2DXGetUserInfoResultEvent callback);
+bool isAuthorizedValidJNI(int platformId);
 
-bool addFriend(int reqID, int platformId, const char* account, C2DXAddFriendResultEvent callback);
+bool isClientValidJNI(int platformId);
 
-__Dictionary* getAuthInfo(int platformId);
+bool getUserInfoJNI(int reqID, int platformId, C2DXGetUserInfoResultEvent callback);
 
-bool shareContent(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback);
+bool addFriendJNI(int reqID, int platformId, const char* account, C2DXAddFriendResultEvent callback);
 
-bool getFriendList(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback);
+__Dictionary* getAuthInfoJNI(int platformId);
 
-bool onekeyShare(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback);
+bool shareContentJNI(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback);
 
-void toastShow(const char* msg);
+bool getFriendListJNI(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback);
+
+bool onekeyShareJNI(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback);
+
+void toastShowJNI(const char* msg);
 
 
 #ifdef __cplusplus

@@ -11,8 +11,12 @@
         android:debuggable="true" 
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher">
+		<!-- Tell Cocos2dxActivity the name of our .so -->
+        <meta-data android:name="android.app.lib_name"
+				android:value="cocos2dcpp" />
 
-        <activity android:name=".HelloCpp"
+
+        <activity android:name="org.cocos2dx.cpp.AppActivity"
                   android:label="@string/app_name"
                   android:screenOrientation="landscape"
                   android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
@@ -45,13 +49,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        
-        <!-- QQ客户端回调 -->
-        <activity 
-        	android:name="cn.sharesdk.tencent.qq.ResultReceiver"
-            android:launchMode="singleTask"
-            android:noHistory="true">
+            
             <!--
             	如果集成QQ分享，或者使用QQ客户端来进行QQ空间的分享，须要在此处添加一个对ACTION_VIEW
             	事件的过滤器，其中的scheme是“tencent”前缀再开发者应用的加上appId。如果此过滤器不设置，
@@ -86,14 +84,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:exported="true"/>
             
-        <!-- 调用新浪原生SDK，需要注册的activity -->
-        <activity
-			android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
-			android:configChanges="keyboardHidden|orientation"
-			android:windowSoftInputMode="adjustResize"
-			android:exported="false" >
-		</activity>
-		
         <!-- 调用新浪原生SDK，需要注册的回调activity -->
         <activity
             android:name="cn.sharesdk.sina.weibo.SinaActivity"

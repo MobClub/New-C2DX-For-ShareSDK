@@ -1,32 +1,26 @@
 package cn.sharesdk;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.plugin.PluginWrapper;
 
-import com.mob.tools.utils.Hashon;
-import com.mob.tools.utils.UIHandler;
-
-import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.Platform.ShareParams;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.PlatformDb;
-import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.framework.statistics.NewAppReceiver;
-import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.OnekeyShareTheme;
-import android.R.integer;
 import android.content.Context;
-import android.os.Message;
 import android.os.Handler.Callback;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.Platform.ShareParams;
+import cn.sharesdk.framework.PlatformDb;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.onekeyshare.OnekeyShare;
+import cn.sharesdk.onekeyshare.OnekeyShareTheme;
+
+import com.mob.tools.utils.Hashon;
+import com.mob.tools.utils.UIHandler;
 
 public class ShareSDKUtils {
 	public static boolean DEBUG = true;
@@ -58,30 +52,36 @@ public class ShareSDKUtils {
 	private static native void onJavaCallback(String resp);
 
 
-	public static void initSDKAndSetPlatfromConfig(final String appKey, final String configs) {
+	public static void initSDKAndSetPlatfromConfig(final String appKey,final String configs) {
 		if (DEBUG) {
 			System.out.println("initSDKAndSetPlatfromConfig");
 		}
+
 		UIHandler.sendEmptyMessage(1, new Callback() {
-			@SuppressWarnings("unchecked")
-			public boolean handleMessage(Message msg) {
+			public boolean handleMessage(Message msg) {	
 				if (!TextUtils.isEmpty(appKey)) {
 					ShareSDK.initSDK(context, appKey);
 				} else {
 					ShareSDK.initSDK(context);
-				}
-				
+				}				
+				return true;
+			}
+		});
+		
+		UIHandler.sendEmptyMessageDelayed(1, 500, new Callback() {
+			@SuppressWarnings("unchecked")
+			public boolean handleMessage(Message msg) {					
 				Hashon hashon = new Hashon();
 				HashMap<String, Object> devInfo = hashon.fromJson(configs);
 				for(Entry<String, Object> entry: devInfo.entrySet()){
 					String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
 					ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
-				}
+				}		
 				return true;
 			}
 		});
 	}
-
+	
 	public static void authorize(int reqID, int platformId) {
 		if (DEBUG) {
 			System.out.println("authorize");

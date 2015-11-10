@@ -2,9 +2,9 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-$(call import-add-path,$(COCOS2DX_ROOT))
-$(call import-add-path,$(COCOS2DX_ROOT)/external)
-$(call import-add-path,$(COCOS2DX_ROOT)/cocos)
+$(call import-add-path,$(LOCAL_PATH)/../../cocos2d)
+$(call import-add-path,$(LOCAL_PATH)/../../cocos2d/external)
+$(call import-add-path,$(LOCAL_PATH)/../../cocos2d/cocos)
 
 LOCAL_MODULE := cocos2dcpp_shared
 
@@ -24,25 +24,18 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes \
 					$(LOCAL_PATH)/../../Classes/C2DXShareSDK/Android/JSON \
 					$(LOCAL_PATH)/../../Classes/C2DXShareSDK/Android/JSON/cJSON
 
-LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
-LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
+# _COCOS_HEADER_ANDROID_BEGIN
+# _COCOS_HEADER_ANDROID_END
 
-# LOCAL_WHOLE_STATIC_LIBRARIES += box2d_static
-# LOCAL_WHOLE_STATIC_LIBRARIES += cocosbuilder_static
-# LOCAL_WHOLE_STATIC_LIBRARIES += spine_static
-# LOCAL_WHOLE_STATIC_LIBRARIES += cocostudio_static
-# LOCAL_WHOLE_STATIC_LIBRARIES += cocos_network_static
-# LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
 
+LOCAL_STATIC_LIBRARIES := cocos2dx_static
+
+# _COCOS_LIB_ANDROID_BEGIN
+# _COCOS_LIB_ANDROID_END
 
 include $(BUILD_SHARED_LIBRARY)
 
 $(call import-module,.)
-$(call import-module,audio/android)
 
-# $(call import-module,Box2D)
-# $(call import-module,editor-support/cocosbuilder)
-# $(call import-module,editor-support/spine)
-# $(call import-module,editor-support/cocostudio)
-# $(call import-module,network)
-# $(call import-module,extensions)
+# _COCOS_LIB_IMPORT_ANDROID_BEGIN
+# _COCOS_LIB_IMPORT_ANDROID_END

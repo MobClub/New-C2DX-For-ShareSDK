@@ -104,12 +104,13 @@ void getFriendsResultHandler(int reqID, C2DXResponseState state, C2DXPlatType pl
 
 Scene* HelloWorld::createScene()
 {
+		CCLOG("1111");
     // 'scene' is an autorelease object
     auto scene = Scene::create();
-    
+    CCLOG("2222");
     // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-
+CCLOG("33333");
     // add layer as a child to scene
     scene->addChild(layer);
 
@@ -131,7 +132,7 @@ bool HelloWorld::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // this, MenuItemLabel::create(label, std::bind(&MyClass::callback, this, std::placeholders::_1));
-
+CCLOG("1");
     //ShareSDK 菜单开始
     MenuItemLabel *shareForWechatTimeLineItem = MenuItemLabel::create(LabelTTF::create("指定平台分享", "Arial", 40),
     															this,
@@ -157,7 +158,7 @@ bool HelloWorld::init()
     MenuItemLabel *shareMenuItem = MenuItemLabel::create(LabelTTF::create("分享", "Arial", 40),
                                                              this,
                                                              menu_selector(HelloWorld::shareMenuItemClick));
-
+CCLOG("2");
     Menu *itemsMenu = Menu::create(shareForWechatTimeLineItem, authMenuItem, cancelAuthMenuItem, hasAuthMenuItem, getUserMenuItem, getFriendListMenuItem, followFriendMenuItem, shareMenuItem, (MenuItemLabel*)NULL);
     itemsMenu -> alignItemsHorizontallyWithPadding(20);
     itemsMenu -> setPosition(Point(Director::getInstance() -> getWinSize().width / 2, 100));
@@ -173,7 +174,7 @@ bool HelloWorld::init()
                                            "CloseNormal.png",
                                            "CloseSelected.png",
                                            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-    
+   CCLOG("3"); 
 	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
                                 origin.y + closeItem->getContentSize().height/2));
 
@@ -181,7 +182,7 @@ bool HelloWorld::init()
     auto menu = Menu::create(closeItem, (MenuItemImage*)NULL);
     menu->setPosition(Vec2::ZERO);
     this->addChild(menu, 1);
-
+CCLOG("4");
     /////////////////////////////
     // 3. add your codes below...
 
@@ -193,13 +194,13 @@ bool HelloWorld::init()
     // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width/2,
                             origin.y + visibleSize.height - label->getContentSize().height));
-
+CCLOG("5");
     // add the label as a child to this layer
     this->addChild(label, 1);
 
     // add "HelloWorld" splash screen"
     auto sprite = Sprite::create("HelloWorld.png");
-
+CCLOG("6");
     // position the sprite on the center of the screen
     sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 

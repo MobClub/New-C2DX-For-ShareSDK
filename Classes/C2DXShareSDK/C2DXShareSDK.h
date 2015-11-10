@@ -19,6 +19,58 @@ namespace cn
 {
     namespace sharesdk
     {
+		class PlatId
+		{
+			public:
+				static const char* Unknown;
+            	static const char* SinaWeibo;         
+            	static const char* TencentWeibo;  
+            	static const char* DouBan;
+           		static const char* QZone; 
+            	static const char* Renren;
+            	static const char* Kaixin;
+            	static const char* Pengyou;
+            	static const char* Facebook;
+            	static const char* Twitter;
+            	static const char* Evernote;
+            	static const char* Foursquare;
+            	static const char* GooglePlus;
+            	static const char* Instagram;
+            	static const char* LinkedIn;
+            	static const char* Tumblr;        
+           		static const char* Mail;             
+            	static const char* SMS;              
+            	static const char* AirPrint;         
+            	static const char* Copy;             
+            	static const char* WeixiSession;     
+            	static const char* WeixiTimeline; 
+            	static const char* QQ;            
+            	static const char* Instapaper;       
+            	static const char* Pocket;           
+            	static const char* YouDaoNote;     
+            	static const char* SohuKan;      
+            	static const char* Pinterest;   
+            	static const char* Flickr;      
+            	static const char* Dropbox;    
+            	static const char* VKontakte;   
+            	static const char* WeixiFav;     
+            	static const char* YiXinSession;    
+            	static const char* YiXinTimeline; 
+            	static const char* YiXinFav;  
+            	static const char* MingDao;    
+    			static const char* Line;      
+    			static const char* WhatsApp;  
+    			static const char* KakaoTalk;   
+    			static const char* KakaoStory;   
+    			static const char* FacebookMessenger;
+    			static const char* Bluetooth;
+    			static const char* Alipay;
+    			static const char* WechatPlatform;
+    			static const char* QQPlatform;
+    			static const char* Any; 
+		};
+
+
         /**
          *	@brief	ShareSDK
          */

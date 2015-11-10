@@ -20,54 +20,55 @@ namespace cn
          */
         enum C2DXPlatType
         {
-        	Unknown : 0,
-            SinaWeibo = 1,         /**< 新浪微博 */
-            TencentWeibo = 2,      /**< 腾讯微博 */
-            DouBan = 5,            /**< 豆瓣社区 */
-            QZone = 6,             /**< QQ空间 */
-            Renren = 7,            /**< 人人网 */
-            Kaixin = 8,            /**< 开心网 */
-            Pengyou = 9,           /**< 朋友网 */
-            Facebook = 10,         /**< Facebook */
-            Twitter = 11,          /**< Twitter */
-            Evernote = 12,         /**< 印象笔记 */
-            Foursquare = 13,       /**< Foursquare */
-            GooglePlus = 14,       /**< Google＋ */
-            Instagram = 15,        /**< Instagram */
-            LinkedIn = 16,         /**< LinkedIn */
-            Tumblr = 17,           /**< Tumbir */
-            Mail = 18,             /**< 邮件分享 */
-            SMS = 19,              /**< 短信分享 */
-            AirPrint = 20,         /**< 打印 */
-            Copy = 21,             /**< 拷贝 */
-            WeixiSession = 22,     /**< 微信好友 */
-            WeixiTimeline = 23,    /**< 微信朋友圈 */
-            QQ = 24,               /**< QQ */
-            Instapaper = 25,       /**< Instapaper */
-            Pocket = 26,           /**< Pocket */
-            YouDaoNote = 27,       /**< 有道云笔记 */
-            SohuKan = 28,          /**< 搜狐随身看 */
-            Pinterest = 30,        /**< Pinterest */
-            Flickr = 34,           /**< Flickr */
-            Dropbox = 35,          /**< Dropbox */
-            VKontakte = 36,        /**< VKontakte */
-            WeixiFav = 37,         /**< 微信收藏 */
-            YiXinSession = 38,     /**< 易信好友 */
-            YiXinTimeline = 39,    /**< 易信朋友圈 */
-            YiXinFav = 40,         /**< 易信收藏 */
-            MingDao : 41,          /**< 明道 */
-    		Line : 42,             /**< Line */
-    		WhatsApp : 43,         /**< Whats App */
-    		KakaoTalk : 44,        /**< KakaoTalk */
-    		KakaoStory : 45,       /**< KakaoStory */ 
-    		FacebookMessenger : 46,/**< FacebookMessenger */
-    		Bluetooth : 48,        /**< Bluetooth */
-    		Alipay : 50,           /**< Alipay */
-    		WechatPlatform : 997,  /**< Wechat Series */
-    		QQPlatform : 998,	   /**< QQ Series */
-    		Any : 999 			   /**< 任意平台 */
+        	C2DXPlatTypeUnknown = 0,
+            C2DXPlatTypeSinaWeibo = 1,         /**< 新浪微博 */
+            C2DXPlatTypeTencentWeibo = 2,      /**< 腾讯微博 */
+            C2DXPlatTypeDouBan = 5,            /**< 豆瓣社区 */
+            C2DXPlatTypeQZone = 6,             /**< QQ空间 */
+            C2DXPlatTypeRenren = 7,            /**< 人人网 */
+            C2DXPlatTypeKaixin = 8,            /**< 开心网 */
+            C2DXPlatTypePengyou = 9,           /**< 朋友网 */
+            C2DXPlatTypeFacebook = 10,         /**< Facebook */
+            C2DXPlatTypeTwitter = 11,          /**< Twitter */
+            C2DXPlatTypeEvernote = 12,         /**< 印象笔记 */
+            C2DXPlatTypeFoursquare = 13,       /**< Foursquare */
+            C2DXPlatTypeGooglePlus = 14,       /**< Google＋ */
+            C2DXPlatTypeInstagram = 15,        /**< Instagram */
+            C2DXPlatTypeLinkedIn = 16,         /**< LinkedIn */
+            C2DXPlatTypeTumblr = 17,           /**< Tumbir */
+            C2DXPlatTypeMail = 18,             /**< 邮件分享 */
+            C2DXPlatTypeSMS = 19,              /**< 短信分享 */
+            C2DXPlatTypeAirPrint = 20,         /**< 打印 */
+            C2DXPlatTypeCopy = 21,             /**< 拷贝 */
+            C2DXPlatTypeWeixiSession = 22,     /**< 微信好友 */
+            C2DXPlatTypeWeixiTimeline = 23,    /**< 微信朋友圈 */
+            C2DXPlatTypeQQ = 24,               /**< QQ */
+            C2DXPlatTypeInstapaper = 25,       /**< Instapaper */
+            C2DXPlatTypePocket = 26,           /**< Pocket */
+            C2DXPlatTypeYouDaoNote = 27,       /**< 有道云笔记 */
+            C2DXPlatTypeSohuKan = 28,          /**< 搜狐随身看 */
+            C2DXPlatTypePinterest = 30,        /**< Pinterest */
+            C2DXPlatTypeFlickr = 34,           /**< Flickr */
+            C2DXPlatTypeDropbox = 35,          /**< Dropbox */
+            C2DXPlatTypeVKontakte = 36,        /**< VKontakte */
+            C2DXPlatTypeWeixiFav = 37,         /**< 微信收藏 */
+            C2DXPlatTypeYiXinSession = 38,     /**< 易信好友 */
+            C2DXPlatTypeYiXinTimeline = 39,    /**< 易信朋友圈 */
+            C2DXPlatTypeYiXinFav = 40,         /**< 易信收藏 */
+            C2DXPlatTypeMingDao = 41,          /**< 明道 */
+    		C2DXPlatTypeLine = 42,             /**< Line */
+    		C2DXPlatTypeWhatsApp = 43,         /**< Whats App */
+    		C2DXPlatTypeKakaoTalk = 44,        /**< KakaoTalk */
+    		C2DXPlatTypeKakaoStory = 45,       /**< KakaoStory */ 
+    		C2DXPlatTypeFacebookMessenger = 46,/**< FacebookMessenger */
+    		C2DXPlatTypeBluetooth = 48,        /**< Bluetooth */
+    		C2DXPlatTypeAlipay = 50,           /**< Alipay */
+    		C2DXPlatTypeWechatPlatform = 997,  /**< Wechat Series */
+    		C2DXPlatTypeQQPlatform = 998,	   /**< QQ Series */
+    		C2DXPlatTypeAny = 999 			   /**< 任意平台 */
         };
-        
+
+
         /**
          *	@brief	内容类型
          */

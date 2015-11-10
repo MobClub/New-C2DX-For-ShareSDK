@@ -21,6 +21,53 @@
 
 using namespace cn::sharesdk;
 
+const char* PlatId::Unknown = "0";
+const char* PlatId::SinaWeibo = "1";         /**< 新浪微博 */
+const char* PlatId::TencentWeibo = "2";      /**< 腾讯微博 */
+const char* PlatId::DouBan = "5";            /**< 豆瓣社区 */
+const char* PlatId::QZone = "6";             /**< QQ空间 */
+const char* PlatId::Renren = "7";            /**< 人人网 */
+const char* PlatId::Kaixin = "8";            /**< 开心网 */
+const char* PlatId::Pengyou = "9";           /**< 朋友网 */
+const char* PlatId::Facebook = "10";         /**< Facebook */
+const char* PlatId::Twitter = "11";          /**< Twitter */
+const char* PlatId::Evernote = "12";         /**< 印象笔记 */
+const char* PlatId::Foursquare = "13";       /**< Foursquare */
+const char* PlatId::GooglePlus = "14";       /**< Google＋ */
+const char* PlatId::Instagram = "15";        /**< Instagram */
+const char* PlatId::LinkedIn = "16";         /**< LinkedIn */
+const char* PlatId::Tumblr = "17";           /**< Tumbir */
+const char* PlatId::Mail = "18";             /**< 邮件分享 */
+const char* PlatId::SMS = "19";              /**< 短信分享 */
+const char* PlatId::AirPrint = "20";         /**< 打印 */
+const char* PlatId::Copy = "21";             /**< 拷贝 */
+const char* PlatId::WeixiSession = "22";     /**< 微信好友 */
+const char* PlatId::WeixiTimeline = "23";    /**< 微信朋友圈 */
+const char* PlatId::QQ = "24";              /**< QQ */
+const char* PlatId::Instapaper = "25";       /**< Instapaper */
+const char* PlatId::Pocket = "26";           /**< Pocket */
+const char* PlatId::YouDaoNote = "27";       /**< 有道云笔记 */
+const char* PlatId::SohuKan = "28";          /**< 搜狐随身看 */
+const char* PlatId::Pinterest = "30";        /**< Pinterest */
+const char* PlatId::Flickr = "34";           /**< Flickr */
+const char* PlatId::Dropbox = "35";          /**< Dropbox */
+const char* PlatId::VKontakte = "36";        /**< VKontakte */
+const char* PlatId::WeixiFav = "37";         /**< 微信收藏 */
+const char* PlatId::YiXinSession = "38";     /**< 易信好友 */
+const char* PlatId::YiXinTimeline = "39";    /**< 易信朋友圈 */
+const char* PlatId::YiXinFav = "40";         /**< 易信收藏 */
+const char* PlatId::MingDao = "41";          /**< 明道 */
+const char* PlatId::Line = "42";             /**< Line */
+const char* PlatId::WhatsApp = "43";         /**< Whats App */
+const char* PlatId::KakaoTalk = "44";        /**< KakaoTalk */
+const char* PlatId::KakaoStory = "45";       /**< KakaoStory */ 
+const char* PlatId::FacebookMessenger = "46";/**< FacebookMessenger */
+const char* PlatId::Bluetooth = "48";        /**< Bluetooth */
+const char* PlatId::Alipay = "50";           /**< Alipay */
+const char* PlatId::WechatPlatform = "997";  /**< Wechat Series */
+const char* PlatId::QQPlatform = "998";	   /**< QQ Series */
+const char* PlatId::Any = "999"; 			   /**< 任意平台 */
+
 
 void C2DXShareSDK::rigisterAppAndSetPlatformConfig(const char *appKey, __Dictionary *configInfo)
 {
@@ -28,7 +75,7 @@ void C2DXShareSDK::rigisterAppAndSetPlatformConfig(const char *appKey, __Diction
     
     //TODO: Andorid
     // This is not a necessary method for Android, you can setup your platform configs more efficiently in "assets/ShareSDK.xml"
-    rigisterAppAndSetPlatformConfig(appKey, configInfo);
+    rigisterAppAndSetPlatformConfigJNI(appKey, configInfo);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -42,7 +89,7 @@ void C2DXShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEve
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    authorize(reqID, (int)platType, callback);
+    authorizeJNI(reqID, (int)platType, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -56,7 +103,7 @@ void C2DXShareSDK::cancelAuthorize(C2DXPlatType platType)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    cancelAuthorize((int)platType);
+    cancelAuthorizeJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -70,7 +117,7 @@ bool C2DXShareSDK::isAuthorizedValid(C2DXPlatType platType)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    return isAuthorizedValid((int)platType);
+    return isAuthorizedValidJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -86,7 +133,7 @@ bool C2DXShareSDK::isClientValid(C2DXPlatType platType)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    return isClientValid((int)platType);
+    return isClientValidJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS    
     //TODO: iOS
@@ -102,7 +149,7 @@ void C2DXShareSDK::getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfo
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    getUserInfo(reqID, (int)platType, callback);
+    getUserInfoJNI(reqID, (int)platType, callback);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
     //TODO: iOS
@@ -116,7 +163,7 @@ __Dictionary* C2DXShareSDK::getAuthInfo(C2DXPlatType platType)
 
     //TODO: Andorid
     //return getAuthInfo((int)platType);
-    return getAuthInfo((int)platType);
+    return getAuthInfoJNI((int)platType);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
     //TODO: iOS
@@ -131,8 +178,8 @@ void C2DXShareSDK::shareContent(int reqID, C2DXPlatType platType, __Dictionary *
     
     //TODO: Andorid
     __Array *platTypes = __Array::create();
-	platTypes.addObject(platType);
-    shareContent(reqID, platTypes, content, callback);
+	platTypes->addObject(Integer::create(platType));
+    shareContentJNI(reqID, platTypes, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -146,7 +193,7 @@ void C2DXShareSDK::shareContent(int reqID, __Array *platTypes, __Dictionary *con
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //TODO: Andorid
-    shareContent(reqID, platTypes, content, callback);
+    shareContentJNI(reqID, platTypes, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -160,7 +207,7 @@ void C2DXShareSDK::showShareMenu(int reqID, __Array *platTypes, __Dictionary *co
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //TODO: Android
-    onekeyShare(reqID, 0, content, callback);
+    onekeyShareJNI(reqID, 0, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -174,7 +221,7 @@ void C2DXShareSDK::showShareView(int reqID, C2DXPlatType platType, __Dictionary 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //TODO: Android
-    onekeyShare(reqID, (int) platType, content, callback);
+    onekeyShareJNI(reqID, (int) platType, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
@@ -187,7 +234,7 @@ void C2DXShareSDK::getFriendList(int reqID, C2DXPlatType platType, int count, in
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //TODO: Android
-	getFriendList(reqID, (int) platType, count, page, callback);
+	getFriendListJNI(reqID, (int) platType, count, page, callback);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
@@ -201,7 +248,7 @@ void C2DXShareSDK::addFriend(int reqID, C2DXPlatType platType, const char* accou
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //TODO: Android
-	addFriend(reqID, (int) platType, account, callback);
+	addFriendJNI(reqID, (int) platType, account, callback);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
@@ -216,7 +263,7 @@ void C2DXShareSDK::toast(const char *msg)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //TODO: Android
-    toastShow(msg);
+    toastShowJNI(msg);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 

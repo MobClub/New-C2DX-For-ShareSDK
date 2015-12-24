@@ -1,59 +1,45 @@
 //
 //  C2DXiOSShareSDK.h
-//  C2DXShareSDKSample
+//  HelloWorldDemo
 //
-//  Created by 冯 鸿杰 on 13-12-17.
-//
+//  Created by 刘 靖煌 on 15-11-27.
+//  Copyright © 2015年 mob.com. All rights reserved.
 //
 
-#ifndef __C2DXShareSDKSample__C2DXiOSShareSDK__
-#define __C2DXShareSDKSample__C2DXiOSShareSDK__
+#ifndef __HelloWorldDemo__C2DXiOSShareSDK__
+#define __HelloWorldDemo__C2DXiOSShareSDK__
 
-#include <iostream>
+#include <stdio.h>
 #include "cocos2d.h"
 #include "C2DXShareSDKTypeDef.h"
-
-USING_NS_CC;
 
 namespace cn
 {
     namespace sharesdk
     {
         /**
-         *	@brief	ShareSDK (iOS)
+         *	@brief	ShareSDK 简洁版(iOS)
          */
         class C2DXiOSShareSDK
         {
+        
         public:
-            
             /**
              *	@brief	初始化ShareSDK
              *
-             *	@param 	appKey 	应用Key
-             *	@param 	useAppTrusteeship 	是否使用应用信息托管
+             *	@param 	appKey 	appKey
+             *	@param 	configInfo 	平台配置信息
              */
-            static void open(CCString *appKey, bool useAppTrusteeship);
-            
-            /**
-             *	@brief	关闭ShareSDK
-             */
-            static void close();
-            
-            /**
-             *	@brief	设置平台配置信息
-             *
-             *	@param 	platType 	平台类型
-             *	@param 	configInfo 	配置信息
-             */
-            static void setPlatformConfig(C2DXPlatType platType, CCDictionary *configInfo);
+            static void registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo);
             
             /**
              *	@brief	用户授权
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
              */
-            static void authorize(C2DXPlatType platType, C2DXAuthResultEvent callback);
+            static void authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEvent callback);
             
             /**
              *	@brief	取消用户授权
@@ -72,12 +58,29 @@ namespace cn
             static bool hasAutorized(C2DXPlatType platType);
             
             /**
+             *	@brief	是否安装客户端
+             *
+             *	@param 	platType 	平台类型
+             *
+             *	@return	true 已安装， false 尚未安装
+             */
+            static bool isClientInstalled(C2DXPlatType platType);
+            
+            /**
              *	@brief	获取用户信息
              *
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
              */
-            static void getUserInfo(C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
+            static void getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
+            
+//            /**
+//             *	@brief	获取用户授权信息
+//             *
+//             *	@param 	platType 	平台类型
+//             *	@param 	callback 	回调方法
+//             */
+//            static void getAuthInfo(C2DXPlatType platType);
             
             /**
              *	@brief	分享内容
@@ -86,48 +89,67 @@ namespace cn
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
              */
-            static void shareContent(C2DXPlatType platType, CCDictionary *content, C2DXShareResultEvent callback);
-            
+            static void shareContent(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
+
             /**
              *	@brief	一键分享内容
              *
+             *	@param 	reqID 	流水号
              *	@param 	platTypes 	平台类型列表
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
              */
-            static void oneKeyShareContent(CCArray *platTypes, CCDictionary *content, C2DXShareResultEvent callback);
+            static void oneKeyShareContent(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback);
             
             /**
              *	@brief	显示分享菜单
              *
-             *	@param 	platTypes 	平台类型列表
-             *	@param 	content 	分享内容
-             *	@param 	callback 	回调方法
-             */
-            static void showShareMenu(CCArray *platTypes, CCDictionary *content, C2DXShareResultEvent callback);
-            
-            /**
-             *	@brief	显示分享菜单
-             *
+             *	@param 	reqID 	流水号
              *	@param 	platTypes 	平台类型列表
              *	@param 	content 	分享内容
              *	@param 	pt          弹出分享菜单参位置，仅用于设置iPad分享菜单弹出
-             *  @param  direction   弹出分享菜单指向，仅用于设置iPad分享菜单弹出
              *	@param 	callback 	回调方法
              */
-            static void showShareMenu(CCArray *platTypes, CCDictionary *content, CCPoint pt, C2DXMenuArrowDirection direction, C2DXShareResultEvent callback);
-
+            static void showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXPoint pt, C2DXShareResultEvent callback);
             
             /**
-             *	@brief	显示分享视图
+             *	@brief	显示分享编辑框
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
              */
-            static void showShareView(C2DXPlatType platType, CCDictionary *content, C2DXShareResultEvent callback);
+            static void showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
+            
+            /**
+             *	@brief	获取好友列表
+             *
+             *	@param 	reqID 	流水号
+             *	@param 	platType 	平台类型
+             *	@param 	content 	分享内容
+             *	@param 	callback 	回调方法
+             */
+            static void getFriendList(int reqID,C2DXPlatType platType,int count, int page, C2DXAddFriendResultEvent callback);
+            
+            /**
+             *	@brief	显示分享编辑框
+             *
+             *	@param 	reqID 	流水号
+             *	@param 	platType 	平台类型
+             *	@param 	content 	分享内容
+             *	@param 	callback 	回调方法
+             */
+            static void addFriend(int reqID,C2DXPlatType platType,const char* account,C2DXGetFriendsResultEvent callback);
+            
+            /**
+             *	@brief	显示分享编辑框
+             */
+            static void alertLog(const char *msg);
         };
     }
 }
 
-#endif /* defined(__C2DXShareSDKSample__C2DXiOSShareSDK__) */
+#endif /* defined(__HelloWorldDemo__C2DXiOSShareSDK__) */
+
+

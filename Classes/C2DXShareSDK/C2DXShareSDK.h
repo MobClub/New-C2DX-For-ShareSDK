@@ -2,8 +2,8 @@
 //  C2DXShareSDK.h
 //  C2DXShareSDKSample
 //
-//  Created by 冯 鸿杰 on 13-12-17.
-//
+//  Created by 刘 靖煌 on 15-11-27.
+//  Copyright © 2015年 mob.com. All rights reserved.
 //
 
 #ifndef __C2DXShareSDKSample__C2DXShareSDK__
@@ -47,8 +47,7 @@ namespace cn
             	static const char* QQ;            
             	static const char* Instapaper;       
             	static const char* Pocket;           
-            	static const char* YouDaoNote;     
-            	static const char* SohuKan;      
+            	static const char* YouDaoNote;
             	static const char* Pinterest;   
             	static const char* Flickr;      
             	static const char* Dropbox;    
@@ -65,11 +64,12 @@ namespace cn
     			static const char* FacebookMessenger;
     			static const char* Bluetooth;
     			static const char* Alipay;
+                static const char* KakaoPlatform;
+                static const char* EvernotePlatform;
     			static const char* WechatPlatform;
     			static const char* QQPlatform;
     			static const char* Any; 
 		};
-
 
         /**
          *	@brief	ShareSDK
@@ -77,19 +77,18 @@ namespace cn
         class C2DXShareSDK
         {
         public:
-       
-            
             /**
              *	@brief	设置平台配置信息
              *
              *	@param 	platType 	平台类型
              *	@param 	configInfo 	配置信息
              */
-            static void rigisterAppAndSetPlatformConfig(const char *appKey, __Dictionary *configInfo);
+            static void registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo);
             
             /**
              *	@brief	用户授权
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
              */
@@ -110,61 +109,79 @@ namespace cn
              *	@return	true 已授权， false 尚未授权
              */
             static bool isAuthorizedValid(C2DXPlatType platType);
-
+            
+            /**
+             *	@brief	是否安装客户端
+             *
+             *	@param 	platType 	平台类型
+             *
+             *	@return	true 已安装客户端， false 尚未安装客户端
+             */
 			static bool isClientValid(C2DXPlatType platType);
             
             /**
              *	@brief	获取用户信息
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
              */
             static void getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
 
-
-            static __Dictionary* getAuthInfo(C2DXPlatType platType);
+            /**
+             *	@brief	获取用户授权信息
+             *
+             *	@param 	platType 	平台类型
+             *	@param 	callback 	回调方法
+             */
+            static C2DXDictionary* getAuthInfo(C2DXPlatType platType);
 
             /**
              *	@brief	分享内容
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param  isSSO       是否SSO授权
              *	@param 	callback 	回调方法
              */
-            static void shareContent(int reqID, C2DXPlatType platType, __Dictionary *content, C2DXShareResultEvent callback);
+            static void shareContent(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
             
             /**
-             *	@brief	一键分享内容
+             *	@brief	分享内容
              *
-             *	@param 	platTypes 	平台类型列表
+             *	@param 	reqID 	流水号
+             *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
+             *	@param  isSSO       是否SSO授权
              *	@param 	callback 	回调方法
              */
-            static void shareContent(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback);
+            static void oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback);
             
             /**
              *	@brief	显示分享菜单
              *
-             *	@param 	platTypes 	平台类型列表
+             *	@param 	reqID 	流水号
+             *	@param 	platTypes 	平台类型列表，值可以为NULL，此时显示所有初始化的平台
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
              */
-            static void showShareMenu(int reqID, __Array *platTypes, __Dictionary *content, int x, int y, C2DXShareResultEvent callback);
+            static void showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback);
             
-           
             /**
              *	@brief	显示分享视图
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
              */
-            static void showShareView(int reqID, C2DXPlatType platType, __Dictionary *content, C2DXShareResultEvent callback);
+            static void showShareView(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
 
             /**
              *	@brief	获得好友列表
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	count 	              每页数量
              *	@param 	page 		页数
@@ -175,6 +192,7 @@ namespace cn
             /**
              *	@brief	关注好友
              *
+             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	account 	呢称
              */
@@ -185,9 +203,8 @@ namespace cn
              * @param msg 消息内容
              */
             static void toast(const char *msg);
-
         };
     }
 }
 
-#endif /* defined(__C2DXShareSDKSample__C2DXShareSDK__) */
+#endif

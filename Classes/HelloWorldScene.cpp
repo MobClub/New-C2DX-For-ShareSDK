@@ -1,311 +1,580 @@
 #include "HelloWorldScene.h"
+
 #include "C2DXShareSDK.h"
 
 USING_NS_CC;
+
+using namespace std;
 using namespace cn::sharesdk;
 
 int reqID = 0;
 
-void authResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res)
-{
-	CCLog("authResultHandler");
-    switch (state) {
-        case C2DXResponseStateSuccess:
-            C2DXShareSDK::toast("授权成功");
-            break;
-        case C2DXResponseStateFail:
-            C2DXShareSDK::toast("授权失败");
-            break;
-        default:
-            C2DXShareSDK::toast("授权取消");
-            break;
-    }
-}
-
-void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res)
-{
-	CCLog("getUserResultHandler");
-    if (state == C2DXResponseStateSuccess)
-    {
-    	//输出用户信息
-    	Array *allKeys = res -> allKeys();
-    	allKeys->retain();
-    	for (int i = 0; i < allKeys -> count(); i++)
-    	{
-    	    String *key = (String *)allKeys -> objectAtIndex(i);
-    	    Object *obj = res -> objectForKey(key -> getCString());
-
-    	    CCLog("key = %s", key -> getCString());
-    	    if (dynamic_cast<String *>(obj))
-    	    {
-    	        CCLog("value = %s", dynamic_cast<String *>(obj) -> getCString());
-    	    }
-    	    else if (dynamic_cast<Integer *>(obj))
-    	    {
-    	        CCLog("value = %d", dynamic_cast<Integer *>(obj) -> getValue());
-    	    }
-    	    else if (dynamic_cast<Double *>(obj))
-    	    {
-    	        CCLog("value = %f", dynamic_cast<Double *>(obj) -> getValue());
-    	    }
-    	}
-    	allKeys->release();
-    }
-}
-
-void shareResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res)
-{
-	CCLog("shareResultHandler");
-    switch (state) {
-        case C2DXResponseStateSuccess:
-            C2DXShareSDK::toast("分享成功");
-            break;
-        case C2DXResponseStateFail:
-            C2DXShareSDK::toast("分享失败");
-            break;
-        default:
-            C2DXShareSDK::toast("分享取消");
-            break;
-    }
-}
-
-void addFriendResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType,  __Dictionary *res)
-{
-	CCLog("addFriendResultHandler");
-    switch (state) {
-        case C2DXResponseStateSuccess:
-            C2DXShareSDK::toast("关注成功");
-            break;
-        case C2DXResponseStateFail:
-            C2DXShareSDK::toast("关注失败");
-            break;
-        default:
-            C2DXShareSDK::toast("关注取消");
-            break;
-    }
-}
-
-void getFriendsResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType,  __Dictionary *res)
-{
-	CCLog("getFriendsResultHandler");
-    switch (state) {
-        case C2DXResponseStateSuccess:
-            C2DXShareSDK::toast("获取好友成功");
-            break;
-        case C2DXResponseStateFail:
-            C2DXShareSDK::toast("获取好友失败");
-            break;
-        default:
-            C2DXShareSDK::toast("取消获取好友");
-            break;
-    }
-}
-
-
 Scene* HelloWorld::createScene()
 {
-		CCLOG("1111");
-    // 'scene' is an autorelease object
     auto scene = Scene::create();
-    CCLOG("2222");
-    // 'layer' is an autorelease object
     auto layer = HelloWorld::create();
-CCLOG("33333");
-    // add layer as a child to scene
+    
     scene->addChild(layer);
-
-    // return the scene
     return scene;
 }
 
-// on "init" you need to initialize your instance
 bool HelloWorld::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if ( !Layer::init() )
     {
         return false;
     }
     
-    Size visibleSize = Director::getInstance()->getVisibleSize();
+    Size winSize = Director::getInstance()->getWinSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    // this, MenuItemLabel::create(label, std::bind(&MyClass::callback, this, std::placeholders::_1));
-CCLOG("1");
-    //ShareSDK 菜单开始
-    MenuItemLabel *shareForWechatTimeLineItem = MenuItemLabel::create(LabelTTF::create("指定平台分享", "Arial", 40),
-    															this,
-                                                                menu_selector(HelloWorld::shareForWechatTimeLineMenuItemClick));
-    MenuItemLabel *authMenuItem = MenuItemLabel::create(LabelTTF::create("授权", "Arial", 40),
-                                                            this,
-                                                            menu_selector(HelloWorld::authMenuItemClick));
-    MenuItemLabel *cancelAuthMenuItem = MenuItemLabel::create(LabelTTF::create("取消授权", "Arial", 40),
-                                                                  this,
-                                                                  menu_selector(HelloWorld::cancelAuthMenuItemClick));
-    MenuItemLabel *hasAuthMenuItem = MenuItemLabel::create(LabelTTF::create("是否授权", "Arial", 40),
-                                                               this,
-                                                               menu_selector(HelloWorld::hasAuthMenuItemClick));
-    MenuItemLabel *getUserMenuItem = MenuItemLabel::create(LabelTTF::create("用户信息", "Arial", 40),
-                                                               this,
-                                                               menu_selector(HelloWorld::getAuthInfoMenuItemClick));
-    MenuItemLabel *getFriendListMenuItem = MenuItemLabel::create(LabelTTF::create("好友列表", "Arial", 40),
-                                                                   this,
-                                                                   menu_selector(HelloWorld::getFriendListMenuItemClick));
-    MenuItemLabel *followFriendMenuItem = MenuItemLabel::create(LabelTTF::create("关注好友", "Arial", 40),
-                                                                      this,
-                                                                      menu_selector(HelloWorld::followFriendMenuItemClick));
-    MenuItemLabel *shareMenuItem = MenuItemLabel::create(LabelTTF::create("分享", "Arial", 40),
-                                                             this,
-                                                             menu_selector(HelloWorld::shareMenuItemClick));
-CCLOG("2");
-    Menu *itemsMenu = Menu::create(shareForWechatTimeLineItem, authMenuItem, cancelAuthMenuItem, hasAuthMenuItem, getUserMenuItem, getFriendListMenuItem, followFriendMenuItem, shareMenuItem, (MenuItemLabel*)NULL);
-    itemsMenu -> alignItemsHorizontallyWithPadding(20);
-    itemsMenu -> setPosition(Point(Director::getInstance() -> getWinSize().width / 2, 100));
-    this -> addChild(itemsMenu);
-    //ShareSDK 菜单结束
-
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
-
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-   CCLOG("3"); 
-	closeItem->setPosition(Vec2(origin.x + visibleSize.width - closeItem->getContentSize().width/2 ,
-                                origin.y + closeItem->getContentSize().height/2));
-
-    // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, (MenuItemImage*)NULL);
-    menu->setPosition(Vec2::ZERO);
-    this->addChild(menu, 1);
-CCLOG("4");
-    /////////////////////////////
-    // 3. add your codes below...
-
-    // add a label shows "Hello World"
-    // create and initialize a label
     
-    auto label = LabelTTF::create("Hello World", "Arial", 24);
+    //授权
+    MenuItemLabel *authItem = MenuItemLabel::create(LabelTTF::create("Authorize", "Arial", 10),
+                                                    CC_CALLBACK_1(HelloWorld::authBtnClickHandler, this));
+    authItem->setPosition(winSize.width/2 , 300);
+    auto authMenu = Menu::create(authItem,NULL);
+    authMenu->setPosition(Vec2::ZERO);
+    this->addChild(authMenu);
     
-    // position the label on the center of the screen
-    label->setPosition(Vec2(origin.x + visibleSize.width/2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
-CCLOG("5");
-    // add the label as a child to this layer
-    this->addChild(label, 1);
-
-    // add "HelloWorld" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
-CCLOG("6");
-    // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-    // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    //是否授权
+    MenuItemLabel *isAuthValid = MenuItemLabel::create(LabelTTF::create("is Auth Valid", "Arial", 10),
+                                                       CC_CALLBACK_1(HelloWorld::isAuthValidBtnClickHandler, this));
+    isAuthValid->setPosition(winSize.width/2 , 275);
+    auto isAuthValidMenu = Menu::create(isAuthValid,NULL);
+    isAuthValidMenu->setPosition(Vec2::ZERO);
+    this->addChild(isAuthValidMenu);
+    
+    //取消授权
+    MenuItemLabel *cancelAuthItem = MenuItemLabel::create(LabelTTF::create("Cancel Authorize", "Arial", 10),
+                                                          CC_CALLBACK_1(HelloWorld::cancelAuthBtnClickHandler, this));
+    cancelAuthItem->setPosition(winSize.width/2 , 250);
+    auto cancelAuthMenu = Menu::create(cancelAuthItem,NULL);
+    cancelAuthMenu->setPosition(Vec2::ZERO);
+    this->addChild(cancelAuthMenu);
+    
+    //客户端是否安装
+    MenuItemLabel *isClientInstalledItem = MenuItemLabel::create(LabelTTF::create("Is Client Installed", "Arial", 10),
+                                                                 CC_CALLBACK_1(HelloWorld::isClientValidBtnClickHandler, this));
+    isClientInstalledItem->setPosition(winSize.width/2 , 225);
+    auto isClientInstalledMenu = Menu::create(isClientInstalledItem,NULL);
+    isClientInstalledMenu->setPosition(Vec2::ZERO);
+    this->addChild(isClientInstalledMenu);
+    
+    //获取用户信息
+    MenuItemLabel *getUserInfoItem = MenuItemLabel::create(LabelTTF::create("Get User Info", "Arial", 10),
+                                                           CC_CALLBACK_1(HelloWorld::getUserInfoBtnClickHandler, this));
+    getUserInfoItem->setPosition(winSize.width/2 , 200);
+    auto getUserInfoMenu = Menu::create(getUserInfoItem,NULL);
+    getUserInfoMenu->setPosition(Vec2::ZERO);
+    this->addChild(getUserInfoMenu);
+    
+    //获取授权信息
+    MenuItemLabel *getAuthInfoItem = MenuItemLabel::create(LabelTTF::create("Get Auth Info", "Arial", 10),
+                                                           CC_CALLBACK_1(HelloWorld::getAuthInfoBtnClickHandler, this));
+    getAuthInfoItem->setPosition(winSize.width/2 , 175);
+    auto getAuthInfoMenu = Menu::create(getAuthInfoItem,NULL);
+    getAuthInfoMenu->setPosition(Vec2::ZERO);
+    this->addChild(getAuthInfoMenu);
+    
+    //直接分享
+    auto shareItem = MenuItemLabel::create(LabelTTF::create("Share Directly", "Arial", 10),
+                                           CC_CALLBACK_1(HelloWorld::shareContentClickHandler, this));
+    shareItem->setPosition(winSize.width/2 , 150);
+    
+    auto itemsMenu = Menu::create(shareItem,NULL);
+    itemsMenu->setPosition(Vec2::ZERO);
+    this->addChild(itemsMenu);
+    
+    //分享菜单
+    MenuItemLabel *shareMenuItem = MenuItemLabel::create(LabelTTF::create("Show Share Menu", "Arial", 10),
+                                                         CC_CALLBACK_1(HelloWorld::showShareMenuClickHandler, this));
+    shareMenuItem->setPosition(Director::getInstance()->getWinSize().width/2 , 125);
+    auto shareMenu = Menu::create(shareMenuItem,NULL);
+    shareMenu->setPosition(Vec2::ZERO);
+    this->addChild(shareMenu);
+    
+    //显示分享编辑页面
+    MenuItemLabel *shareEditItem = MenuItemLabel::create(LabelTTF::create("Show Share Edit View", "Arial", 10),
+                                                         CC_CALLBACK_1(HelloWorld::showShareViewClickHandler, this));
+    shareEditItem->setPosition(winSize.width/2 , 100);
+    auto shareEditItemMenu = Menu::create(shareEditItem,NULL);
+    shareEditItemMenu->setPosition(Vec2::ZERO);
+    this->addChild(shareEditItemMenu);
+    
+    //获取好友列表
+    MenuItemLabel *getFriendList = MenuItemLabel::create(LabelTTF::create("Get Friend List", "Arial", 10),
+                                                         CC_CALLBACK_1(HelloWorld::getFriendListBtnClickHandler, this));
+    getFriendList->setPosition(winSize.width/2 , 75);
+    auto getFriendListMenu = Menu::create(getFriendList,NULL);
+    getFriendListMenu->setPosition(Vec2::ZERO);
+    this->addChild(getFriendListMenu);
+    
+    //添加好友
+    MenuItemLabel *addFriend = MenuItemLabel::create(LabelTTF::create("Add Friend", "Arial", 10),
+                                                     CC_CALLBACK_1(HelloWorld::addFriendBtnClickHandler, this));
+    addFriend->setPosition(winSize.width/2 , 50);
+    auto addFriendMenu = Menu::create(addFriend,NULL);
+    addFriendMenu->setPosition(Vec2::ZERO);
+    this->addChild(addFriendMenu);
     
     return true;
 }
 
-
-void HelloWorld::menuCloseCallback(Ref* pSender)
+//分享回调
+void shareContentResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sharesdk::C2DXPlatType platType, __Dictionary *result)
 {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-	MessageBox("You pressed the close button. Windows Store Apps do not implement a close button.","Alert");
-    return;
-#endif
-
-    Director::getInstance()->end();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    exit(0);
-#endif
-}
-
-
-void HelloWorld::authMenuItemClick(cocos2d::Ref* pSender)
-{
-	reqID += 1; 
-    C2DXShareSDK::authorize(reqID, C2DXPlatTypeQQ, authResultHandler);
-}
-
-void HelloWorld::cancelAuthMenuItemClick(cocos2d::Ref* pSender)
-{
-    C2DXShareSDK::cancelAuthorize(C2DXPlatTypeQQ);
-}
-
-void HelloWorld::hasAuthMenuItemClick(cocos2d::Ref* pSender)
-{
-    if (C2DXShareSDK::isAuthorizedValid(C2DXPlatTypeQQ))
+    switch (state)
     {
-        C2DXShareSDK::toast("用户已授权");
+        case cn::sharesdk::C2DXResponseStateSuccess:
+        {
+            log("Success");
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateFail:
+        {
+            log("Fail");
+            //回调错误信息
+            __Array *allKeys = result->allKeys();
+            allKeys->retain();
+            for (int i = 0; i < allKeys-> count(); i++)
+            {
+                __String *key = (__String*)allKeys->getObjectAtIndex(i);
+                Ref *obj = result->objectForKey(key->getCString());
+                
+                log("key = %s", key -> getCString());
+                if (dynamic_cast<__String *>(obj))
+                {
+                    log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                }
+                else if (dynamic_cast<__Integer *>(obj))
+                {
+                    log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                }
+                else if (dynamic_cast<__Double *>(obj))
+                {
+                    log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                }
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateCancel:
+        {
+            log("Cancel");
+        }
+            break;
+        default:
+            break;
     }
-    else
+}
+
+//授权回调
+void authResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sharesdk::C2DXPlatType platType, __Dictionary *result)
+{
+    switch (state)
     {
-        C2DXShareSDK::toast("用户尚未授权");
+        case cn::sharesdk::C2DXResponseStateSuccess:
+        {
+            log("Success");
+            
+            //输出信息
+            try
+            {
+                __Array *allKeys = result -> allKeys();
+                allKeys->retain();
+                for (int i = 0; i < allKeys -> count(); i++)
+                {
+                    __String *key = (__String *)allKeys -> getObjectAtIndex(i);
+                    Ref *obj = result -> objectForKey(key -> getCString());
+                    
+                    log("key = %s", key -> getCString());
+                    if (dynamic_cast<__String *>(obj))
+                    {
+                        log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                    }
+                    else if (dynamic_cast<__Integer *>(obj))
+                    {
+                        log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                    }
+                    else if (dynamic_cast<__Double *>(obj))
+                    {
+                        log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                    }
+                }
+                allKeys->release();
+            }
+            catch(...)
+            {
+                log("==============error");
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateFail:
+        {
+            log("Fail");
+            //回调错误信息
+            __Array *allKeys = result->allKeys();
+            allKeys->retain();
+            for (int i = 0; i < allKeys-> count(); i++)
+            {
+                __String *key = (__String*)allKeys->getObjectAtIndex(i);
+                Ref *obj = result->objectForKey(key->getCString());
+                
+                log("key = %s", key -> getCString());
+                if (dynamic_cast<__String *>(obj))
+                {
+                    log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                }
+                else if (dynamic_cast<__Integer *>(obj))
+                {
+                    log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                }
+                else if (dynamic_cast<__Double *>(obj))
+                {
+                    log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                }
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateCancel:
+        {
+            log("Cancel");
+        }
+            break;
+        default:
+            break;
     }
 }
 
-void HelloWorld::getAuthInfoMenuItemClick(cocos2d::Ref* pSender)
+//获取用户信息结果回调
+void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *result)
 {
-	//此方法可以获取用户授权后的用户信息，若未授权返回为空
-	__Dictionary* userInfo = C2DXShareSDK::getAuthInfo(C2DXPlatTypeQQ);
+    switch (state)
+    {
+        case cn::sharesdk::C2DXResponseStateSuccess:
+        {
+            log("Success");
+            
+            //输出信息
+            try
+            {
+                __Array *allKeys = result -> allKeys();
+                allKeys->retain();
+                for (int i = 0; i < allKeys -> count(); i++)
+                {
+                    __String *key = (__String *)allKeys -> getObjectAtIndex(i);
+                    Ref *obj = result -> objectForKey(key -> getCString());
+                    
+                    log("key = %s", key -> getCString());
+                    if (dynamic_cast<__String *>(obj))
+                    {
+                        log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                    }
+                    else if (dynamic_cast<__Integer *>(obj))
+                    {
+                        log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                    }
+                    else if (dynamic_cast<__Double *>(obj))
+                    {
+                        log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                    }
+                }
+                allKeys->release();
+            }
+            catch(...)
+            {
+                log("==============error");
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateFail:
+        {
+            log("Fail");
+            //回调错误信息
+            __Array *allKeys = result->allKeys();
+            allKeys->retain();
+            for (int i = 0; i < allKeys-> count(); i++)
+            {
+                __String *key = (__String*)allKeys->getObjectAtIndex(i);
+                Ref *obj = result->objectForKey(key->getCString());
+                
+                log("key = %s", key -> getCString());
+                if (dynamic_cast<__String *>(obj))
+                {
+                    log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                }
+                else if (dynamic_cast<__Integer *>(obj))
+                {
+                    log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                }
+                else if (dynamic_cast<__Double *>(obj))
+                {
+                    log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                }
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateCancel:
+        {
+            log("Cancel");
+        }
+            break;
+        default:
+            break;
+    }
 }
 
-void HelloWorld::getUserInfoMenuItemClick(cocos2d::Ref* pSender)
+void getFriendListResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *result)
 {
-	reqID += 1; 
-    C2DXShareSDK::getUserInfo(reqID, C2DXPlatTypeQQ, getUserResultHandler);
+    switch (state)
+    {
+        case cn::sharesdk::C2DXResponseStateSuccess:
+        {
+            log("Success");
+            
+            //输出信息
+            try
+            {
+                __Array *allKeys = result -> allKeys();
+                allKeys->retain();
+                for (int i = 0; i < allKeys -> count(); i++)
+                {
+                    __String *key = (__String *)allKeys -> getObjectAtIndex(i);
+                    Ref *obj = result -> objectForKey(key -> getCString());
+                    
+                    log("key = %s", key -> getCString());
+                    if (dynamic_cast<__String *>(obj))
+                    {
+                        log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                    }
+                    else if (dynamic_cast<__Integer *>(obj))
+                    {
+                        log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                    }
+                    else if (dynamic_cast<__Double *>(obj))
+                    {
+                        log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                    }
+                }
+                allKeys->release();
+            }
+            catch(...)
+            {
+                log("==============error");
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateFail:
+        {
+            log("Fail");
+            //回调错误信息
+            __Array *allKeys = result->allKeys();
+            allKeys->retain();
+            for (int i = 0; i < allKeys-> count(); i++)
+            {
+                __String *key = (__String*)allKeys->getObjectAtIndex(i);
+                Ref *obj = result->objectForKey(key->getCString());
+                
+                log("key = %s", key -> getCString());
+                if (dynamic_cast<__String *>(obj))
+                {
+                    log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                }
+                else if (dynamic_cast<__Integer *>(obj))
+                {
+                    log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                }
+                else if (dynamic_cast<__Double *>(obj))
+                {
+                    log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                }
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateCancel:
+        {
+            log("Cancel");
+        }
+            break;
+        default:
+            break;
+    }
 }
 
-void HelloWorld::getFriendListMenuItemClick(cocos2d::Ref* pSender)
+void addFriendResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *result)
 {
-	reqID += 1; 
-	//account 填入昵称
-	C2DXShareSDK::getFriendList(reqID, C2DXPlatTypeSinaWeibo, 10, 1, getFriendsResultHandler);
+    switch (state)
+    {
+        case cn::sharesdk::C2DXResponseStateSuccess:
+        {
+            log("Success");
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateFail:
+        {
+            log("Fail");
+            //回调错误信息
+            __Array *allKeys = result->allKeys();
+            allKeys->retain();
+            for (int i = 0; i < allKeys-> count(); i++)
+            {
+                __String *key = (__String*)allKeys->getObjectAtIndex(i);
+                Ref *obj = result->objectForKey(key->getCString());
+                
+                log("key = %s", key -> getCString());
+                if (dynamic_cast<__String *>(obj))
+                {
+                    log("value = %s", dynamic_cast<__String *>(obj) -> getCString());
+                }
+                else if (dynamic_cast<__Integer *>(obj))
+                {
+                    log("value = %d", dynamic_cast<__Integer *>(obj) -> getValue());
+                }
+                else if (dynamic_cast<__Double *>(obj))
+                {
+                    log("value = %f", dynamic_cast<__Double *>(obj) -> getValue());
+                }
+            }
+        }
+            break;
+        case cn::sharesdk::C2DXResponseStateCancel:
+        {
+            log("Cancel");
+        }
+            break;
+        default:
+            break;
+    }
 }
 
-void HelloWorld::followFriendMenuItemClick(cocos2d::Ref* pSender)
+void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
 {
-	reqID += 1; 
-	//account 填入昵称
-	C2DXShareSDK::addFriend(reqID, C2DXPlatTypeSinaWeibo, "淡淡想起丶", addFriendResultHandler);
+    reqID += 1;
+    
+    __Dictionary *content = __Dictionary::create();
+    content -> setObject(__String::create("分享文本"), "text");
+    content -> setObject(__String::create("HelloWorld.png"), "image");
+    content -> setObject(__String::create("测试标题"), "title");
+    content -> setObject(__String::create("http://www.mob.com"), "url");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    
+//可以自定义分享平台，如果平台传入NULL，此时显示所有初始化的平台
+//    C2DXArray *platforms = C2DXArray::create();
+//    __Integer *sina = new __Integer(cn::sharesdk::C2DXPlatTypeSinaWeibo);
+//    __Integer *tencent = new __Integer(cn::sharesdk::C2DXPlatTypeTencentWeibo);
+//    __Integer *wechat = new __Integer(cn::sharesdk::C2DXPlatTypeWechatPlatform);
+//    __Integer *qq = new __Integer(cn::sharesdk::C2DXPlatTypeQQPlatform);
+//    __Integer *fb = new __Integer(cn::sharesdk::C2DXPlatTypeFacebook);
+//    __Integer *tw = new __Integer(cn::sharesdk::C2DXPlatTypeTwitter);
+//    __Integer *mail = new __Integer(cn::sharesdk::C2DXPlatTypeMail);
+//
+//    platforms->addObject(sina);
+//    platforms->addObject(tencent);
+//    platforms->addObject(wechat);
+//    platforms->addObject(qq);
+//    platforms->addObject(fb);
+//    platforms->addObject(tw);
+//    platforms->addObject(mail);
+    
+    C2DXShareSDK::showShareMenu(reqID,NULL,content,100,100,shareContentResultHandler);
 }
 
-void HelloWorld::shareForWechatTimeLineMenuItemClick(cocos2d::Ref* pSender)
+void HelloWorld::authBtnClickHandler(cocos2d::Ref* pSender)
 {
-	reqID += 1; 
-	__Dictionary *content = __Dictionary::create();
-	//Dictionary可用的Key如下，如果需要用到其它字段，可自行参考Sample中的代码实现：
-	// (并不是所有平台都有这些字段，需要参考文档http://wiki.mob.com/Android_%E4%B8%8D%E5%90%8C%E5%B9%B3%E5%8F%B0%E5%88%86%E4%BA%AB%E5%86%85%E5%AE%B9%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E
-	content -> setObject(String::create("jajax"), "content"); //要分享的内容，注意在文档中content对应的是text字段
-	//content -> setObject(String::create("http://img0.bdstatic.com/img/image/shouye/systsy-11927417755.jpg"), "image"); //可以是本地路径（如：/sdcard/a.jpg）或是一个URL
-	//content -> setObject(String::create("for title"), "title");
-	//content -> setObject(String::create("http://sharesdk.cn"), "url");
-	//content -> setObject(String::createWithFormat("%d", C2DXContentTypeImage), "type");
-	C2DXShareSDK::shareContent(reqID, C2DXPlatTypeSinaWeibo , content , shareResultHandler);
+    reqID += 1;
+    C2DXShareSDK::authorize(reqID,cn::sharesdk::C2DXPlatTypeFacebook, authResultHandler);
 }
 
-void HelloWorld::shareMenuItemClick(cocos2d::Ref * pSender)
+void HelloWorld::isAuthValidBtnClickHandler(cocos2d::Ref *pSender)
 {
-	reqID += 1; 
-	__Dictionary *content = __Dictionary::create();
-    //Dictionary可用的Key如下，如果需要用到其它字段，可自行参考Sample中的代码实现：
-    // (并不是所有平台都有这些字段，需要参考文档http://wiki.mob.com/Android_%E4%B8%8D%E5%90%8C%E5%B9%B3%E5%8F%B0%E5%88%86%E4%BA%AB%E5%86%85%E5%AE%B9%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E)
+    bool isAuthValid = C2DXShareSDK::isAuthorizedValid(cn::sharesdk::C2DXPlatTypeSinaWeibo);
+    log("isAuthValid: %i",isAuthValid);
+}
 
-    content -> setObject(String::create("jaja"), "content"); //要分享的内容，注意在文档中content对应的是text字段
-    content -> setObject(String::create("http://img0.bdstatic.com/img/image/shouye/systsy-11927417755.jpg"), "image"); //可以是本地路径（如：/sdcard/a.jpg）或是一个URL
-    content -> setObject(String::create("for title"), "title");
-    content -> setObject(String::create("测试描述"), "description");
-    content -> setObject(String::create("http://sharesdk.cn"), "url");
-    content -> setObject(String::createWithFormat("%d", C2DXContentTypeNews), "type");
-    content -> setObject(String::create("http://sharesdk.cn"), "siteUrl");
-    content -> setObject(String::create("ShareSDK"), "site");
-    content -> setObject(String::create("http://mp3.mwap8.com/destdir/Music/2009/20090601/ZuiXuanMinZuFeng20090601119.mp3"), "musicUrl");
-    content -> setObject(String::create("extInfo"), "extInfo"); //微信分享应用时传给应用的附加信息
-    C2DXShareSDK::showShareMenu(reqID, NULL, content, 100, 100, shareResultHandler);
-//    C2DXShareSDK::showShareView(reqID, C2DXPlatTypeSinaWeibo, content, shareResultHandler);
+void HelloWorld::cancelAuthBtnClickHandler(cocos2d::Ref *pSender)
+{
+    C2DXShareSDK::cancelAuthorize(cn::sharesdk::C2DXPlatTypeSinaWeibo);
+}
+
+void HelloWorld::isClientValidBtnClickHandler(cocos2d::Ref *pSender)
+{
+    bool isClientValid = C2DXShareSDK::isClientValid(cn::sharesdk::C2DXPlatTypeSinaWeibo);
+    log("isAuthValid: %i",isClientValid);
+}
+
+void HelloWorld::getUserInfoBtnClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    C2DXShareSDK::getUserInfo(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, getUserResultHandler);
+}
+
+void HelloWorld::getAuthInfoBtnClickHandler(cocos2d::Ref *pSender)
+{
+    log("Use getUserInfo method instead.");
+}
+
+void HelloWorld::shareContentClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    
+    //分享内容
+    __Dictionary *content = __Dictionary::create();
+    content -> setObject(__String::create("分享文本"), "text");
+    content -> setObject(__String::create("HelloWorld.png"), "image");
+    content -> setObject(__String::create("测试标题"), "title");
+    content -> setObject(__String::create("http://www.mob.com"), "url");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    
+    C2DXShareSDK::shareContent(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
+}
+
+void HelloWorld::oneKeyShareContentClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    
+    //分享内容
+    __Dictionary *content = __Dictionary::create();
+    content -> setObject(__String::create("分享文本"), "text");
+    content -> setObject(__String::create("HelloWorld.png"), "image");
+    content -> setObject(__String::create("测试标题"), "title");
+    content -> setObject(__String::create("http://www.mob.com"), "url");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    
+    //分享平台
+    C2DXArray *platforms = C2DXArray::create();
+    __Integer *sina = new __Integer(cn::sharesdk::C2DXPlatTypeSinaWeibo);
+    platforms->addObject(sina);
+    __Integer *tencent = new __Integer(cn::sharesdk::C2DXPlatTypeTencentWeibo);
+    platforms->addObject(tencent);
+    
+    //一键分享
+    C2DXShareSDK::oneKeyShareContent(reqID, platforms, content, shareContentResultHandler);
+}
+
+void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    
+    //分享内容
+    __Dictionary *content = __Dictionary::create();
+    content -> setObject(__String::create("分享文本"), "text");
+    content -> setObject(__String::create("HelloWorld.png"), "image");
+    content -> setObject(__String::create("测试标题"), "title");
+    content -> setObject(__String::create("http://www.mob.com"), "url");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    
+    C2DXShareSDK::showShareView(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
+}
+
+void HelloWorld::getFriendListBtnClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    
+    C2DXShareSDK::getFriendList(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, 5, 1, getFriendListResultHandler);
+}
+
+void HelloWorld::addFriendBtnClickHandler(cocos2d::Ref *pSender)
+{
+    reqID += 1;
+    
+    C2DXShareSDK::addFriend(reqID, cn::sharesdk::C2DXPlatTypeTencentWeibo, "ShareSDK", addFriendResultHandler);
 }

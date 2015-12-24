@@ -2,8 +2,8 @@
 //  C2DXShareSDK.cpp
 //  C2DXShareSDKSample
 //
-//  Created by 冯 鸿杰 on 13-12-17.
-//
+//  Created by 刘 靖煌 on 15-11-27.
+//  Copyright © 2015年 mob.com. All rights reserved.
 //
 
 #include "C2DXShareSDK.h"
@@ -17,7 +17,6 @@
 #include "ShareSDKUtils.h"
 
 #endif
-
 
 using namespace cn::sharesdk;
 
@@ -43,11 +42,10 @@ const char* PlatId::AirPrint = "20";         /**< 打印 */
 const char* PlatId::Copy = "21";             /**< 拷贝 */
 const char* PlatId::WeixiSession = "22";     /**< 微信好友 */
 const char* PlatId::WeixiTimeline = "23";    /**< 微信朋友圈 */
-const char* PlatId::QQ = "24";              /**< QQ */
+const char* PlatId::QQ = "24";               /**< QQ */
 const char* PlatId::Instapaper = "25";       /**< Instapaper */
 const char* PlatId::Pocket = "26";           /**< Pocket */
 const char* PlatId::YouDaoNote = "27";       /**< 有道云笔记 */
-const char* PlatId::SohuKan = "28";          /**< 搜狐随身看 */
 const char* PlatId::Pinterest = "30";        /**< Pinterest */
 const char* PlatId::Flickr = "34";           /**< Flickr */
 const char* PlatId::Dropbox = "35";          /**< Dropbox */
@@ -64,22 +62,24 @@ const char* PlatId::KakaoStory = "45";       /**< KakaoStory */
 const char* PlatId::FacebookMessenger = "46";/**< FacebookMessenger */
 const char* PlatId::Bluetooth = "48";        /**< Bluetooth */
 const char* PlatId::Alipay = "50";           /**< Alipay */
+const char* PlatId::KakaoPlatform = "995";   /**< Kakao Series */
+const char* PlatId::EvernotePlatform = "996";/**< Evernote Series */
 const char* PlatId::WechatPlatform = "997";  /**< Wechat Series */
-const char* PlatId::QQPlatform = "998";	   /**< QQ Series */
-const char* PlatId::Any = "999"; 			   /**< 任意平台 */
+const char* PlatId::QQPlatform = "998";	     /**< QQ Series */
+const char* PlatId::Any = "999"; 			 /**< 任意平台 */
 
-
-void C2DXShareSDK::rigisterAppAndSetPlatformConfig(const char *appKey, __Dictionary *configInfo)
+void C2DXShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     // This is not a necessary method for Android, you can setup your platform configs more efficiently in "assets/ShareSDK.xml"
-    rigisterAppAndSetPlatformConfigJNI(appKey, configInfo);
+    registerAppAndSetPlatformConfigJNI(appKey, configInfo);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::registerAppAndSetPlatformConfig(appKey, configInfo);
     
 #endif
 }
@@ -88,12 +88,13 @@ void C2DXShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEve
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     authorizeJNI(reqID, (int)platType, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::authorize(reqID, platType, callback);
     
 #endif
 }
@@ -102,12 +103,13 @@ void C2DXShareSDK::cancelAuthorize(C2DXPlatType platType)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     cancelAuthorizeJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::cancelAuthorize(platType);
     
 #endif
 }
@@ -116,12 +118,13 @@ bool C2DXShareSDK::isAuthorizedValid(C2DXPlatType platType)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     return isAuthorizedValidJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    return C2DXiOSShareSDK::hasAutorized(platType);
     
 #endif
     
@@ -132,128 +135,141 @@ bool C2DXShareSDK::isClientValid(C2DXPlatType platType)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     return isClientValidJNI((int)platType);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS    
-    //TODO: iOS
+    //iOS
+    return C2DXiOSShareSDK::isClientInstalled(platType);
     
 #endif
     
     return false;
 }
 
-
 void C2DXShareSDK::getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
     getUserInfoJNI(reqID, (int)platType, callback);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::getUserInfo(reqID, platType, callback);
     
 #endif
 }
 
-__Dictionary* C2DXShareSDK::getAuthInfo(C2DXPlatType platType)
+C2DXDictionary* C2DXShareSDK::getAuthInfo(C2DXPlatType platType)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Andorid
+    //Andorid
     //return getAuthInfo((int)platType);
     return getAuthInfoJNI((int)platType);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-    //TODO: iOS
-
+    //iOS
+    //Use C2DXShareSDK::getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfoResultEvent callback) method to get the authorize infomation.
+    return NULL;
 
 #endif
 }
 
-void C2DXShareSDK::shareContent(int reqID, C2DXPlatType platType, __Dictionary *content, C2DXShareResultEvent callback)
+void C2DXShareSDK::shareContent(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
-    __Array *platTypes = __Array::create();
-	platTypes->addObject(Integer::create(platType));
+    //Andorid
+    C2DXArray *platTypes = C2DXArray::create();
+	platTypes->addObject(C2DXInteger::create(platType));
     shareContentJNI(reqID, platTypes, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXArray *platTypes = C2DXArray::create();
+    platTypes->addObject(C2DXInteger::create(platType));
+    C2DXiOSShareSDK::shareContent(reqID,platType, content, callback);
     
 #endif
 }
 
-void C2DXShareSDK::shareContent(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback)
+void C2DXShareSDK::oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
-    //TODO: Andorid
+    //Andorid
+    C2DXArray *platTypes = C2DXArray::create();
+    platTypes->addObject(C2DXInteger::create(platType));
     shareContentJNI(reqID, platTypes, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::oneKeyShareContent(reqID, platTypes, content, callback);
     
 #endif
+
 }
 
-void C2DXShareSDK::showShareMenu(int reqID, __Array *platTypes, __Dictionary *content, int x, int y, C2DXShareResultEvent callback)
+void C2DXShareSDK::showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Android
+    //Android
     onekeyShareJNI(reqID, 0, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, cocos2d::Point{static_cast<float>(x),static_cast<float>(y)}, callback);
     
 #endif
 }
 
-void C2DXShareSDK::showShareView(int reqID, C2DXPlatType platType, __Dictionary *content, C2DXShareResultEvent callback)
+void C2DXShareSDK::showShareView(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Android
+    //Android
     onekeyShareJNI(reqID, (int) platType, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
-    //TODO: iOS
+    //iOS
+    C2DXiOSShareSDK::showShareEditView(reqID,platType, content, callback);
     
 #endif
 }
 
-void C2DXShareSDK::getFriendList(int reqID, C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback){
+void C2DXShareSDK::getFriendList(int reqID, C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback)
+{
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Android
+    //Android
 	getFriendListJNI(reqID, (int) platType, count, page, callback);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-    //TODO: iOS
-    //
+    //iOS
+    C2DXiOSShareSDK::getFriendList(reqID, platType,count, page, callback);
 
 #endif
 }
 
-void C2DXShareSDK::addFriend(int reqID, C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback){
+void C2DXShareSDK::addFriend(int reqID, C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback)
+{
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Android
+    //Android
 	addFriendJNI(reqID, (int) platType, account, callback);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-    //TODO: iOS
-    //
+    //iOS
+    C2DXiOSShareSDK::addFriend(reqID, platType, account,callback);
 
 #endif
 }
@@ -262,12 +278,13 @@ void C2DXShareSDK::toast(const char *msg)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
-    //TODO: Android
+    //Android
     toastShowJNI(msg);
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 
-    //TODO: iOS
-
+    //iOS
+//    C2DXiOSShareSDK::alertLog(msg);
+    
 #endif
 }

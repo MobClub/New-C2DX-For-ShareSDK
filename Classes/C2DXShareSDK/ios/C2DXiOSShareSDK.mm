@@ -1,104 +1,126 @@
 //
 //  C2DXiOSShareSDK.cpp
-//  C2DXShareSDKSample
+//  HelloWorldDemo
 //
-//  Created by 冯 鸿杰 on 13-12-17.
-//
+//  Created by 刘 靖煌 on 15-11-27.
+//  Copyright © 2015年 mob.com. All rights reserved.
 //
 
 #include "C2DXiOSShareSDK.h"
-#import <ShareSDK/ShareSDK.h>
-#import <AGCommon/CMRegexKitLite.h>
 
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+#import <ShareSDKUI/ShareSDKUI.h>
+#import <ShareSDKExtension/ShareSDK+Extension.h>
+#import <ShareSDKExtension/SSEShareHelper.h>
+#import <ShareSDK/SSDKFriendsPaging.h>
+#import <MOBFoundation/MOBFRegex.h>
+#import <ShareSDK/NSMutableDictionary+SSDKShare.h>
+
+#import <ShareSDK/ShareSDK+Base.h>
+
+#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
+#define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
+#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
+#define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
+#define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
+//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要易信分享可以注释此行
+//#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要易信分享可以注释此行
+
+#ifdef IMPORT_SINA_WEIBO_LIB
+#import "WeiboSDK.h"
+#endif
+
+#ifdef IMPORT_QZONE_QQ_LIB
+#import <TencentOpenAPI/TencentOAuth.h>
+#import <TencentOpenAPI/QQApiInterface.h>
+#endif
+
+#ifdef IMPORT_RENREN_LIB
+#import <RennSDK/RennSDK.h>
+#endif
+
+#ifdef IMPORT_GOOGLE_PLUS_LIB
+#import <GooglePlus/GooglePlus.h>
+#endif
+
+#ifdef IMPORT_WECHAT_LIB
+#import "WXApi.h"
+#endif
+
+#ifdef IMPORT_ALIPAY_LIB
+#import "APOpenAPI.h"
+#endif
+
+#ifdef IMPORT_KAKAO_LIB
+#import <KakaoOpenSDK/KakaoOpenSDK.h>
+#endif
 
 static UIView *_refView = nil;
 
 using namespace cn::sharesdk;
 
+#pragma mark - tools
+
 /**
- *	@brief	转换NSDictionary为CCDicationary类型
+ *	@brief	转换NSDictionary为C2DXDictionary类型
  *
  *	@param 	dict 	字典
  *
  *	@return	字典类型
  */
-CCDictionary* convertNSDictToCCDict(NSDictionary *dict);
+C2DXDictionary* convertNSDictToCCDict(NSDictionary *dict);
 
 /**
- *	@brief	转换NSString为CCString类型
+ *	@brief	转换C2DXDictionary为NSDictionary类型
+ *
+ *	@param 	dict 	字典
+ *
+ *	@return	字典类型
+ */
+NSMutableDictionary* convertC2DXDictionaryToNSDictionary(C2DXDictionary *Dictionary);
+
+/**
+ *	@brief	转换NSString为C2DXString类型
  *
  *	@param 	string 	字符串
  *
  *	@return	字符类型
  */
-CCString* convertNSStringToCCString(NSString *string);
+C2DXString* convertNSStringToC2DXString(NSString *string);
 
 /**
- *	@brief	转换NSArray为CCArray类型
+ *	@brief	转换C2DXString为NSString类型
+ *
+ *	@param 	string 	字符串
+ *
+ *	@return	字符类型
+ */
+NSString* convertC2DXStringToNSString(C2DXString *String);
+
+/**
+ *	@brief	转换NSArray为C2DXArray类型
  *
  *	@param 	array 	数组
  *
  *	@return	数组类型
  */
-CCArray* convertNSArrayToCCArray(NSArray *array);
+C2DXArray* convertNSArrayToC2DXArray(NSArray *array);
 
 /**
- *	@brief	转换分享内容
+ *	@brief	转换C2DXArray为NSArray类型
  *
- *	@param 	content 	内容字典结构
+ *	@param 	array 	数组
  *
- *	@return	分享内容对象
+ *	@return	数组类型
  */
-id<ISSContent> convertPublishContent(CCDictionary *content);
+NSArray* convertC2DXArrayToNSArray(C2DXArray *Array);
 
-
-UIImage *glToUIImage(CGSize size)
-{
-    
-    CGSize viewSize = size;
-    NSInteger myDataLength = viewSize.width * viewSize.height * 4;
-    
-    // allocate array and read pixels into it.
-    GLubyte *buffer = (GLubyte *) malloc(myDataLength);
-    glReadPixels(0, 0, viewSize.width, viewSize.height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    
-    // gl renders "upside down" so swap top to bottom into new array.
-    // there's gotta be a better way, but this works.
-    GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
-    for(int y = 0; y < viewSize.height; y++)
-    {
-        for(int x = 0; x < viewSize.width* 4; x++)
-        {
-            buffer2[(int)((viewSize.height-1 - y) * viewSize.width * 4 + x)] = buffer[(int)(y * 4 * viewSize.width + x)];
-        }
-    }
-    
-    // make data provider with data.
-    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
-    
-    // prep the ingredients
-    int bitsPerComponent = 8;
-    int bitsPerPixel = 32;
-    int bytesPerRow = 4 * viewSize.width;
-    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
-    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
-    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
-    
-    // make the cgimage
-    CGImageRef imageRef = CGImageCreate(viewSize.width , viewSize.height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
-    
-    // then make the uiimage from that
-    UIImage *myImage = [UIImage imageWithCGImage:imageRef];
-    return myImage;
-}
-
-
-CCDictionary* convertNSDictToCCDict(NSDictionary *dict)
+C2DXDictionary* convertNSDictToCCDict(NSDictionary *dict)
 {
     if (dict)
     {
-        CCDictionary *ccDict = CCDictionary::create();
-        
+        C2DXDictionary *ccDict = C2DXDictionary::create();
         NSArray *allKeys = [dict allKeys];
         for (int i = 0; i < [allKeys count]; i++)
         {
@@ -107,7 +129,7 @@ CCDictionary* convertNSDictToCCDict(NSDictionary *dict)
             
             if ([value isKindOfClass:[NSString class]])
             {
-                CCString *strValue = convertNSStringToCCString(value);
+                C2DXString *strValue = convertNSStringToC2DXString(value);
                 if (strValue)
                 {
                     ccDict -> setObject(strValue, [key UTF8String]);
@@ -115,7 +137,7 @@ CCDictionary* convertNSDictToCCDict(NSDictionary *dict)
             }
             else if ([value isKindOfClass:[NSNumber class]])
             {
-                CCString *strValue = convertNSStringToCCString([NSString stringWithFormat:@"%@", value]);
+                C2DXString *strValue = convertNSStringToC2DXString([NSString stringWithFormat:@"%@", value]);
                 if (strValue)
                 {
                     ccDict -> setObject(strValue, [key UTF8String]);
@@ -123,11 +145,11 @@ CCDictionary* convertNSDictToCCDict(NSDictionary *dict)
             }
             else if ([value isKindOfClass:[NSDate class]])
             {
-                ccDict -> setObject(CCDouble::create([value timeIntervalSince1970] * 1000), [key UTF8String]);
+                ccDict -> setObject(C2DXDouble::create([value timeIntervalSince1970] * 1000), [key UTF8String]);
             }
             else if ([value isKindOfClass:[NSDictionary class]])
             {
-                CCDictionary *dictValue = convertNSDictToCCDict(value);
+                C2DXDictionary *dictValue = convertNSDictToCCDict(value);
                 if (dictValue)
                 {
                     ccDict -> setObject(dictValue, [key UTF8String]);
@@ -135,42 +157,101 @@ CCDictionary* convertNSDictToCCDict(NSDictionary *dict)
             }
             else if ([value isKindOfClass:[NSArray class]])
             {
-                CCArray *arrValue = convertNSArrayToCCArray(value);
+                C2DXArray *arrValue = convertNSArrayToC2DXArray(value);
                 if (arrValue)
                 {
                     ccDict -> setObject(arrValue, [key UTF8String]);
                 }
             }
         }
-        
         return ccDict;
     }
     
     return NULL;
 }
 
-CCString* convertNSStringToCCString(NSString *string)
+NSMutableDictionary * convertC2DXDictionaryToNSDictionary(C2DXDictionary * Dictionary)
+{
+    if (Dictionary)
+    {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        C2DXArray *allkeys = Dictionary -> allKeys();
+        
+        if (allkeys != NULL)
+        {
+            for (int i = 0; i < allkeys -> count(); i ++)
+            {
+                C2DXString * key = dynamic_cast<C2DXString *> (allkeys -> getObjectAtIndex(i));
+                C2DXObject * value = Dictionary -> objectForKey(key -> getCString());
+                
+                if (dynamic_cast<C2DXString*>(value) != NULL)
+                {
+                    NSString *strValue = convertC2DXStringToNSString(dynamic_cast<C2DXString*>(value) );
+                    if (strValue)
+                    {
+                        [dict setObject:strValue
+                                 forKey:[NSString stringWithCString:key -> getCString()
+                                                           encoding:NSUTF8StringEncoding]];
+                    }
+                }
+                else if (dynamic_cast<C2DXDictionary*>(value) != NULL)
+                {
+                    NSMutableDictionary *dictValue = convertC2DXDictionaryToNSDictionary(dynamic_cast<C2DXDictionary*>(value));
+                    if (dictValue)
+                    {
+                        [dict setObject:dictValue
+                                 forKey:[NSString stringWithCString:key -> getCString()
+                                                           encoding:NSUTF8StringEncoding]];
+                    }
+                }
+                else if (dynamic_cast<C2DXArray*>(value) != NULL)
+                {
+                    NSArray *arrayValue = convertC2DXArrayToNSArray(dynamic_cast<C2DXArray*>(value));
+                    if (arrayValue)
+                    {
+                        [dict setObject:arrayValue
+                                 forKey:[NSString stringWithCString:key -> getCString()
+                                                           encoding:NSUTF8StringEncoding]];
+                    }
+                }
+            }
+        }
+        return  dict;
+    }
+    return NULL;
+}
+
+C2DXString* convertNSStringToC2DXString(NSString *string)
 {
     if (string)
     {
-        return CCString::create([string cStringUsingEncoding:NSUTF8StringEncoding]);
+        return C2DXString::create([string cStringUsingEncoding:NSUTF8StringEncoding]);
     }
     
     return NULL;
 }
 
-CCArray* convertNSArrayToCCArray(NSArray *array)
+NSString* convertC2DXStringToNSString(C2DXString *string)
+{
+    if (string)
+    {
+        return [NSString stringWithCString:string -> getCString() encoding:NSUTF8StringEncoding];
+    }
+    return NULL;
+}
+
+C2DXArray* convertNSArrayToC2DXArray(NSArray *array)
 {
     if (array)
     {
-        CCArray *ccArray = CCArray::create();
+        C2DXArray *ccArray = C2DXArray::create();
         
         for (int i = 0; i < [array count]; i++)
         {
             id value = [array objectAtIndex:i];
             if ([value isKindOfClass:[NSString class]])
             {
-                CCString *strValue = convertNSStringToCCString(value);
+                C2DXString *strValue = convertNSStringToC2DXString(value);
                 if (strValue)
                 {
                     ccArray -> addObject(strValue);
@@ -178,7 +259,7 @@ CCArray* convertNSArrayToCCArray(NSArray *array)
             }
             else if ([value isKindOfClass:[NSNumber class]])
             {
-                CCString *strValue = convertNSStringToCCString([NSString stringWithFormat:@"%@", value]);
+                C2DXString *strValue = convertNSStringToC2DXString([NSString stringWithFormat:@"%@", value]);
                 if (strValue)
                 {
                     ccArray -> addObject(strValue);
@@ -186,11 +267,11 @@ CCArray* convertNSArrayToCCArray(NSArray *array)
             }
             else if ([value isKindOfClass:[NSDate class]])
             {
-                ccArray -> addObject(CCDouble::create([value timeIntervalSince1970] * 1000));
+                ccArray -> addObject(C2DXDouble::create([value timeIntervalSince1970] * 1000));
             }
             else if ([value isKindOfClass:[NSDictionary class]])
             {
-                CCDictionary *dictValue = convertNSDictToCCDict(value);
+                C2DXDictionary *dictValue = convertNSDictToCCDict(value);
                 if (dictValue)
                 {
                     ccArray -> addObject(dictValue);
@@ -198,7 +279,7 @@ CCArray* convertNSArrayToCCArray(NSArray *array)
             }
             else if ([value isKindOfClass:[NSArray class]])
             {
-                CCArray *arrayValue = convertNSArrayToCCArray(value);
+                C2DXArray *arrayValue = convertNSArrayToC2DXArray(value);
                 if (arrayValue)
                 {
                     ccArray -> addObject(arrayValue);
@@ -212,477 +293,671 @@ CCArray* convertNSArrayToCCArray(NSArray *array)
     return NULL;
 }
 
-id<ISSContent> convertPublishContent(CCDictionary *content)
+NSArray* convertC2DXArrayToNSArray(C2DXArray *array)
 {
-    NSString *message = nil;
-    id<ISSCAttachment> image = nil;
+    if (array)
+    {
+        NSMutableArray *nsArray = [NSMutableArray array];
+        for (int i = 0; i < array -> count(); i++)
+        {
+            C2DXObject * value = array -> getObjectAtIndex(i);
+            if (dynamic_cast<C2DXString*>(value) != NULL)
+            {
+                NSString *strValue = convertC2DXStringToNSString(dynamic_cast<C2DXString*>(value) );
+                if (strValue)
+                {
+                    [nsArray addObject:strValue];
+                }
+            }
+            else if (dynamic_cast<C2DXDictionary*>(value) != NULL)
+            {
+                NSMutableDictionary *dictValue = convertC2DXDictionaryToNSDictionary(dynamic_cast<C2DXDictionary*>(value));
+                if (dictValue)
+                {
+                    [nsArray addObject:dictValue];
+                }
+            }
+            else if (dynamic_cast<C2DXArray*>(value) != NULL)
+            {
+                NSArray *arrayValue = convertC2DXArrayToNSArray(dynamic_cast<C2DXArray*>(value));
+                if (arrayValue)
+                {
+                    [nsArray addObject:arrayValue];
+                }
+            }
+        }
+        return nsArray;
+    }
+    return NULL;
+}
+
+#pragma mark - ShareSDK 接口
+#pragma mark 注册
+
+void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo)
+{
+    NSString* appKeyStr = [NSString stringWithCString:appKey
+                                             encoding:NSUTF8StringEncoding];
+    NSMutableDictionary* platformsDic = [NSMutableDictionary dictionary];
+    
+    if(configInfo)
+    {
+        platformsDic = convertC2DXDictionaryToNSDictionary(configInfo);
+    }
+    
+    NSArray *platforms = [platformsDic allKeys];
+    NSMutableArray *activePlatforms = [NSMutableArray array];
+    
+    for (id platformStr in platforms)
+    {
+        if ([platformStr isKindOfClass:[NSString class]])
+        {
+            [activePlatforms addObject:@([platformStr integerValue])];
+        }
+    }
+    
+    [ShareSDK registerApp:appKeyStr
+          activePlatforms:activePlatforms
+                 onImport:^(SSDKPlatformType platformType)
+                 {
+                     switch (platformType)
+                     {
+#ifdef IMPORT_SINA_WEIBO_LIB
+                         case SSDKPlatformTypeSinaWeibo:
+                             [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_QZONE_QQ_LIB
+                         case SSDKPlatformTypeQQ:
+                             [ShareSDKConnector connectQQ:[QQApiInterface class]
+                                        tencentOAuthClass:[TencentOAuth class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_RENREN_LIB
+                         case SSDKPlatformTypeRenren:
+                             [ShareSDKConnector connectRenren:[RennClient class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_GOOGLE_PLUS_LIB
+                         case SSDKPlatformTypeGooglePlus:
+                             [ShareSDKConnector connectGooglePlus:[GPPSignIn class]
+                                                       shareClass:[GPPShare class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_WECHAT_LIB
+                         case SSDKPlatformTypeWechat:
+                             [ShareSDKConnector connectWeChat:[WXApi class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_ALIPAY_LIB
+                         case SSDKPlatformTypeAliPaySocial:
+                             [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
+                             break;
+#endif
+                             
+#ifdef IMPORT_KAKAO_LIB
+                         case SSDKPlatformTypeKakao:
+                             [ShareSDKConnector connectKaKao:[KOSession class]];
+                             break;
+#endif
+             
+                         default:
+                         break;
+                     }
+                 }
+    onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
+    {
+        NSMutableDictionary * dict = [platformsDic objectForKey:[NSString stringWithFormat:@"%zi",platformType]];
+        [appInfo addEntriesFromDictionary:dict];
+        [appInfo setObject:@"both" forKey:@"auth"];
+        
+    }];
+}
+
+id convertPublishContent(C2DXDictionary *content)
+{
+    NSString *text = nil;
     NSString *title = nil;
     NSString *url = nil;
-    NSString *desc = nil;
-    SSPublishContentMediaType type = SSPublishContentMediaTypeText;
+    SSDKImage *thumbImg = nil;
+    SSDKImage *image = nil;
+    
+    NSString *musicFileUrl = nil;
+    NSString *extInfo = nil;
+    NSData *fileData = nil;
+    NSData *emoData = nil;
+    SSDKContentType contentType = SSDKContentTypeAuto;
+    C2DXContentType temContentType = C2DXContentTypeText;
+    
+    NSMutableDictionary *shareContentPara = [NSMutableDictionary dictionary];
     
     if (content)
     {
-        CCString *messageStr = dynamic_cast<CCString *>(content -> objectForKey("content"));
-        if (messageStr)
+        //text
+        C2DXString *textStr = dynamic_cast<C2DXString *>(content -> objectForKey("text"));
+        if (textStr)
         {
-            message = [NSString stringWithCString:messageStr -> getCString() encoding:NSUTF8StringEncoding];
+            text = [NSString stringWithCString:textStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
-        CCString *imagePathStr = dynamic_cast<CCString *>(content -> objectForKey("image"));
-        if (imagePathStr)
-        {
-            NSString *imagePath = [NSString stringWithCString:imagePathStr -> getCString() encoding:NSUTF8StringEncoding];
-            NSLog(@"imagePath = %@", imagePath);
-            if ([imagePath isMatchedByRegex:@"\\w://.*"])
-            {
-                NSLog(@"is url");
-                image = [ShareSDK imageWithUrl:imagePath];
-            }
-            else
-            {
-                NSLog(@"is path");
-                image = [ShareSDK imageWithPath:imagePath];
-            }
-        }
-        
-        CCString *titleStr = dynamic_cast<CCString *>(content -> objectForKey("title"));
+        //title
+        C2DXString *titleStr = dynamic_cast<C2DXString *>(content -> objectForKey("title"));
         if (titleStr)
         {
             title = [NSString stringWithCString:titleStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
-        CCString *urlStr = dynamic_cast<CCString *>(content -> objectForKey("url"));
+        //url
+        C2DXString *urlStr = dynamic_cast<C2DXString *>(content -> objectForKey("url"));
         if (urlStr)
         {
             url = [NSString stringWithCString:urlStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
-        CCString *descStr = dynamic_cast<CCString *>(content -> objectForKey("description"));
-        if (descStr)
+        //thumbImg
+        C2DXString *thumbImagePath = dynamic_cast<C2DXString *>(content -> objectForKey("thumbImg"));
+        if (thumbImagePath)
         {
-            desc = [NSString stringWithCString:descStr -> getCString() encoding:NSUTF8StringEncoding];
-        }
-        
-        CCString *typeValue = dynamic_cast<CCString *>(content -> objectForKey("type"));
-        if (typeValue)
-        {
-            type = (SSPublishContentMediaType)typeValue -> intValue();
-        }
-    }
-    
-    id<ISSContent> contentObj =  [ShareSDK content:message
-                                    defaultContent:nil
-                                             image:image
-                                             title:title
-                                               url:url
-                                       description:desc
-                                         mediaType:type];
-    
-    if (content)
-    {
-        NSString *siteUrlStr = nil;
-        NSString *siteStr = nil;
-        
-        CCString *siteUrl = dynamic_cast<CCString *>(content -> objectForKey("siteUrl"));
-        if (siteUrl)
-        {
-            siteUrlStr = [NSString stringWithCString:siteUrl -> getCString() encoding:NSUTF8StringEncoding];
-        }
-        CCString *site = dynamic_cast<CCString *>(content -> objectForKey("site"));
-        if (site)
-        {
-            siteStr = [NSString stringWithCString:site -> getCString() encoding:NSUTF8StringEncoding];
-        }
-        
-        if (siteUrlStr || siteStr)
-        {
-            [contentObj addQQSpaceUnitWithTitle:INHERIT_VALUE
-                                            url:INHERIT_VALUE
-                                           site:siteStr
-                                        fromUrl:siteUrlStr
-                                        comment:INHERIT_VALUE
-                                        summary:INHERIT_VALUE
-                                          image:INHERIT_VALUE
-                                           type:INHERIT_VALUE
-                                        playUrl:INHERIT_VALUE
-                                           nswb:INHERIT_VALUE];
-        }
-        
-        NSString *extInfoStr = nil;
-        NSString *musicUrlStr = nil;
-        
-        CCString *extInfo = dynamic_cast<CCString *>(content -> objectForKey("extInfo"));
-        if (extInfo)
-        {
-            extInfoStr = [NSString stringWithCString:extInfo -> getCString() encoding:NSUTF8StringEncoding];
-        }
-        CCString *musicUrl = dynamic_cast<CCString *>(content -> objectForKey("musicUrl"));
-        if (musicUrl)
-        {
-            musicUrlStr = [NSString stringWithCString:musicUrl -> getCString() encoding:NSUTF8StringEncoding];
-        }
-        
-        if (extInfoStr || musicUrlStr)
-        {
-            [contentObj addWeixinSessionUnitWithType:INHERIT_VALUE
-                                             content:INHERIT_VALUE
-                                               title:INHERIT_VALUE
-                                                 url:INHERIT_VALUE
-                                               image:INHERIT_VALUE
-                                        musicFileUrl:musicUrlStr
-                                             extInfo:extInfoStr
-                                            fileData:INHERIT_VALUE
-                                        emoticonData:INHERIT_VALUE];
+            NSString *imgPath = [NSString stringWithCString:thumbImagePath -> getCString() encoding:NSUTF8StringEncoding];
             
-            [contentObj addWeixinTimelineUnitWithType:INHERIT_VALUE
-                                              content:INHERIT_VALUE
-                                                title:INHERIT_VALUE
-                                                  url:INHERIT_VALUE
-                                                image:INHERIT_VALUE
-                                         musicFileUrl:musicUrlStr
-                                              extInfo:extInfoStr
-                                             fileData:INHERIT_VALUE
-                                         emoticonData:INHERIT_VALUE];
-        }
-    }
-    
-    return contentObj;
-}
-
-void C2DXiOSShareSDK::open(CCString *appKey, bool useAppTrusteeship)
-{
-    NSString *appKeyStr = [NSString stringWithCString:appKey -> getCString() encoding:NSUTF8StringEncoding];
-    [ShareSDK registerApp:appKeyStr useAppTrusteeship:useAppTrusteeship];
-    [ShareSDK ssoEnabled:NO];
-}
-
-void C2DXiOSShareSDK::close()
-{
-    
-}
-
-void C2DXiOSShareSDK::setPlatformConfig(C2DXPlatType platType, CCDictionary *configInfo)
-{
-    NSMutableDictionary *configDict = nil;
-    
-    if (configInfo)
-    {
-        //转换配置信息
-        CCArray *configInfoKeys = configInfo -> allKeys();
-        if (configInfoKeys)
-        {
-            configDict = [NSMutableDictionary dictionary];
-            
-            for (int i = 0; i < configInfoKeys -> count(); i++)
+            if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
+                                    options:MOBFRegexOptionsNoOptions
+                                    inRange:NSMakeRange(0, 10)
+                                 withString:imgPath])
             {
-                CCString *key = (CCString *)configInfoKeys -> objectAtIndex(i);
-                CCString *value = (CCString *)configInfo -> objectForKey(key -> getCString());
-                
-                NSString *keyStr = [NSString stringWithCString:key -> getCString() encoding:NSUTF8StringEncoding];
-                NSString *valueStr = [NSString stringWithCString:value -> getCString() encoding:NSUTF8StringEncoding];
-                if (keyStr && valueStr)
-                {
-                    [configDict setObject:valueStr forKey:keyStr];
-                }
+                thumbImg = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
+            }else
+            {
+                thumbImg = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
+                                                     format:SSDKImageFormatJpeg settings:nil];
             }
         }
+        
+        //image
+        C2DXString *imagePath = dynamic_cast<C2DXString *>(content -> objectForKey("image"));
+        if (imagePath)
+        {
+            NSString *imgPath = [NSString stringWithCString:imagePath -> getCString() encoding:NSUTF8StringEncoding];
+            
+            if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
+                                    options:MOBFRegexOptionsNoOptions
+                                    inRange:NSMakeRange(0, 10)
+                                 withString:imgPath])
+            {
+                image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
+            }else
+            {
+                image = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
+                                                     format:SSDKImageFormatJpeg settings:nil];
+            }
+        }
+        
+        //Music url
+        C2DXString *musicUrl = dynamic_cast<C2DXString *>(content -> objectForKey("musicFileUrl"));
+        if (musicUrl)
+        {
+            musicFileUrl = [NSString stringWithCString:musicUrl -> getCString() encoding:NSUTF8StringEncoding];
+        }
+        
+        //extInfo
+        C2DXString *extInfoUrl = dynamic_cast<C2DXString *>(content -> objectForKey("extInfo"));
+        if (extInfoUrl)
+        {
+            extInfo = [NSString stringWithCString:extInfoUrl -> getCString() encoding:NSUTF8StringEncoding];
+        }
+        
+        //fileData
+        C2DXString *fileDataStr = dynamic_cast<C2DXString *>(content -> objectForKey("fileData"));
+        
+        if (fileDataStr)
+        {
+            fileData = [NSData dataWithContentsOfFile:[NSString stringWithCString:fileDataStr -> getCString() encoding:NSUTF8StringEncoding]];
+        }
+        
+        //emoticonData
+        C2DXString *emoticonDataStr = dynamic_cast<C2DXString *>(content -> objectForKey("emoticonData"));
+        
+        if (emoticonDataStr)
+        {
+            emoData = [NSData dataWithContentsOfFile:[NSString stringWithCString:emoticonDataStr -> getCString() encoding:NSUTF8StringEncoding]];
+        }
+        
+        //type
+        C2DXString *typeValue = dynamic_cast<C2DXString *>(content -> objectForKey("type"));
+        if (typeValue)
+        {
+            temContentType = (C2DXContentType)typeValue -> intValue();
+            
+            switch (temContentType)
+            {
+                case C2DXContentTypeText:
+                    contentType = (SSDKContentType)SSDKContentTypeText;
+                    break;
+                case C2DXContentTypeImage:
+                case C2DXContentTypeNonGif:
+                case C2DXContentTypeGif:
+                    contentType = (SSDKContentType)SSDKContentTypeImage;
+                    break;
+                case C2DXContentTypeWebPage:
+                    contentType = (SSDKContentType)SSDKContentTypeWebPage;
+                    break;
+                case C2DXContentTypeMusic:
+                    contentType = (SSDKContentType)SSDKContentTypeAudio;
+                    break;
+                case C2DXContentTypeVideo:
+                    contentType = (SSDKContentType)SSDKContentTypeVideo;
+                    break;
+                case C2DXContentTypeApp:
+                    contentType = (SSDKContentType)SSDKContentTypeApp;
+                    break;
+                default:
+                    break;
+            }
+        }
+        
+        [shareContentPara SSDKSetupShareParamsByText:text
+                                              images:image
+                                                 url:[NSURL URLWithString:url]
+                                               title:title
+                                                type:contentType];
+        
+        return shareContentPara;
     }
     
-    switch (platType)
-    {
-        case C2DXPlatTypeWeixiSession:
-        case C2DXPlatTypeYiXinSession:
-            [configDict setObject:[NSNumber numberWithInt:0] forKey:@"scene"];
-            break;
-        case C2DXPlatTypeWeixiTimeline:
-        case C2DXPlatTypeYiXinTimeline:
-            [configDict setObject:[NSNumber numberWithInt:1] forKey:@"scene"];
-            break;
-        case C2DXPlatTypeWeixiFav:
-            [configDict setObject:[NSNumber numberWithInt:2] forKey:@"scene"];
-            break;
-        default:
-            break;
-    }
-    
-    [ShareSDK connectPlatformWithType:(ShareType)platType
-                             platform:nil
-                              appInfo:configDict];
+    return NULL;
 }
 
-void C2DXiOSShareSDK::authorize(C2DXPlatType platType, C2DXAuthResultEvent callback)
+#pragma mark 分享平台授权
+void C2DXiOSShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEvent callback)
 {
-    [ShareSDK authWithType:(ShareType)platType
-                   options:nil
-                    result:^(SSAuthState state, id<ICMErrorInfo> error) {
-                        
-                        CCDictionary *errorInfo = NULL;
-                        
-                        if (error)
-                        {
-                            errorInfo = CCDictionary::create();
-                            errorInfo -> setObject(CCInteger::create([error errorCode]), "error_code");
-                            errorInfo -> setObject(CCString::create([[error errorDescription] UTF8String]), "error_msg");
-                        }
-                        
-                        if (callback)
-                        {
-                            callback ((C2DXResponseState)state, platType, errorInfo);
-                        }
-                        
-                    }];
+    [ShareSDK authorize:(SSDKPlatformType)platType
+               settings:nil
+         onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+
+             C2DXDictionary *userInfoDict = NULL;
+             
+             if (user)
+             {
+                 userInfoDict = convertNSDictToCCDict([user rawData]);
+             }
+             
+             if (error)
+             {
+                 NSInteger errCode = [error code];
+                 NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                 
+                 userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                 
+                 if (errDesc)
+                 {
+                     userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                 }
+             }
+             
+             if (callback)
+             {
+                 callback(reqID,(C2DXResponseState)state,platType,userInfoDict);
+             }
+    }];
 }
 
+#pragma mark 取消授权
 void C2DXiOSShareSDK::cancelAuthorize(C2DXPlatType platType)
 {
-    [ShareSDK cancelAuthWithType:(ShareType)platType];
+    [ShareSDK cancelAuthorize:(SSDKPlatformType)platType];
 }
 
+#pragma mark 用户是否授权
 bool C2DXiOSShareSDK::hasAutorized(C2DXPlatType platType)
 {
-    return [ShareSDK hasAuthorizedWithType:(ShareType)platType] ? true : false;
+    return [ShareSDK hasAuthorized:(SSDKPlatformType)platType] ? true :false;
 }
 
-void C2DXiOSShareSDK::getUserInfo(C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
+bool C2DXiOSShareSDK::isClientInstalled(C2DXPlatType platType)
 {
-    [ShareSDK getUserInfoWithType:(ShareType)platType
-                      authOptions:nil
-                           result:^(BOOL result, id<ISSPlatformUser> userInfo, id<ICMErrorInfo> error) {
-                               
-                               CCDictionary *userInfoDict = NULL;
-                               CCDictionary *errorInfo = NULL;
-                               
-                               if (result)
-                               {
-                                   userInfoDict = convertNSDictToCCDict([userInfo sourceData]);
-                               }
-                               
-                               if (error)
-                               {
-                                   NSInteger errCode = [error errorCode];
-                                   NSString *errDesc = [error errorDescription];
-                                   errorInfo = CCDictionary::create();
-                                   errorInfo -> setObject(CCInteger::create(errCode), "error_code");
-                                   if (errDesc)
-                                   {
-                                       errorInfo -> setObject(CCString::create([errDesc UTF8String]), "error_msg");
-                                   }
-                                   
-                               }
-                               
-                               if (callback)
-                               {
-                                   callback (result ? C2DXResponseStateSuccess : C2DXResponseStateFail, platType, userInfoDict, errorInfo);
-                               }
-                               
-                           }];
+    return [ShareSDK isClientInstalled:(SSDKPlatformType)platType];
 }
 
-void C2DXiOSShareSDK::shareContent(C2DXPlatType platType, CCDictionary *content, C2DXShareResultEvent callback)
+#pragma mark 获取授权用户信息
+void C2DXiOSShareSDK::getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
 {
-    id<ISSContent> publishContent = convertPublishContent(content);
-    [ShareSDK shareContent:publishContent
-                      type:(ShareType)platType
-               authOptions:nil
-              shareOptions:nil
-             statusBarTips:NO
-                    result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                        
-                        CCDictionary *shareInfo = NULL;
-                        CCDictionary *errorInfo = NULL;
-                        
-                        if (state == SSResponseStateSuccess)
-                        {
-                            shareInfo = convertNSDictToCCDict([statusInfo sourceData]);
-                        }
-                        
-                        if (error)
-                        {
-                            NSInteger errCode = [error errorCode];
-                            NSString *errDesc = [error errorDescription];
-                            
-                            errorInfo = CCDictionary::create();
-                            errorInfo -> setObject(CCInteger::create(errCode), "error_code");
-                            if (errDesc)
-                            {
-                                errorInfo -> setObject(CCString::create([errDesc UTF8String]), "error_msg");
-                            }
-                            
-                        }
-                        
-                        if (callback)
-                        {
-                            callback ((C2DXResponseState)state, (C2DXPlatType)type, shareInfo, errorInfo);
-                        }
-                        
-                    }];
-}
-
-void C2DXiOSShareSDK::oneKeyShareContent(CCArray *platTypes, CCDictionary *content, C2DXShareResultEvent callback)
-{
-    id<ISSContent> publishContent = convertPublishContent(content);
-    
-    NSMutableArray *shareList = nil;
-    if (platTypes -> count() > 0)
+    [ShareSDK getUserInfo:(SSDKPlatformType)platType
+           onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
     {
-        shareList = [NSMutableArray array];
-        for (int i = 0; i < platTypes -> count(); i++)
+        C2DXDictionary *userInfoDict = NULL;
+        
+        if (state == SSDKResponseStateSuccess)
         {
-            CCInteger *type = (CCInteger *)platTypes -> objectAtIndex(i);
-            [shareList addObject:[NSNumber numberWithInteger:type -> getValue()]];
+            userInfoDict = convertNSDictToCCDict([user rawData]);
         }
-    }
-    
-    [ShareSDK oneKeyShareContent:publishContent
-                       shareList:shareList
-                     authOptions:nil
-                    shareOptions:nil
-                   statusBarTips:NO
-                          result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                              
-                              CCDictionary *shareInfo = NULL;
-                              CCDictionary *errorInfo = NULL;
-                              
-                              if (state == SSResponseStateSuccess)
-                              {
-                                  shareInfo = convertNSDictToCCDict([statusInfo sourceData]);
-                              }
-                              
-                              if (error)
-                              {
-                                  NSInteger errCode = [error errorCode];
-                                  NSString *errDesc = [error errorDescription];
-                                  
-                                  errorInfo = CCDictionary::create();
-                                  errorInfo -> setObject(CCInteger::create(errCode), "error_code");
-                                  if (errDesc)
-                                  {
-                                      errorInfo -> setObject(CCString::create([errDesc UTF8String]), "error_msg");
-                                  }
-                              }
-                              
-                              if (callback)
-                              {
-                                  callback ((C2DXResponseState)state, (C2DXPlatType)type, shareInfo, errorInfo);
-                              }
-                              
-                          }];
+        
+        if ([[user credential] rawData])
+        {
+            userInfoDict->setObject(convertNSDictToCCDict([[user credential] rawData]), "credential");
+        }
+        
+        if (error)
+        {
+            NSInteger errCode = [error code];
+            NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+            
+            userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+            
+            if (errDesc)
+            {
+                userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+            }
+        }
+
+        if(callback)
+        {
+             callback(reqID,(C2DXResponseState)state,platType,userInfoDict);
+        }
+    }];
 }
 
-void C2DXiOSShareSDK::showShareMenu(CCArray *platTypes, CCDictionary *content, C2DXShareResultEvent callback)
+#pragma mark 简单分享
+void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
-    C2DXiOSShareSDK::showShareMenu(platTypes, content, CCPointMake(0, 0), C2DXMenuArrowDirectionUnknown, callback);
+    NSMutableDictionary *parameters = convertPublishContent(content);
+    [ShareSDK share:(SSDKPlatformType)platType
+         parameters:parameters
+     onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+         
+         C2DXDictionary *userInfoDict = NULL;
+         
+         if (state == SSDKResponseStateSuccess)
+         {
+             userInfoDict = convertNSDictToCCDict(userData);
+         }
+         
+         if (error)
+         {
+             NSInteger errCode = [error code];
+             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+             
+             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+             
+             if (errDesc)
+             {
+                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+             }
+         }
+         
+         if (callback)
+         {
+             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platType,userInfoDict);
+         }
+     }];
 }
 
-void C2DXiOSShareSDK::showShareMenu(CCArray *platTypes, CCDictionary *content, CCPoint pt, C2DXMenuArrowDirection direction, C2DXShareResultEvent callback)
+#pragma mark 一键分享
+void C2DXiOSShareSDK::oneKeyShareContent(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
-    id<ISSContent> publishContent = convertPublishContent(content);
-    id<ISSContainer> container = nil;
-    
     NSMutableArray *shareList = nil;
     if (platTypes && platTypes -> count() > 0)
     {
         shareList = [NSMutableArray array];
         for (int i = 0; i < platTypes -> count(); i++)
         {
-            CCInteger *type = (CCInteger *)platTypes -> objectAtIndex(i);
+            C2DXInteger *type = (C2DXInteger *)platTypes -> C2DXObjectAtIndex(i);
+            [shareList addObject:[NSNumber numberWithInteger:type -> getValue()]];
+        }
+    }
+    
+    NSMutableDictionary *shareParams;
+    //构造分享参数
+    shareParams = convertPublishContent(content);
+    [SSEShareHelper oneKeyShare:shareList
+                     parameters:shareParams
+                 onStateChanged:^(SSDKPlatformType platformType,
+                                  SSDKResponseState state,
+                                  NSDictionary *userData,
+                                  SSDKContentEntity *contentEntity,
+                                  NSError *error,
+                                  BOOL end)
+     {
+         C2DXDictionary *userInfoDict = NULL;
+         
+         if (state == SSDKResponseStateSuccess)
+         {
+             userInfoDict = convertNSDictToCCDict(userData);
+         }
+         
+         if (error)
+         {
+             NSInteger errCode = [error code];
+             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+             
+             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+             
+             if (errDesc)
+             {
+                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+             }
+         }
+         
+         if (callback)
+         {
+             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
+         }
+    }];
+}
+
+#pragma mark 弹出分享菜单进行分享
+void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXPoint pt, C2DXShareResultEvent callback)
+{
+    NSMutableArray *shareList = nil;
+    if (platTypes && platTypes -> count() > 0)
+    {
+        shareList = [NSMutableArray array];
+        for (int i = 0; i < platTypes -> count(); i++)
+        {
+            C2DXInteger *type = (C2DXInteger *)platTypes -> C2DXObjectAtIndex(i);
             [shareList addObject:[NSNumber numberWithInteger:type -> getValue()]];
         }
     }
     
     //设置iPad菜单位置
-    pt = CCDirector::sharedDirector() -> convertToUI(pt);
+    //    pt = CCDirector::sharedDirector() -> convertToUI(pt);
     if (!_refView)
     {
         _refView = [[UIView alloc] initWithFrame:CGRectMake(pt.x, pt.y, 1, 1)];
     }
+    _refView.frame = CGRectMake(pt.x, pt.y, 1, 1);
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:_refView];
     
-    [[UIApplication sharedApplication].keyWindow addSubview:_refView];
+    NSMutableDictionary *shareParams;
+    //构造分享参数
+    shareParams = convertPublishContent(content);
     
-    container = [ShareSDK container];
-    [container setIPadContainerWithView:_refView arrowDirect:direction];
-    
-    [ShareSDK showShareActionSheet:container
-                         shareList:shareList
-                           content:publishContent
-                     statusBarTips:NO
-                       authOptions:nil
-                      shareOptions:nil
-                            result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                                
-                                CCDictionary *shareInfo = NULL;
-                                CCDictionary *errorInfo = NULL;
-                                
-                                if (state == SSResponseStateSuccess)
-                                {
-                                    shareInfo = convertNSDictToCCDict([statusInfo sourceData]);
-                                }
-                                
-                                if (error)
-                                {
-                                    NSInteger errCode = [error errorCode];
-                                    NSString *errDesc = [error errorDescription];
-                                    
-                                    errorInfo = CCDictionary::create();
-                                    errorInfo -> setObject(CCInteger::create(errCode), "error_code");
-                                    if (errDesc)
-                                    {
-                                        errorInfo -> setObject(CCString::create([errDesc UTF8String]), "error_msg");
-                                    }
-                                }
-                                
-                                if (callback)
-                                {
-                                    callback ((C2DXResponseState)state, (C2DXPlatType)type, shareInfo, errorInfo);
-                                }
-                                
-                                if (_refView)
-                                {
-                                    //移除视图
-                                    [_refView removeFromSuperview];
-                                }
-                                
-                            }];
+    [ShareSDK showShareActionSheet:_refView
+                             items:shareList
+                       shareParams:shareParams
+               onShareStateChanged:^(SSDKResponseState state,
+                                     SSDKPlatformType platformType,
+                                     NSDictionary *userData,
+                                     SSDKContentEntity *contentEntity,
+                                     NSError *error,
+                                     BOOL end)
+     {
+         C2DXDictionary *userInfoDict = NULL;
+         
+         if (state == SSDKResponseStateSuccess)
+         {
+             userInfoDict = convertNSDictToCCDict(userData);
+         }
+         
+         if (error)
+         {
+             NSInteger errCode = [error code];
+             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+             
+             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+             
+             if (errDesc)
+             {
+                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+             }
+         }
+        
+         if (callback)
+         {
+             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
+         }
+         
+         if (_refView)
+         {
+             //移除视图
+             [_refView removeFromSuperview];
+         }
+     }];
 }
 
-void C2DXiOSShareSDK::showShareView(C2DXPlatType platType, CCDictionary *content, C2DXShareResultEvent callback)
+#pragma mark 弹出分享编辑框
+void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
-    id<ISSContent> publishContent = convertPublishContent(content);
-    
-    [ShareSDK showShareViewWithType:(ShareType)platType
-                          container:nil
-                            content:publishContent
-                      statusBarTips:NO
-                        authOptions:nil
-                       shareOptions:nil
-                             result:^(ShareType type, SSResponseState state, id<ISSPlatformShareInfo> statusInfo, id<ICMErrorInfo> error, BOOL end) {
-                                 
-                                 CCDictionary *shareInfo = NULL;
-                                 CCDictionary *errorInfo = NULL;
-                                 
-                                 if (state == SSResponseStateSuccess)
-                                 {
-                                     shareInfo = convertNSDictToCCDict([statusInfo sourceData]);
-                                 }
-                                 
-                                 if (error)
-                                 {
-                                     NSInteger errCode = [error errorCode];
-                                     NSString *errDesc = [error errorDescription];
-                                     
-                                     errorInfo = CCDictionary::create();
-                                     errorInfo -> setObject(CCInteger::create(errCode), "error_code");
-                                     if (errDesc)
-                                     {
-                                         errorInfo -> setObject(CCString::create([errDesc UTF8String]), "error_msg");
-                                     }
-                                 }
-                                 
-                                 if (callback)
-                                 {
-                                     callback ((C2DXResponseState)state, (C2DXPlatType)type, shareInfo, errorInfo);
-                                 }
-                                 
-                             }];
+    NSMutableDictionary *shareParams;
+    //构造分享参数
+    shareParams = convertPublishContent(content);
+    [ShareSDK showShareEditor:(SSDKPlatformType)platType
+           otherPlatformTypes:nil
+                  shareParams:shareParams
+          onShareStateChanged:^(SSDKResponseState state,
+                                SSDKPlatformType platformType,
+                                NSDictionary *userData,
+                                SSDKContentEntity *contentEntity,
+                                NSError *error,
+                                BOOL end)
+    {
+        C2DXDictionary *userInfoDict = NULL;
+        
+        if (state == SSDKResponseStateSuccess)
+        {
+            userInfoDict = convertNSDictToCCDict(userData);
+        }
+        
+        if (error)
+        {
+            NSInteger errCode = [error code];
+            NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+            
+            userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+            
+            if (errDesc)
+            {
+                userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+            }
+        }
+        
+        if (callback)
+        {
+            callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
+        }
+    }];
 }
+
+void C2DXiOSShareSDK::getFriendList(int reqID,C2DXPlatType platType,int count, int page, C2DXAddFriendResultEvent callback)
+{
+    [ShareSDK getFriends:(SSDKPlatformType)platType
+                  cursor:page
+                    size:count
+          onStateChanged:^(SSDKResponseState state, SSDKFriendsPaging *paging, NSError *error) {
+              
+              C2DXDictionary *userInfoDict = NULL;
+              NSMutableDictionary *useDic = [NSMutableDictionary dictionary];
+              
+              if (state == SSDKResponseStateSuccess)
+              {
+                  if (paging.users)
+                  {
+                      [useDic setObject:paging.users forKey:@"data"];
+                  }
+              }
+              
+              if (error)
+              {
+                  NSInteger errCode = [error code];
+                  NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                  
+                  if (@(errCode))
+                  {
+                      [useDic setObject:@(errCode) forKey:@"error_code"];
+                  }
+
+                  if (errDesc)
+                  {
+                      [useDic setObject:errDesc forKey:@"error_msg"];
+                  }
+              }
+              
+              userInfoDict = convertNSDictToCCDict(useDic);
+              
+              if (callback)
+              {
+                  callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platType,userInfoDict);
+              }
+          }];
+}
+
+void C2DXiOSShareSDK::addFriend(int reqID,C2DXPlatType platType,const char* account ,C2DXGetFriendsResultEvent callback)
+{
+    SSDKPlatformType type = (SSDKPlatformType)platType;
+    SSDKUser *user = [[SSDKUser alloc] init];
+    
+    if (type == SSDKPlatformTypeTencentWeibo)
+    {
+        user.nickname = convertC2DXStringToNSString(C2DXString::create(account));
+    }
+    else
+    {
+        user.nickname = convertC2DXStringToNSString(C2DXString::create(account));
+    }
+    
+    [ShareSDK addFriend:(SSDKPlatformType)platType
+                   user:user
+         onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
+
+             C2DXDictionary *userInfoDict = NULL;
+             
+             NSMutableDictionary *temDic = [NSMutableDictionary dictionary];
+             if (user)
+             {
+                 [temDic setObject:user forKey:@"data"];
+             }
+             
+             if (error)
+             {
+                 NSInteger errCode = [error code];
+                 NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                 
+                 [temDic setObject:@(errCode) forKey:@"error_code"];
+                 [temDic setObject:errDesc forKey:@"error_msg"];
+             }
+             userInfoDict = convertNSDictToCCDict(temDic);
+             
+             if (callback)
+             {
+                 callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platType,userInfoDict);
+             }
+         }];
+}
+
+void C2DXiOSShareSDK::alertLog(const char *msg)
+{
+//    NSString *message = convertC2DXStringToNSString((C2DXString *)msg);
+//    
+//    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@""
+//                                                        message:message
+//                                                       delegate:nil
+//                                              cancelButtonTitle:@"OK"
+//                                              otherButtonTitles:nil, nil];
+//    [alertView show];
+//    [alertView release];
+}
+

@@ -2,6 +2,9 @@
 //  C2DXShareSDKTypeDef.h
 //  C2DXShareSDKSample
 //
+//  Created by 刘 靖煌 on 15-11-27.
+//  Copyright © 2015年 mob.com. All rights reserved.
+//
 
 #ifndef C2DXShareSDKSample_C2DXShareSDKTypeDef_h
 #define C2DXShareSDKSample_C2DXShareSDKTypeDef_h
@@ -10,6 +13,37 @@
 #include <stdint.h>
 
 USING_NS_CC;
+
+//使用Cocoa2D-X 2.x版本环境打开下面这行注释
+//#define UsingCocoa2DX2
+
+#ifdef UsingCocoa2DX2
+
+#define C2DXDictionary CCDictionary
+#define C2DXArray CCArray
+#define C2DXString CCString
+#define C2DXPoint CCPoint
+#define C2DXDouble CCDouble
+
+#define C2DXInteger Integer
+#define C2DXObject CCObject
+#define C2DXPointMake(x,y) CCPointMake(x, y)
+#define C2DXObjectAtIndex(i) objectAtIndex(i)getObjectAtIndex
+
+#else
+
+#define C2DXDictionary __Dictionary
+#define C2DXArray __Array
+#define C2DXString __String
+#define C2DXPoint cocos2d::Point
+#define C2DXDouble __Double
+
+#define C2DXInteger __Integer
+#define C2DXObject Ref
+#define C2DXPointMake(x,y) cocos2d::Point{x,y}
+#define C2DXObjectAtIndex(i) getObjectAtIndex(i)
+
+#endif
 
 namespace cn
 {
@@ -68,7 +102,6 @@ namespace cn
     		C2DXPlatTypeAny = 999 			   /**< 任意平台 */
         };
 
-
         /**
          *	@brief	内容类型
          */
@@ -76,7 +109,7 @@ namespace cn
         {
             C2DXContentTypeText = 0, /**< 文本 */
             C2DXContentTypeImage = 1, /**< 图片 */
-            C2DXContentTypeNews = 2, /**< 新闻 */
+            C2DXContentTypeWebPage = 2, /**< 网页 */
             C2DXContentTypeMusic = 3, /**< 音乐 */
             C2DXContentTypeVideo = 4, /**< 视频 */
             C2DXContentTypeApp = 5, /**< 应用,仅供微信使用 */
@@ -99,27 +132,27 @@ namespace cn
         /**
          *	@brief	授权回调事件
          */
-        typedef void(*C2DXAuthResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res);
+        typedef void(*C2DXAuthResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, C2DXDictionary *res);
         
-        /**
+        /** 
          *	@brief	获取用户信息回调事件
          */
-        typedef void(*C2DXGetUserInfoResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res);
+        typedef void(*C2DXGetUserInfoResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, C2DXDictionary *res);
         
         /**
          *	@brief	分享回调事件
          */
-        typedef void(*C2DXShareResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, __Dictionary *res);
+        typedef void(*C2DXShareResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType, C2DXDictionary *res);
 
         /**
          *	@brief	关注好友回调事件
          */
-        typedef void(*C2DXAddFriendResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType,  __Dictionary *res);
+        typedef void(*C2DXAddFriendResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType,  C2DXDictionary *res);
 		
         /**
          *	@brief	获取好友列表回调事件
          */
-        typedef void(*C2DXGetFriendsResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType,  __Dictionary *res);
+        typedef void(*C2DXGetFriendsResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType,  C2DXDictionary *res);
     }
 }
 

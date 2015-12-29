@@ -24,7 +24,7 @@
 #define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
 #define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
 #define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
-//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要易信分享可以注释此行
+//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
 //#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要易信分享可以注释此行
 
 #ifdef IMPORT_SINA_WEIBO_LIB

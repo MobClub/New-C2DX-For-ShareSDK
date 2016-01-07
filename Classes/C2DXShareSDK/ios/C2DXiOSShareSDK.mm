@@ -442,28 +442,32 @@ id convertPublishContent(C2DXDictionary *content)
         C2DXString *textStr = dynamic_cast<C2DXString *>(content -> objectForKey("text"));
         if (textStr)
         {
-            text = [NSString stringWithCString:textStr -> getCString() encoding:NSUTF8StringEncoding];
+            text = [NSString stringWithCString:textStr -> getCString()
+                                      encoding:NSUTF8StringEncoding];
         }
         
         //title
         C2DXString *titleStr = dynamic_cast<C2DXString *>(content -> objectForKey("title"));
         if (titleStr)
         {
-            title = [NSString stringWithCString:titleStr -> getCString() encoding:NSUTF8StringEncoding];
+            title = [NSString stringWithCString:titleStr -> getCString()
+                                       encoding:NSUTF8StringEncoding];
         }
         
         //url
         C2DXString *urlStr = dynamic_cast<C2DXString *>(content -> objectForKey("url"));
         if (urlStr)
         {
-            url = [NSString stringWithCString:urlStr -> getCString() encoding:NSUTF8StringEncoding];
+            url = [NSString stringWithCString:urlStr -> getCString()
+                                     encoding:NSUTF8StringEncoding];
         }
         
         //thumbImg
         C2DXString *thumbImagePath = dynamic_cast<C2DXString *>(content -> objectForKey("thumbImg"));
         if (thumbImagePath)
         {
-            NSString *imgPath = [NSString stringWithCString:thumbImagePath -> getCString() encoding:NSUTF8StringEncoding];
+            NSString *imgPath = [NSString stringWithCString:thumbImagePath -> getCString()
+                                                   encoding:NSUTF8StringEncoding];
             
             if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                     options:MOBFRegexOptionsNoOptions
@@ -471,10 +475,12 @@ id convertPublishContent(C2DXDictionary *content)
                                  withString:imgPath])
             {
                 thumbImg = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
-            }else
+            }
+            else
             {
-                thumbImg = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
-                                                     format:SSDKImageFormatJpeg settings:nil];
+                thumbImg = [[SSDKImage alloc] initWithImage:[UIImage imageWithContentsOfFile:imgPath]
+                                                     format:SSDKImageFormatJpeg
+                                                   settings:nil];
             }
         }
         
@@ -490,10 +496,12 @@ id convertPublishContent(C2DXDictionary *content)
                                  withString:imgPath])
             {
                 image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
-            }else
+            }
+            else
             {
-                image = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
-                                                     format:SSDKImageFormatJpeg settings:nil];
+                image = [[SSDKImage alloc] initWithImage:[UIImage imageWithContentsOfFile:imgPath]
+                                                  format:SSDKImageFormatJpeg
+                                                settings:nil];
             }
         }
         

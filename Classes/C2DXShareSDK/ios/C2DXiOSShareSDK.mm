@@ -25,7 +25,7 @@
 #define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
 #define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
 //#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
-//#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要易信分享可以注释此行
+//#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
 
 #ifdef IMPORT_SINA_WEIBO_LIB
 #import "WeiboSDK.h"
@@ -442,32 +442,28 @@ id convertPublishContent(C2DXDictionary *content)
         C2DXString *textStr = dynamic_cast<C2DXString *>(content -> objectForKey("text"));
         if (textStr)
         {
-            text = [NSString stringWithCString:textStr -> getCString()
-                                      encoding:NSUTF8StringEncoding];
+            text = [NSString stringWithCString:textStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
         //title
         C2DXString *titleStr = dynamic_cast<C2DXString *>(content -> objectForKey("title"));
         if (titleStr)
         {
-            title = [NSString stringWithCString:titleStr -> getCString()
-                                       encoding:NSUTF8StringEncoding];
+            title = [NSString stringWithCString:titleStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
         //url
         C2DXString *urlStr = dynamic_cast<C2DXString *>(content -> objectForKey("url"));
         if (urlStr)
         {
-            url = [NSString stringWithCString:urlStr -> getCString()
-                                     encoding:NSUTF8StringEncoding];
+            url = [NSString stringWithCString:urlStr -> getCString() encoding:NSUTF8StringEncoding];
         }
         
         //thumbImg
         C2DXString *thumbImagePath = dynamic_cast<C2DXString *>(content -> objectForKey("thumbImg"));
         if (thumbImagePath)
         {
-            NSString *imgPath = [NSString stringWithCString:thumbImagePath -> getCString()
-                                                   encoding:NSUTF8StringEncoding];
+            NSString *imgPath = [NSString stringWithCString:thumbImagePath -> getCString() encoding:NSUTF8StringEncoding];
             
             if ([MOBFRegex isMatchedByRegex:@"\\w://.*"
                                     options:MOBFRegexOptionsNoOptions
@@ -475,12 +471,10 @@ id convertPublishContent(C2DXDictionary *content)
                                  withString:imgPath])
             {
                 thumbImg = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
-            }
-            else
+            }else
             {
-                thumbImg = [[SSDKImage alloc] initWithImage:[UIImage imageWithContentsOfFile:imgPath]
-                                                     format:SSDKImageFormatJpeg
-                                                   settings:nil];
+                thumbImg = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
+                                                     format:SSDKImageFormatJpeg settings:nil];
             }
         }
         
@@ -496,12 +490,10 @@ id convertPublishContent(C2DXDictionary *content)
                                  withString:imgPath])
             {
                 image = [[SSDKImage alloc]initWithURL:[NSURL URLWithString:imgPath]];
-            }
-            else
+            }else
             {
-                image = [[SSDKImage alloc] initWithImage:[UIImage imageWithContentsOfFile:imgPath]
-                                                  format:SSDKImageFormatJpeg
-                                                settings:nil];
+                image = [[SSDKImage alloc] initWithImage:[UIImage imageNamed:imgPath]
+                                                     format:SSDKImageFormatJpeg settings:nil];
             }
         }
         
@@ -587,24 +579,35 @@ void C2DXiOSShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResult
                settings:nil
          onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
 
-             C2DXDictionary *userInfoDict = NULL;
-             
-             if (user)
+             C2DXDictionary *userInfoDict = C2DXDictionary::create();
+             switch (state)
              {
-                 userInfoDict = convertNSDictToCCDict([user rawData]);
-             }
-             
-             if (error)
-             {
-                 NSInteger errCode = [error code];
-                 NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-                 
-                 userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-                 
-                 if (errDesc)
-                 {
-                     userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-                 }
+                 case SSDKResponseStateSuccess:
+                     userInfoDict = convertNSDictToCCDict([user rawData]);
+                     if (user)
+                     {
+                         userInfoDict = convertNSDictToCCDict([user rawData]);
+                     }
+                     
+                     break;
+                 case SSDKResponseStateFail:
+                     
+                     if (error)
+                     {
+                         NSInteger errCode = [error code];
+                         NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                         
+                         userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                         
+                         if (errDesc)
+                         {
+                             userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                         }
+                     }
+                     break;
+                     
+                 default:
+                     break;
              }
              
              if (callback)
@@ -637,31 +640,37 @@ void C2DXiOSShareSDK::getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserIn
     [ShareSDK getUserInfo:(SSDKPlatformType)platType
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
     {
-        C2DXDictionary *userInfoDict = NULL;
-        
-        if (state == SSDKResponseStateSuccess)
+        C2DXDictionary *userInfoDict = C2DXDictionary::create();
+        switch (state)
         {
-            userInfoDict = convertNSDictToCCDict([user rawData]);
+            case SSDKResponseStateSuccess:
+                userInfoDict = convertNSDictToCCDict([user rawData]);
+                if ([[user credential] rawData])
+                {
+                    userInfoDict->setObject(convertNSDictToCCDict([[user credential] rawData]), "credential");
+                }
+                
+                break;
+            case SSDKResponseStateFail:
+                
+                if (error)
+                {
+                    NSInteger errCode = [error code];
+                    NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                    
+                    userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                    
+                    if (errDesc)
+                    {
+                        userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                    }
+                }
+                break;
+                
+            default:
+                break;
         }
         
-        if ([[user credential] rawData])
-        {
-            userInfoDict->setObject(convertNSDictToCCDict([[user credential] rawData]), "credential");
-        }
-        
-        if (error)
-        {
-            NSInteger errCode = [error code];
-            NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-            
-            userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-            
-            if (errDesc)
-            {
-                userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-            }
-        }
-
         if(callback)
         {
              callback(reqID,(C2DXResponseState)state,platType,userInfoDict);
@@ -676,25 +685,31 @@ void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictiona
     [ShareSDK share:(SSDKPlatformType)platType
          parameters:parameters
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
-         
-         C2DXDictionary *userInfoDict = NULL;
-         
-         if (state == SSDKResponseStateSuccess)
+
+         C2DXDictionary *userInfoDict = C2DXDictionary::create();
+         switch (state)
          {
-             userInfoDict = convertNSDictToCCDict(userData);
-         }
-         
-         if (error)
-         {
-             NSInteger errCode = [error code];
-             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-             
-             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-             
-             if (errDesc)
-             {
-                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-             }
+             case SSDKResponseStateSuccess:
+                 userInfoDict = convertNSDictToCCDict(userData);
+                 break;
+             case SSDKResponseStateFail:
+                 
+                 if (error)
+                 {
+                     NSInteger errCode = [error code];
+                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                     
+                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                     
+                     if (errDesc)
+                     {
+                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                     }
+                 }
+                 break;
+                 
+             default:
+                 break;
          }
          
          if (callback)
@@ -730,24 +745,31 @@ void C2DXiOSShareSDK::oneKeyShareContent(int reqID,C2DXArray *platTypes, C2DXDic
                                   NSError *error,
                                   BOOL end)
      {
-         C2DXDictionary *userInfoDict = NULL;
+         C2DXDictionary *userInfoDict = C2DXDictionary::create();
          
-         if (state == SSDKResponseStateSuccess)
+         switch (state)
          {
-             userInfoDict = convertNSDictToCCDict(userData);
-         }
-         
-         if (error)
-         {
-             NSInteger errCode = [error code];
-             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-             
-             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-             
-             if (errDesc)
-             {
-                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-             }
+             case SSDKResponseStateSuccess:
+                 userInfoDict = convertNSDictToCCDict(userData);
+                 break;
+             case SSDKResponseStateFail:
+                 
+                 if (error)
+                 {
+                     NSInteger errCode = [error code];
+                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                     
+                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                     
+                     if (errDesc)
+                     {
+                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                     }
+                 }
+                 break;
+                 
+             default:
+                 break;
          }
          
          if (callback)
@@ -794,24 +816,31 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
                                      NSError *error,
                                      BOOL end)
      {
-         C2DXDictionary *userInfoDict = NULL;
+         C2DXDictionary *userInfoDict = C2DXDictionary::create();
          
-         if (state == SSDKResponseStateSuccess)
+         switch (state)
          {
-             userInfoDict = convertNSDictToCCDict(userData);
-         }
-         
-         if (error)
-         {
-             NSInteger errCode = [error code];
-             NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-             
-             userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-             
-             if (errDesc)
-             {
-                 userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-             }
+             case SSDKResponseStateSuccess:
+                 userInfoDict = convertNSDictToCCDict(userData);
+                 break;
+             case SSDKResponseStateFail:
+                 
+                 if (error)
+                 {
+                     NSInteger errCode = [error code];
+                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                     
+                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                     
+                     if (errDesc)
+                     {
+                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                     }
+                 }
+                 
+                 break;
+             default:
+                 break;
          }
         
          if (callback)
@@ -843,24 +872,29 @@ void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDic
                                 NSError *error,
                                 BOOL end)
     {
-        C2DXDictionary *userInfoDict = NULL;
+        C2DXDictionary *userInfoDict = C2DXDictionary::create();
         
-        if (state == SSDKResponseStateSuccess)
+        switch (state)
         {
-            userInfoDict = convertNSDictToCCDict(userData);
-        }
-        
-        if (error)
-        {
-            NSInteger errCode = [error code];
-            NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-            
-            userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-            
-            if (errDesc)
-            {
-                userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-            }
+            case SSDKResponseStateSuccess:
+                userInfoDict = convertNSDictToCCDict(userData);
+                break;
+            case SSDKResponseStateFail:
+                if (error)
+                {
+                    NSInteger errCode = [error code];
+                    NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                    
+                    userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                    
+                    if (errDesc)
+                    {
+                        userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                    }
+                }
+                break;
+            default:
+                break;
         }
         
         if (callback)
@@ -876,32 +910,37 @@ void C2DXiOSShareSDK::getFriendList(int reqID,C2DXPlatType platType,int count, i
                   cursor:page
                     size:count
           onStateChanged:^(SSDKResponseState state, SSDKFriendsPaging *paging, NSError *error) {
-              
-              C2DXDictionary *userInfoDict = NULL;
+
+              C2DXDictionary *userInfoDict = C2DXDictionary::create();
               NSMutableDictionary *useDic = [NSMutableDictionary dictionary];
               
-              if (state == SSDKResponseStateSuccess)
+              switch (state)
               {
-                  if (paging.users)
-                  {
-                      [useDic setObject:paging.users forKey:@"data"];
-                  }
-              }
-              
-              if (error)
-              {
-                  NSInteger errCode = [error code];
-                  NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-                  
-                  if (@(errCode))
-                  {
-                      [useDic setObject:@(errCode) forKey:@"error_code"];
-                  }
-
-                  if (errDesc)
-                  {
-                      [useDic setObject:errDesc forKey:@"error_msg"];
-                  }
+                  case SSDKResponseStateSuccess:
+                      if (paging.users)
+                      {
+                          [useDic setObject:paging.users forKey:@"data"];
+                      }
+                      break;
+                  case SSDKResponseStateFail:
+                      if (error)
+                      {
+                          NSInteger errCode = [error code];
+                          NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                          
+                          if (@(errCode))
+                          {
+                              [useDic setObject:@(errCode) forKey:@"error_code"];
+                          }
+                          
+                          if (errDesc)
+                          {
+                              [useDic setObject:errDesc forKey:@"error_msg"];
+                          }
+                      }
+                      break;
+                  default:
+                      break;
               }
               
               userInfoDict = convertNSDictToCCDict(useDic);
@@ -931,9 +970,9 @@ void C2DXiOSShareSDK::addFriend(int reqID,C2DXPlatType platType,const char* acco
                    user:user
          onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
 
-             C2DXDictionary *userInfoDict = NULL;
-             
+             C2DXDictionary *userInfoDict = C2DXDictionary::create();;
              NSMutableDictionary *temDic = [NSMutableDictionary dictionary];
+             
              if (user)
              {
                  [temDic setObject:user forKey:@"data"];

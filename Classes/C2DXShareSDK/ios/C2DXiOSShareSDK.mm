@@ -555,6 +555,8 @@ id convertPublishContent(C2DXDictionary *content)
                 case C2DXContentTypeApp:
                     contentType = (SSDKContentType)SSDKContentTypeApp;
                     break;
+                case C2DXContentTypeAuto:
+                    contentType = (SSDKContentType)SSDKContentTypeAuto;
                 default:
                     break;
             }

@@ -114,8 +114,9 @@ namespace cn
             C2DXContentTypeVideo = 4, /**< 视频 */
             C2DXContentTypeApp = 5, /**< 应用,仅供微信使用 */
             C2DXContentTypeNonGif = 6, /**< 非Gif消息,仅供微信使用 */
-            C2DXContentTypeGif = 7, /**< Gif消息,仅供微信使用 */
-            C2DXContentTypeFile = 8 /**< 文件消息,仅供微信使用 */
+            C2DXContentTypeGif = 7,  /**< Gif消息,仅供微信使用 */
+            C2DXContentTypeFile = 8, /**< 文件消息,仅供微信使用 */
+            C2DXContentTypeAuto = 9  /**< 自动判断发送类型，避免部分平台不支持某些类型，仅供iOS端使用 */
         };
         
         /**

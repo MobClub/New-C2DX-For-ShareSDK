@@ -25,10 +25,10 @@ USING_NS_CC;
 #define C2DXPoint CCPoint
 #define C2DXDouble CCDouble
 
-#define C2DXInteger Integer
+#define C2DXInteger CCInteger
 #define C2DXObject CCObject
 #define C2DXPointMake(x,y) CCPointMake(x, y)
-#define C2DXObjectAtIndex(i) objectAtIndex(i)getObjectAtIndex
+#define C2DXObjectAtIndex(i) objectAtIndex(i)
 
 #else
 
@@ -40,7 +40,7 @@ USING_NS_CC;
 
 #define C2DXInteger __Integer
 #define C2DXObject Ref
-#define C2DXPointMake(x,y) cocos2d::Point{x,y}
+#define C2DXPointMake(x,y) cocos2d::Point{static_cast<float>(x), static_cast<float>(y)}
 #define C2DXObjectAtIndex(i) getObjectAtIndex(i)
 
 #endif

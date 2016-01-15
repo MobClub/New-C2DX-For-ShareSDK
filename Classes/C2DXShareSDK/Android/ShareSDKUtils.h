@@ -47,7 +47,7 @@ bool initSDKJNI(const char* appKey);
 
 bool setPlatformConfigJNI(int platformId,__Dictionary *platConfig);
 
-bool rigisterAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos);
+bool registerAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos);
 
 bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback);
 

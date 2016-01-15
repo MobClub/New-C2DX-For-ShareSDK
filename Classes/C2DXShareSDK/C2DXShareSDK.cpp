@@ -201,8 +201,6 @@ void C2DXShareSDK::oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDicti
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
-    C2DXArray *platTypes = C2DXArray::create();
-    platTypes->addObject(C2DXInteger::create(platType));
     shareContentJNI(reqID, platTypes, content, callback);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS

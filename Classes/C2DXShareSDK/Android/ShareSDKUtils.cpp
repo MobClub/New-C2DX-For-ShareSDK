@@ -131,7 +131,7 @@ bool setPlatformConfigJNI(int platformId, __Dictionary *platConfig) {
 	return true;
 }
 
-bool rigisterAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos) {
+bool registerAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {

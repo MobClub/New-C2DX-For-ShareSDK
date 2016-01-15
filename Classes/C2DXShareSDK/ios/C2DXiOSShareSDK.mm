@@ -19,10 +19,10 @@
 
 #import <ShareSDK/ShareSDK+Base.h>
 
-#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
+//#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
 #define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
-#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
-#define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
+//#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
+//#define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
 #define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
 //#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
 //#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
@@ -181,7 +181,7 @@ NSMutableDictionary * convertC2DXDictionaryToNSDictionary(C2DXDictionary * Dicti
         {
             for (int i = 0; i < allkeys -> count(); i ++)
             {
-                C2DXString * key = dynamic_cast<C2DXString *> (allkeys -> getObjectAtIndex(i));
+                C2DXString * key = dynamic_cast<C2DXString *> (allkeys -> C2DXObjectAtIndex(i));
                 C2DXObject * value = Dictionary -> objectForKey(key -> getCString());
                 
                 if (dynamic_cast<C2DXString*>(value) != NULL)
@@ -300,7 +300,7 @@ NSArray* convertC2DXArrayToNSArray(C2DXArray *array)
         NSMutableArray *nsArray = [NSMutableArray array];
         for (int i = 0; i < array -> count(); i++)
         {
-            C2DXObject * value = array -> getObjectAtIndex(i);
+            C2DXObject * value = array -> C2DXObjectAtIndex(i);
             if (dynamic_cast<C2DXString*>(value) != NULL)
             {
                 NSString *strValue = convertC2DXStringToNSString(dynamic_cast<C2DXString*>(value) );
@@ -839,7 +839,6 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
                          userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
                      }
                  }
-                 
                  break;
              default:
                  break;

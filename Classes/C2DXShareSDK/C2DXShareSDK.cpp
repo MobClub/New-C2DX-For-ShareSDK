@@ -224,8 +224,8 @@ void C2DXShareSDK::showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
     //iOS
-    C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, cocos2d::Point{static_cast<float>(x),static_cast<float>(y)}, callback);
-    
+    C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, C2DXPointMake(x,y), callback);
+
 #endif
 }
 

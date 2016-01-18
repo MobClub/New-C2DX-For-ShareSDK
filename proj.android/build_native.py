@@ -14,12 +14,12 @@ def build(build_mode):
 
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    cocos_root = os.path.join(current_dir, "../cocos2d")
+    cocos_root = os.path.join(current_dir, "D:/development/cocos2d-x-3.8")
 
     app_android_root = os.path.join(current_dir, "../")
 		
     if build_mode is None:
-    	  build_mode = 'debug'
+    	build_mode = 'debug'
     elif build_mode != 'release':
         build_mode = 'debug'
     

@@ -22,13 +22,13 @@ JNIEXPORT void JNICALL Java_cn_sharesdk_ShareSDKUtils_onJavaCallback
   (JNIEnv * env, jclass thiz, jstring resp) {
 	CCJSONConverter* json = CCJSONConverter::sharedConverter();
 	const char* ccResp = env->GetStringUTFChars(resp, JNI_FALSE);
-	CCLog("ccResp = %s", ccResp);
-	__Dictionary* dic = json->dictionaryFrom(ccResp);
+	//CCLog("ccResp = %s", ccResp);
+	C2DXDictionary* dic = json->dictionaryFrom(ccResp);
 	env->ReleaseStringUTFChars(resp, ccResp);
 	CCNumber* status = (CCNumber*) dic->objectForKey("status"); // Success = 1, Fail = 2, Cancel = 3
 	CCNumber* action = (CCNumber*) dic->objectForKey("action"); //  1 = ACTION_AUTHORIZING,  8 = ACTION_USER_INFOR,9 = ACTION_SHARE
 	CCNumber* platform = (CCNumber*) dic->objectForKey("platform");
-	__Dictionary* res = (__Dictionary*) dic->objectForKey("res");
+	C2DXDictionary* res = (C2DXDictionary*) dic->objectForKey("res");
 	CCNumber* reqID = (CCNumber*) dic->objectForKey("reqID");
 	// TODO add codes here
 	if(1 == status->getIntValue()){
@@ -42,8 +42,8 @@ JNIEXPORT void JNICALL Java_cn_sharesdk_ShareSDKUtils_onJavaCallback
 	dic->release();
 }
 
-void callBackComplete(int reqID, int action, int platformId, __Dictionary* res){
-	CCLog("complete callback");
+void callBackComplete(int reqID, int action, int platformId, C2DXDictionary* res){
+	//CCLog("complete callback");
 	if (action == 1 && NULL != authCb) { // 1 = ACTION_AUTHORIZING
 		authCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, NULL);
 	} else if (action == 8 && NULL != infoCb) { // 8 = ACTION_USER_INFOR 
@@ -57,7 +57,7 @@ void callBackComplete(int reqID, int action, int platformId, __Dictionary* res){
 	}
 }
 
-void callBackError(int reqID, int action, int platformId, __Dictionary* res){
+void callBackError(int reqID, int action, int platformId, C2DXDictionary* res){
 	if (action == 1 && NULL != authCb) { // 1 = ACTION_AUTHORIZING
 		authCb(reqID, C2DXResponseStateFail, (C2DXPlatType) platformId, res);
 	} else if (action == 8 && NULL != infoCb) { // 8 = ACTION_USER_INFOR 2 = ACTION_GET_FRIEND_LIST
@@ -71,7 +71,7 @@ void callBackError(int reqID, int action, int platformId, __Dictionary* res){
 	}
 }
 
-void callBackCancel(int reqID, int action, int platformId, __Dictionary* res){
+void callBackCancel(int reqID, int action, int platformId, C2DXDictionary* res){
 	if (action == 1 && NULL != authCb) { // 1 = ACTION_AUTHORIZING
 		authCb(reqID, C2DXResponseStateCancel, (C2DXPlatType) platformId, NULL);
 	} else if (action == 8 && NULL != infoCb) { // 8 = ACTION_USER_INFOR 2 = ACTION_GET_FRIEND_LIST
@@ -94,44 +94,7 @@ void releaseMethod(JniMethodInfo &mi) {
 		mi.env->DeleteLocalRef(mi.classID);
 }
 
-bool initSDKJNI(const char* appKey) {
-	JniMethodInfo mi;\
-	bool result = false;
-	bool isHave = getMethod(mi, "initSDK","(Ljava/lang/String;)V");
-	if(!isHave) {
-		return false;
-	}
-
-	jstring jKey = NULL;
-	if(appKey != NULL) {
-		jKey = mi.env->NewStringUTF(appKey);
-		mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jKey);
-		result = true;
-	}
-	releaseMethod(mi);
-	return result;
-}
-
-bool setPlatformConfigJNI(int platformId, __Dictionary *platConfig) {
-	JniMethodInfo mi;
-	bool isHave = getMethod(mi, "setPlatformConfig","(ILjava/lang/String;)V");
-	if(!isHave) {
-		return false;
-	}
-	jstring jConfig = NULL;
-	if(platConfig != NULL) {
-		CCJSONConverter* json = CCJSONConverter::sharedConverter();
-		const char* ccConfig = json->strFrom(platConfig);
-		jConfig = mi.env->NewStringUTF(ccConfig);
-	}
-
-	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, platformId, jConfig);
-	
-	releaseMethod(mi);
-	return true;
-}
-
-bool registerAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos) {
+bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {
@@ -227,9 +190,9 @@ bool addFriendJNI(int reqID, int platformId, const char* account, C2DXAddFriendR
 	return true;
 }
 
-__Dictionary* getAuthInfoJNI(int platformId){
+C2DXDictionary* getAuthInfoJNI(int platformId){
 	JniMethodInfo mi;
-	__Dictionary* dic;
+	C2DXDictionary* dic;
 	bool isHave = getMethod(mi, "getAuthInfo", "(I)Ljava/lang/String;");
 	CCJSONConverter* json = CCJSONConverter::sharedConverter();
 	jstring userInfo = (jstring) mi.env->CallStaticObjectMethod(mi.classID, mi.methodID, platformId);
@@ -241,7 +204,7 @@ __Dictionary* getAuthInfoJNI(int platformId){
 	return dic;
 }
 
-bool shareContentJNI(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback){
+bool shareContentJNI(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback){
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "shareContent", "(IILjava/lang/String;)V");
 	if (!isHave) {
@@ -279,7 +242,7 @@ bool getFriendListJNI(int reqID, int platformId, int count, int page, C2DXGetFri
 	return true;
 }
 
-bool onekeyShareJNI(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback) {
+bool onekeyShareJNI(int reqID, int platformId, C2DXDictionary *content, C2DXShareResultEvent callback) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "onekeyShare", "(IILjava/lang/String;)V");
 	if (!isHave) {
@@ -300,7 +263,10 @@ bool onekeyShareJNI(int reqID, int platformId, __Dictionary *content, C2DXShareR
 void toastShowJNI(const char *msg) {
     JniMethodInfo mi;
     bool isHave = getMethod(mi, "toast", "(Ljava/lang/String;)V");
-
+	if (!isHave) {
+		return;
+	}
+	
     jstring jContent = mi.env->NewStringUTF(msg);
 
     mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jContent);

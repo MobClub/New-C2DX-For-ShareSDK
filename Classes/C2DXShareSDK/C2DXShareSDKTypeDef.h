@@ -2,7 +2,6 @@
 //  C2DXShareSDKTypeDef.h
 //  C2DXShareSDKSample
 //
-//  Created by 刘 靖煌 on 15-11-27.
 //  Copyright © 2015年 mob.com. All rights reserved.
 //
 
@@ -17,7 +16,7 @@ USING_NS_CC;
 //使用Cocoa2D-X 2.x版本环境打开下面这行注释
 //#define UsingCocoa2DX2
 
-#ifdef UsingCocoa2DX2
+#if COCOS2D_VERSION < 0x00030000
 
 #define C2DXDictionary CCDictionary
 #define C2DXArray CCArray

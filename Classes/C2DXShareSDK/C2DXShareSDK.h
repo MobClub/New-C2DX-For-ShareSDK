@@ -2,7 +2,6 @@
 //  C2DXShareSDK.h
 //  C2DXShareSDKSample
 //
-//  Created by 刘 靖煌 on 15-11-27.
 //  Copyright © 2015年 mob.com. All rights reserved.
 //
 

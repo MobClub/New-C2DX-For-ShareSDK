@@ -32,11 +32,11 @@ extern "C" {
 JNIEXPORT void JNICALL Java_cn_sharesdk_ShareSDKUtils_onJavaCallback
   (JNIEnv * env, jclass thiz, jstring resp);
 
-void callBackComplete(int reqID, int action, int platformId, __Dictionary* res);
+void callBackComplete(int reqID, int action, int platformId, C2DXDictionary* res);
 
-void callBackError(int reqID, int action, int platformId, __Dictionary* res);
+void callBackError(int reqID, int action, int platformId, C2DXDictionary* res);
 
-void callBackCancel(int reqID, int action, int platformId, __Dictionary* res);
+void callBackCancel(int reqID, int action, int platformId, C2DXDictionary* res);
 
 bool getMethod(JniMethodInfo &mi, const char *methodName, const char *paramCode);
 
@@ -45,9 +45,9 @@ void releaseMethod(JniMethodInfo &mi);
 //jni methods
 bool initSDKJNI(const char* appKey);
 
-bool setPlatformConfigJNI(int platformId,__Dictionary *platConfig);
+bool setPlatformConfigJNI(int platformId, C2DXDictionary *platConfig);
 
-bool registerAppAndSetPlatformConfigJNI(const char* appKey, __Dictionary *platformInfos);
+bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos);
 
 bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback);
 
@@ -61,13 +61,13 @@ bool getUserInfoJNI(int reqID, int platformId, C2DXGetUserInfoResultEvent callba
 
 bool addFriendJNI(int reqID, int platformId, const char* account, C2DXAddFriendResultEvent callback);
 
-__Dictionary* getAuthInfoJNI(int platformId);
+C2DXDictionary* getAuthInfoJNI(int platformId);
 
-bool shareContentJNI(int reqID, __Array *platTypes, __Dictionary *content, C2DXShareResultEvent callback);
+bool shareContentJNI(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback);
 
 bool getFriendListJNI(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback);
 
-bool onekeyShareJNI(int reqID, int platformId, __Dictionary *content, C2DXShareResultEvent callback);
+bool onekeyShareJNI(int reqID, int platformId, C2DXDictionary *content, C2DXShareResultEvent callback);
 
 void toastShowJNI(const char* msg);
 

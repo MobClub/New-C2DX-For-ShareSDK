@@ -73,8 +73,8 @@ namespace cn
             C2DXPlatTypeSMS = 19,              /**< 短信分享 */
             C2DXPlatTypeAirPrint = 20,         /**< 打印 */
             C2DXPlatTypeCopy = 21,             /**< 拷贝 */
-            C2DXPlatTypeWeixiSession = 22,     /**< 微信好友 */
-            C2DXPlatTypeWeixiTimeline = 23,    /**< 微信朋友圈 */
+            C2DXPlatTypeWeChat = 22,           /**< 微信好友 */
+            C2DXPlatTypeWeChatMoments = 23,    /**< 微信朋友圈 */
             C2DXPlatTypeQQ = 24,               /**< QQ */
             C2DXPlatTypeInstapaper = 25,       /**< Instapaper */
             C2DXPlatTypePocket = 26,           /**< Pocket */
@@ -84,7 +84,7 @@ namespace cn
             C2DXPlatTypeFlickr = 34,           /**< Flickr */
             C2DXPlatTypeDropbox = 35,          /**< Dropbox */
             C2DXPlatTypeVKontakte = 36,        /**< VKontakte */
-            C2DXPlatTypeWeixiFav = 37,         /**< 微信收藏 */
+            C2DXPlatTypeWeChatFavorites = 37,  /**< 微信收藏 */
             C2DXPlatTypeYiXinSession = 38,     /**< 易信好友 */
             C2DXPlatTypeYiXinTimeline = 39,    /**< 易信朋友圈 */
             C2DXPlatTypeYiXinFav = 40,         /**< 易信收藏 */

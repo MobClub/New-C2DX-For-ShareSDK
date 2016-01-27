@@ -13,9 +13,6 @@
 
 USING_NS_CC;
 
-//使用Cocoa2D-X 2.x版本环境打开下面这行注释
-//#define UsingCocoa2DX2
-
 #if COCOS2D_VERSION < 0x00030000
 
 #define C2DXDictionary CCDictionary

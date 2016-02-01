@@ -67,6 +67,8 @@ const char* PlatId::WechatPlatform = "997";  /**< Wechat Series */
 const char* PlatId::QQPlatform = "998";	     /**< QQ Series */
 const char* PlatId::Any = "999"; 			 /**< 任意平台 */
 
+int reqID = 0;
+
 void C2DXShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -83,8 +85,9 @@ void C2DXShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDicti
 #endif
 }
 
-void C2DXShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEvent callback)
+int C2DXShareSDK::authorize(C2DXPlatType platType, C2DXAuthResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
@@ -96,6 +99,7 @@ void C2DXShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEve
     C2DXiOSShareSDK::authorize(reqID, platType, callback);
     
 #endif
+	return reqID;
 }
 
 void C2DXShareSDK::cancelAuthorize(C2DXPlatType platType)
@@ -146,8 +150,9 @@ bool C2DXShareSDK::isClientValid(C2DXPlatType platType)
     return false;
 }
 
-void C2DXShareSDK::getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
+int C2DXShareSDK::getUserInfo(C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
@@ -158,6 +163,7 @@ void C2DXShareSDK::getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfo
     C2DXiOSShareSDK::getUserInfo(reqID, platType, callback);
     
 #endif
+	return reqID;
 }
 
 C2DXDictionary* C2DXShareSDK::getAuthInfo(C2DXPlatType platType)
@@ -176,8 +182,9 @@ C2DXDictionary* C2DXShareSDK::getAuthInfo(C2DXPlatType platType)
 #endif
 }
 
-void C2DXShareSDK::shareContent(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
+int C2DXShareSDK::shareContent(C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
@@ -193,10 +200,12 @@ void C2DXShareSDK::shareContent(int reqID, C2DXPlatType platType, C2DXDictionary
     C2DXiOSShareSDK::shareContent(reqID,platType, content, callback);
     
 #endif
+	return reqID;
 }
 
-void C2DXShareSDK::oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback)
+int C2DXShareSDK::oneKeyShareContent(C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
@@ -208,11 +217,13 @@ void C2DXShareSDK::oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDicti
     C2DXiOSShareSDK::oneKeyShareContent(reqID, platTypes, content, callback);
     
 #endif
+	return reqID;
 
 }
 
-void C2DXShareSDK::showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback)
+int C2DXShareSDK::showShareMenu(C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //Android
@@ -224,10 +235,12 @@ void C2DXShareSDK::showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary
     C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, C2DXPointMake(x,y), callback);
 
 #endif
+	return reqID;
 }
 
-void C2DXShareSDK::showShareView(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
+int C2DXShareSDK::showShareView(C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //Android
@@ -239,10 +252,12 @@ void C2DXShareSDK::showShareView(int reqID, C2DXPlatType platType, C2DXDictionar
     C2DXiOSShareSDK::showShareEditView(reqID,platType, content, callback);
     
 #endif
+	return reqID;
 }
 
-void C2DXShareSDK::getFriendList(int reqID, C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback)
+int C2DXShareSDK::getFriendList(C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //Android
@@ -254,10 +269,12 @@ void C2DXShareSDK::getFriendList(int reqID, C2DXPlatType platType, int count, in
     C2DXiOSShareSDK::getFriendList(reqID, platType,count, page, callback);
 
 #endif
+	return reqID;
 }
 
-void C2DXShareSDK::addFriend(int reqID, C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback)
+int C2DXShareSDK::addFriend(C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback)
 {
+	reqID ++;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 
     //Android
@@ -269,6 +286,7 @@ void C2DXShareSDK::addFriend(int reqID, C2DXPlatType platType, const char* accou
     C2DXiOSShareSDK::addFriend(reqID, platType, account,callback);
 
 #endif
+	return reqID;
 }
 
 void C2DXShareSDK::toast(const char *msg)

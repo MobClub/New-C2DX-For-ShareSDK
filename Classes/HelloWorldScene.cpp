@@ -7,8 +7,6 @@ USING_NS_CC;
 using namespace std;
 using namespace cn::sharesdk;
 
-int reqID = 0;
-
 Scene* HelloWorld::createScene()
 {
     auto scene = Scene::create();
@@ -447,9 +445,7 @@ void addFriendResultHandler(int reqID, C2DXResponseState state, C2DXPlatType pla
 }
 
 void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
-{
-    reqID += 1;
-    
+{    
     __Dictionary *content = __Dictionary::create();
     content -> setObject(__String::create("分享文本"), "text");
     content -> setObject(__String::create("HelloWorld.png"), "image");
@@ -475,13 +471,12 @@ void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
 //    platforms->addObject(tw);
 //    platforms->addObject(mail);
     
-    C2DXShareSDK::showShareMenu(reqID,NULL,content,100,100,shareContentResultHandler);
+    C2DXShareSDK::showShareMenu(NULL,content,100,100,shareContentResultHandler);
 }
 
 void HelloWorld::authBtnClickHandler(cocos2d::Ref* pSender)
 {
-    reqID += 1;
-    C2DXShareSDK::authorize(reqID,cn::sharesdk::C2DXPlatTypeFacebook, authResultHandler);
+    C2DXShareSDK::authorize(cn::sharesdk::C2DXPlatTypeFacebook, authResultHandler);
 }
 
 void HelloWorld::isAuthValidBtnClickHandler(cocos2d::Ref *pSender)
@@ -503,8 +498,7 @@ void HelloWorld::isClientValidBtnClickHandler(cocos2d::Ref *pSender)
 
 void HelloWorld::getUserInfoBtnClickHandler(cocos2d::Ref *pSender)
 {
-    reqID += 1;
-    C2DXShareSDK::getUserInfo(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, getUserResultHandler);
+    C2DXShareSDK::getUserInfo(cn::sharesdk::C2DXPlatTypeSinaWeibo, getUserResultHandler);
 }
 
 void HelloWorld::getAuthInfoBtnClickHandler(cocos2d::Ref *pSender)
@@ -513,9 +507,7 @@ void HelloWorld::getAuthInfoBtnClickHandler(cocos2d::Ref *pSender)
 }
 
 void HelloWorld::shareContentClickHandler(cocos2d::Ref *pSender)
-{
-    reqID += 1;
-    
+{    
     //分享内容
     __Dictionary *content = __Dictionary::create();
     content -> setObject(__String::create("分享文本"), "text");
@@ -524,13 +516,11 @@ void HelloWorld::shareContentClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::create("http://www.mob.com"), "url");
     content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
     
-    C2DXShareSDK::shareContent(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
+    C2DXShareSDK::shareContent(cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
 }
 
 void HelloWorld::oneKeyShareContentClickHandler(cocos2d::Ref *pSender)
-{
-    reqID += 1;
-    
+{    
     //分享内容
     __Dictionary *content = __Dictionary::create();
     content -> setObject(__String::create("分享文本"), "text");
@@ -547,13 +537,11 @@ void HelloWorld::oneKeyShareContentClickHandler(cocos2d::Ref *pSender)
     platforms->addObject(tencent);
     
     //一键分享
-    C2DXShareSDK::oneKeyShareContent(reqID, platforms, content, shareContentResultHandler);
+    C2DXShareSDK::oneKeyShareContent(platforms, content, shareContentResultHandler);
 }
 
 void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
-{
-    reqID += 1;
-    
+{    
     //分享内容
     __Dictionary *content = __Dictionary::create();
     content -> setObject(__String::create("分享文本"), "text");
@@ -562,19 +550,15 @@ void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::create("http://www.mob.com"), "url");
     content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
     
-    C2DXShareSDK::showShareView(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
+    C2DXShareSDK::showShareView(cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
 }
 
 void HelloWorld::getFriendListBtnClickHandler(cocos2d::Ref *pSender)
-{
-    reqID += 1;
-    
-    C2DXShareSDK::getFriendList(reqID, cn::sharesdk::C2DXPlatTypeSinaWeibo, 5, 1, getFriendListResultHandler);
+{    
+    C2DXShareSDK::getFriendList(cn::sharesdk::C2DXPlatTypeSinaWeibo, 5, 1, getFriendListResultHandler);
 }
 
 void HelloWorld::addFriendBtnClickHandler(cocos2d::Ref *pSender)
-{
-    reqID += 1;
-    
-    C2DXShareSDK::addFriend(reqID, cn::sharesdk::C2DXPlatTypeTencentWeibo, "ShareSDK", addFriendResultHandler);
+{    
+    C2DXShareSDK::addFriend(cn::sharesdk::C2DXPlatTypeTencentWeibo, "ShareSDK", addFriendResultHandler);
 }

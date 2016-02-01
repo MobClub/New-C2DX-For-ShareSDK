@@ -87,11 +87,11 @@ namespace cn
             /**
              *	@brief	用户授权
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEvent callback);
+            static int authorize(C2DXPlatType platType, C2DXAuthResultEvent callback);
             
             /**
              *	@brief	取消用户授权
@@ -121,11 +121,11 @@ namespace cn
             /**
              *	@brief	获取用户信息
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void getUserInfo(int reqID, C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
+            static int getUserInfo(C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
 
             /**
              *	@brief	获取用户授权信息
@@ -138,64 +138,64 @@ namespace cn
             /**
              *	@brief	分享内容
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param  isSSO       是否SSO授权
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void shareContent(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
+            static int shareContent(C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
             
             /**
              *	@brief	分享内容
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param  isSSO       是否SSO授权
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void oneKeyShareContent(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback);
+            static int oneKeyShareContent(C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback);
             
             /**
              *	@brief	显示分享菜单
              *
-             *	@param 	reqID 	流水号
              *	@param 	platTypes 	平台类型列表，值可以为NULL，此时显示所有初始化的平台
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void showShareMenu(int reqID, C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback);
+            static int showShareMenu(C2DXArray *platTypes, C2DXDictionary *content, int x, int y, C2DXShareResultEvent callback);
             
             /**
              *	@brief	显示分享视图
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	content 	分享内容
              *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
              */
-            static void showShareView(int reqID, C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
+            static int showShareView(C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
 
             /**
              *	@brief	获得好友列表
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	count 	              每页数量
              *	@param 	page 		页数
              *	@param  account     用户名
+             *	@return 	reqID 	流水号
              */
-            static void getFriendList(int reqID, C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback);
+            static int getFriendList(C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback);
 
             /**
              *	@brief	关注好友
              *
-             *	@param 	reqID 	流水号
              *	@param 	platType 	平台类型
              *	@param 	account 	呢称
+             *	@return 	reqID 	流水号
              */
-            static void addFriend(int reqID, C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback);
+            static int addFriend(C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback);
 
             /**
              * @brief 显示一个消息

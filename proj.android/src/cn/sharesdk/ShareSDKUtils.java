@@ -309,30 +309,13 @@ public class ShareSDKUtils {
 		}
 		if (content.get("type") != null) {
 			String type = (String) content.get("type");
-			int shareType = iosTypeToAndroidType(Integer.parseInt(type));
+			int shareType = Integer.parseInt(type);
+			if (shareType == 0) {
+				shareType = 1;//ios的auto类型，修改成1的text类型
+			}
 			map.put("shareType", shareType);
 		}
 		return map;
 	}
 
-	private static int iosTypeToAndroidType(int type) {
-		switch (type) {
-		case 1:
-			return Platform.SHARE_IMAGE;
-		case 2:
-			return Platform.SHARE_WEBPAGE;
-		case 3:
-			return Platform.SHARE_MUSIC;
-		case 4:
-			return Platform.SHARE_VIDEO;
-		case 5:
-			return Platform.SHARE_APPS;
-		case 6:
-		case 7:
-			return Platform.SHARE_EMOJI;
-		case 8:
-			return Platform.SHARE_FILE;
-		}
-		return Platform.SHARE_TEXT;
-	}
 }

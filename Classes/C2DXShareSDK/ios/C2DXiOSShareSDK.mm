@@ -19,13 +19,12 @@
 
 #import <ShareSDK/ShareSDK+Base.h>
 
-//#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
+#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
 #define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
-//#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
-//#define IMPORT_GOOGLE_PLUS_LIB              //导入Google+库，如果不需要Google+分享可以注释此行
+#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
 #define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
-//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
-//#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
+#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
+#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
 
 #ifdef IMPORT_SINA_WEIBO_LIB
 #import "WeiboSDK.h"
@@ -38,10 +37,6 @@
 
 #ifdef IMPORT_RENREN_LIB
 #import <RennSDK/RennSDK.h>
-#endif
-
-#ifdef IMPORT_GOOGLE_PLUS_LIB
-#import <GooglePlus/GooglePlus.h>
 #endif
 
 #ifdef IMPORT_WECHAT_LIB
@@ -381,13 +376,6 @@ void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDi
                              break;
 #endif
                              
-#ifdef IMPORT_GOOGLE_PLUS_LIB
-                         case SSDKPlatformTypeGooglePlus:
-                             [ShareSDKConnector connectGooglePlus:[GPPSignIn class]
-                                                       shareClass:[GPPShare class]];
-                             break;
-#endif
-                             
 #ifdef IMPORT_WECHAT_LIB
                          case SSDKPlatformTypeWechat:
                              [ShareSDKConnector connectWeChat:[WXApi class]];
@@ -539,8 +527,7 @@ id convertPublishContent(C2DXDictionary *content)
                     contentType = (SSDKContentType)SSDKContentTypeText;
                     break;
                 case C2DXContentTypeImage:
-                case C2DXContentTypeNonGif:
-                case C2DXContentTypeGif:
+                case C2DXContentTypeEmoji:
                     contentType = (SSDKContentType)SSDKContentTypeImage;
                     break;
                 case C2DXContentTypeWebPage:
@@ -556,6 +543,7 @@ id convertPublishContent(C2DXDictionary *content)
                     contentType = (SSDKContentType)SSDKContentTypeApp;
                     break;
                 case C2DXContentTypeAuto:
+                case C2DXContentTypeFile:
                     contentType = (SSDKContentType)SSDKContentTypeAuto;
                 default:
                     break;
@@ -1006,6 +994,5 @@ void C2DXiOSShareSDK::alertLog(const char *msg)
 //                                              cancelButtonTitle:@"OK"
 //                                              otherButtonTitles:nil, nil];
 //    [alertView show];
-//    [alertView release];
 }
 

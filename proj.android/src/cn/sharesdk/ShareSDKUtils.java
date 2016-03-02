@@ -17,14 +17,13 @@ import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
-import cn.sharesdk.onekeyshare.OnekeyShareTheme;
 
 import com.mob.tools.utils.Hashon;
 import com.mob.tools.utils.UIHandler;
 
 public class ShareSDKUtils {
 	public static boolean DEBUG = true;
-	private static boolean disableSSO = false; 
+	private static boolean disableSSO = true; 
 	
 	private static Context context;
 	private static Hashon hashon;
@@ -200,8 +199,8 @@ public class ShareSDKUtils {
 		}
 	}
 	
-	public static void disableSSOWhenAuthorize(boolean open){
-		disableSSO = open;
+	public static void disableSSOWhenAuthorize(boolean disable){
+		disableSSO = disable;
 	}
 
 	public static void onekeyShare(int reqID, int platformId, String contentJson) {
@@ -248,15 +247,6 @@ public class ShareSDKUtils {
 		}
 		oks.setCallback(paListaner);
 
-		String theme = (String) map.get("shareTheme");
-		if("skyblue".equals(theme)){
-			Log.i("", "theme = skyblue");
-			oks.setTheme(OnekeyShareTheme.SKYBLUE);
-		}else {
-			Log.i("", "theme = classic");
-			oks.setTheme(OnekeyShareTheme.CLASSIC);
-		}
-		
 		oks.show(context);
 	}
 
@@ -276,6 +266,8 @@ public class ShareSDKUtils {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		if (content.get("content") != null) {
 			map.put("text", content.get("content"));
+		} else if (content.get("text") != null) {
+			map.put("text", content.get("text"));
 		}
 		if (content.get("image") != null) {
 			String image = (String) content.get("image");

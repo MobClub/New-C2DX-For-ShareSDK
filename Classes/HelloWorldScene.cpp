@@ -476,7 +476,7 @@ void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
 
 void HelloWorld::authBtnClickHandler(cocos2d::Ref* pSender)
 {
-    C2DXShareSDK::authorize(cn::sharesdk::C2DXPlatTypeFacebook, authResultHandler);
+    C2DXShareSDK::authorize(cn::sharesdk::C2DXPlatTypeSinaWeibo, authResultHandler);
 }
 
 void HelloWorld::isAuthValidBtnClickHandler(cocos2d::Ref *pSender)
@@ -514,7 +514,7 @@ void HelloWorld::shareContentClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::create("HelloWorld.png"), "image");
     content -> setObject(__String::create("测试标题"), "title");
     content -> setObject(__String::create("http://www.mob.com"), "url");
-    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeImage), "type");
     
     C2DXShareSDK::shareContent(cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
 }
@@ -527,7 +527,7 @@ void HelloWorld::oneKeyShareContentClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::create("HelloWorld.png"), "image");
     content -> setObject(__String::create("测试标题"), "title");
     content -> setObject(__String::create("http://www.mob.com"), "url");
-    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeImage), "type");
     
     //分享平台
     C2DXArray *platforms = C2DXArray::create();
@@ -548,7 +548,7 @@ void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::create("HelloWorld.png"), "image");
     content -> setObject(__String::create("测试标题"), "title");
     content -> setObject(__String::create("http://www.mob.com"), "url");
-    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeWebPage), "type");
+    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeImage), "type");
     
     C2DXShareSDK::showShareView(cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
 }

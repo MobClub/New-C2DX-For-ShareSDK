@@ -14,7 +14,7 @@ def build(build_mode):
 
 
     current_dir = os.path.dirname(os.path.realpath(__file__))
-    cocos_root = os.path.join(current_dir, "D:/development/cocos2d-x-3.8")
+    cocos_root = os.path.join(current_dir, "D:/development/cocos2d-x-3.11")
 
     app_android_root = os.path.join(current_dir, "../")
 		

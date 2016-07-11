@@ -285,7 +285,9 @@ public class ShareSDKUtils {
 		}
 		if (content.get("url") != null) {
 			map.put("url", content.get("url"));
-			map.put("titleUrl", content.get("url"));
+		}
+		if (content.get("titleUrl") != null) {
+			map.put("titleUrl", content.get("titleUrl"));
 		}
 		if (content.get("site") != null) {
 			map.put("site", content.get("site"));

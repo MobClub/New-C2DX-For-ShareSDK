@@ -45,6 +45,12 @@ public:
     //加为好友
     void addFriendBtnClickHandler(cocos2d::Ref* pSender);
     
+    //根据配置文件分享
+    void shareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
+    
+    //根据配置文件分享(可选-自定义字段)
+    void cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
+    
     CREATE_FUNC(HelloWorld);
 };
 

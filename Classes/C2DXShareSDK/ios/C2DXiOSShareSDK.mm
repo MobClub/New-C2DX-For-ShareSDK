@@ -401,8 +401,14 @@ void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDi
     onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
     {
         NSMutableDictionary * dict = [platformsDic objectForKey:[NSString stringWithFormat:@"%zi",platformType]];
+
+        if (platformType == SSDKPlatformTypeFacebook)
+        {
+            [dict setObject:@"sso" forKey:@"auth_type"];
+        }
         [appInfo addEntriesFromDictionary:dict];
-        [appInfo setObject:@"both" forKey:@"auth"];
+        
+//        [appInfo setObject:@"both" forKey:@"auth"];
         
     }];
 }
@@ -994,5 +1000,49 @@ void C2DXiOSShareSDK::alertLog(const char *msg)
 //                                              cancelButtonTitle:@"OK"
 //                                              otherButtonTitles:nil, nil];
 //    [alertView show];
+}
+
+void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback)
+{
+    SSDKPlatformType type = (SSDKPlatformType)platType;
+    NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
+    NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
+    
+    [ShareSDK shareWithContentName:aContentName
+                          platform:type
+                      customFields:aCustomFields
+                    onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error)
+    {
+        C2DXDictionary *userInfoDict = C2DXDictionary::create();
+        switch (state)
+        {
+            case SSDKResponseStateSuccess:
+                userInfoDict = convertNSDictToCCDict(userData);
+                break;
+            case SSDKResponseStateFail:
+                
+                if (error)
+                {
+                    NSInteger errCode = [error code];
+                    NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                    
+                    userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                    
+                    if (errDesc)
+                    {
+                        userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                    }
+                }
+                break;
+                
+            default:
+                break;
+        }
+        
+        if (callback)
+        {
+            callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platType,userInfoDict);
+        }
+    }];
 }
 

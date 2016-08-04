@@ -26,10 +26,26 @@ bool HelloWorld::init()
     Size winSize = Director::getInstance()->getWinSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     
+    //根据配置文件分享
+    MenuItemLabel *shareWithConFile = MenuItemLabel::create(LabelTTF::create("Share with Configuration file", "Arial", 10),
+                                                            CC_CALLBACK_1(HelloWorld::shareWithConFileBtnClickHandler, this));
+    shareWithConFile->setPosition(winSize.width/2 , 280);
+    auto shareWithConFileMenu = Menu::create(shareWithConFile,NULL);
+    shareWithConFileMenu->setPosition(Vec2::ZERO);
+    this->addChild(shareWithConFileMenu);
+    
+    //根据配置文件分享(可选-自定义字段)
+    MenuItemLabel *customShareWithConFile = MenuItemLabel::create(LabelTTF::create("Custom share with configuration file", "Arial", 10),
+                                                                  CC_CALLBACK_1(HelloWorld::cuntomShareWithConFileBtnClickHandler, this));
+    customShareWithConFile->setPosition(winSize.width/2 , 260);
+    auto customShareWithConFileMenu = Menu::create(customShareWithConFile,NULL);
+    customShareWithConFileMenu->setPosition(Vec2::ZERO);
+    this->addChild(customShareWithConFileMenu);
+    
     //授权
     MenuItemLabel *authItem = MenuItemLabel::create(LabelTTF::create("Authorize", "Arial", 10),
                                                     CC_CALLBACK_1(HelloWorld::authBtnClickHandler, this));
-    authItem->setPosition(winSize.width/2 , 300);
+    authItem->setPosition(winSize.width/2 , 240);
     auto authMenu = Menu::create(authItem,NULL);
     authMenu->setPosition(Vec2::ZERO);
     this->addChild(authMenu);
@@ -37,7 +53,7 @@ bool HelloWorld::init()
     //是否授权
     MenuItemLabel *isAuthValid = MenuItemLabel::create(LabelTTF::create("is Auth Valid", "Arial", 10),
                                                        CC_CALLBACK_1(HelloWorld::isAuthValidBtnClickHandler, this));
-    isAuthValid->setPosition(winSize.width/2 , 275);
+    isAuthValid->setPosition(winSize.width/2 , 220);
     auto isAuthValidMenu = Menu::create(isAuthValid,NULL);
     isAuthValidMenu->setPosition(Vec2::ZERO);
     this->addChild(isAuthValidMenu);
@@ -45,7 +61,7 @@ bool HelloWorld::init()
     //取消授权
     MenuItemLabel *cancelAuthItem = MenuItemLabel::create(LabelTTF::create("Cancel Authorize", "Arial", 10),
                                                           CC_CALLBACK_1(HelloWorld::cancelAuthBtnClickHandler, this));
-    cancelAuthItem->setPosition(winSize.width/2 , 250);
+    cancelAuthItem->setPosition(winSize.width/2 , 200);
     auto cancelAuthMenu = Menu::create(cancelAuthItem,NULL);
     cancelAuthMenu->setPosition(Vec2::ZERO);
     this->addChild(cancelAuthMenu);
@@ -53,7 +69,7 @@ bool HelloWorld::init()
     //客户端是否安装
     MenuItemLabel *isClientInstalledItem = MenuItemLabel::create(LabelTTF::create("Is Client Installed", "Arial", 10),
                                                                  CC_CALLBACK_1(HelloWorld::isClientValidBtnClickHandler, this));
-    isClientInstalledItem->setPosition(winSize.width/2 , 225);
+    isClientInstalledItem->setPosition(winSize.width/2 , 180);
     auto isClientInstalledMenu = Menu::create(isClientInstalledItem,NULL);
     isClientInstalledMenu->setPosition(Vec2::ZERO);
     this->addChild(isClientInstalledMenu);
@@ -61,7 +77,7 @@ bool HelloWorld::init()
     //获取用户信息
     MenuItemLabel *getUserInfoItem = MenuItemLabel::create(LabelTTF::create("Get User Info", "Arial", 10),
                                                            CC_CALLBACK_1(HelloWorld::getUserInfoBtnClickHandler, this));
-    getUserInfoItem->setPosition(winSize.width/2 , 200);
+    getUserInfoItem->setPosition(winSize.width/2 , 160);
     auto getUserInfoMenu = Menu::create(getUserInfoItem,NULL);
     getUserInfoMenu->setPosition(Vec2::ZERO);
     this->addChild(getUserInfoMenu);
@@ -69,7 +85,7 @@ bool HelloWorld::init()
     //获取授权信息
     MenuItemLabel *getAuthInfoItem = MenuItemLabel::create(LabelTTF::create("Get Auth Info", "Arial", 10),
                                                            CC_CALLBACK_1(HelloWorld::getAuthInfoBtnClickHandler, this));
-    getAuthInfoItem->setPosition(winSize.width/2 , 175);
+    getAuthInfoItem->setPosition(winSize.width/2 , 140);
     auto getAuthInfoMenu = Menu::create(getAuthInfoItem,NULL);
     getAuthInfoMenu->setPosition(Vec2::ZERO);
     this->addChild(getAuthInfoMenu);
@@ -77,7 +93,7 @@ bool HelloWorld::init()
     //直接分享
     auto shareItem = MenuItemLabel::create(LabelTTF::create("Share Directly", "Arial", 10),
                                            CC_CALLBACK_1(HelloWorld::shareContentClickHandler, this));
-    shareItem->setPosition(winSize.width/2 , 150);
+    shareItem->setPosition(winSize.width/2 , 120);
     
     auto itemsMenu = Menu::create(shareItem,NULL);
     itemsMenu->setPosition(Vec2::ZERO);
@@ -86,7 +102,7 @@ bool HelloWorld::init()
     //分享菜单
     MenuItemLabel *shareMenuItem = MenuItemLabel::create(LabelTTF::create("Show Share Menu", "Arial", 10),
                                                          CC_CALLBACK_1(HelloWorld::showShareMenuClickHandler, this));
-    shareMenuItem->setPosition(Director::getInstance()->getWinSize().width/2 , 125);
+    shareMenuItem->setPosition(Director::getInstance()->getWinSize().width/2 , 100);
     auto shareMenu = Menu::create(shareMenuItem,NULL);
     shareMenu->setPosition(Vec2::ZERO);
     this->addChild(shareMenu);
@@ -94,7 +110,7 @@ bool HelloWorld::init()
     //显示分享编辑页面
     MenuItemLabel *shareEditItem = MenuItemLabel::create(LabelTTF::create("Show Share Edit View", "Arial", 10),
                                                          CC_CALLBACK_1(HelloWorld::showShareViewClickHandler, this));
-    shareEditItem->setPosition(winSize.width/2 , 100);
+    shareEditItem->setPosition(winSize.width/2 , 80);
     auto shareEditItemMenu = Menu::create(shareEditItem,NULL);
     shareEditItemMenu->setPosition(Vec2::ZERO);
     this->addChild(shareEditItemMenu);
@@ -102,7 +118,7 @@ bool HelloWorld::init()
     //获取好友列表
     MenuItemLabel *getFriendList = MenuItemLabel::create(LabelTTF::create("Get Friend List", "Arial", 10),
                                                          CC_CALLBACK_1(HelloWorld::getFriendListBtnClickHandler, this));
-    getFriendList->setPosition(winSize.width/2 , 75);
+    getFriendList->setPosition(winSize.width/2 , 60);
     auto getFriendListMenu = Menu::create(getFriendList,NULL);
     getFriendListMenu->setPosition(Vec2::ZERO);
     this->addChild(getFriendListMenu);
@@ -110,11 +126,11 @@ bool HelloWorld::init()
     //添加好友
     MenuItemLabel *addFriend = MenuItemLabel::create(LabelTTF::create("Add Friend", "Arial", 10),
                                                      CC_CALLBACK_1(HelloWorld::addFriendBtnClickHandler, this));
-    addFriend->setPosition(winSize.width/2 , 50);
+    addFriend->setPosition(winSize.width/2 , 40);
     auto addFriendMenu = Menu::create(addFriend,NULL);
     addFriendMenu->setPosition(Vec2::ZERO);
     this->addChild(addFriendMenu);
-    
+
     return true;
 }
 
@@ -478,24 +494,6 @@ void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
     content -> setObject(__String::create("http://www.mob.com"), "url");
     content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeAuto), "type");
     
-//可以自定义分享平台，如果平台传入NULL，此时显示所有初始化的平台
-//    C2DXArray *platforms = C2DXArray::create();
-//    __Integer *sina = new __Integer(cn::sharesdk::C2DXPlatTypeSinaWeibo);
-//    __Integer *tencent = new __Integer(cn::sharesdk::C2DXPlatTypeTencentWeibo);
-//    __Integer *wechat = new __Integer(cn::sharesdk::C2DXPlatTypeWechatPlatform);
-//    __Integer *qq = new __Integer(cn::sharesdk::C2DXPlatTypeQQPlatform);
-//    __Integer *fb = new __Integer(cn::sharesdk::C2DXPlatTypeFacebook);
-//    __Integer *tw = new __Integer(cn::sharesdk::C2DXPlatTypeTwitter);
-//    __Integer *mail = new __Integer(cn::sharesdk::C2DXPlatTypeMail);
-//
-//    platforms->addObject(sina);
-//    platforms->addObject(tencent);
-//    platforms->addObject(wechat);
-//    platforms->addObject(qq);
-//    platforms->addObject(fb);
-//    platforms->addObject(tw);
-//    platforms->addObject(mail);
-    
     C2DXShareSDK::showShareMenu(NULL,content,100,100,shareContentResultHandler);
 }
 
@@ -586,4 +584,17 @@ void HelloWorld::getFriendListBtnClickHandler(cocos2d::Ref *pSender)
 void HelloWorld::addFriendBtnClickHandler(cocos2d::Ref *pSender)
 {    
     C2DXShareSDK::addFriend(cn::sharesdk::C2DXPlatTypeTencentWeibo, "ShareSDK", addFriendResultHandler);
+}
+
+void HelloWorld::shareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
+{
+    C2DXShareSDK::shareWithConfigurationFile("mob", cn::sharesdk::C2DXPlatTypeSinaWeibo, NULL, shareContentResultHandler);
+}
+
+void HelloWorld::cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
+{
+    __Dictionary *customFields = __Dictionary::create();
+    customFields -> setObject(__String::create("http://www.mob.com/mob/images/sharesdk/analysis-logo.png"), "imgUrl");
+    
+    C2DXShareSDK::shareWithConfigurationFile("sharesdk", cn::sharesdk::C2DXPlatTypeSinaWeibo, customFields, shareContentResultHandler);
 }

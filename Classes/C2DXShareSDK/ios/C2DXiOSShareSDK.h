@@ -146,6 +146,16 @@ namespace cn
              *	@brief	显示分享编辑框
              */
             static void alertLog(const char *msg);
+            
+            /**
+             *  使用配置文件的方式分享
+             *
+             *  @param contentName  ShareContent.xml内<Content>标签name属性的值
+             *  @param platType     平台类型
+             *  @param customFields 自定义字段
+             *  @param callback     状态变更回调处理
+             */
+            static void shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback);
         };
     }
 }

@@ -303,3 +303,19 @@ void C2DXShareSDK::toast(const char *msg)
     
 #endif
 }
+
+int C2DXShareSDK::shareWithConfigurationFile(const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback)
+{
+    reqID ++;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    
+    //Andorid
+    
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    
+    //iOS
+    C2DXiOSShareSDK::shareWithConfigurationFile(reqID, contentName, platType, customFields, callback);
+    
+#endif
+    return reqID;
+}

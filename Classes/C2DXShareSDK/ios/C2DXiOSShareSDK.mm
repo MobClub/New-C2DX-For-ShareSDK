@@ -1004,6 +1004,32 @@ void C2DXiOSShareSDK::alertLog(const char *msg)
 
 void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback)
 {
+    
+#ifdef IMPORT_SINA_WEIBO_LIB
+    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+#endif
+    
+#ifdef IMPORT_QZONE_QQ_LIB
+    [ShareSDKConnector connectQQ:[QQApiInterface class]
+               tencentOAuthClass:[TencentOAuth class]];
+#endif
+    
+#ifdef IMPORT_RENREN_LIB
+    [ShareSDKConnector connectRenren:[RennClient class]];
+#endif
+    
+#ifdef IMPORT_WECHAT_LIB
+    [ShareSDKConnector connectWeChat:[WXApi class]];
+#endif
+    
+#ifdef IMPORT_ALIPAY_LIB
+    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
+#endif
+    
+#ifdef IMPORT_KAKAO_LIB
+    [ShareSDKConnector connectKaKao:[KOSession class]];
+#endif
+    
     SSDKPlatformType type = (SSDKPlatformType)platType;
     NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
     NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);

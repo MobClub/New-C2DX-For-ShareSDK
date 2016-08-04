@@ -148,9 +148,6 @@ void shareContentResultHandler(int seqId, cn::sharesdk::C2DXResponseState state,
         {
             log("Fail");
             //回调错误信息
-			if (result == NULL) {
-				break;
-			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -196,9 +193,6 @@ void authResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sha
             //输出信息
             try
             {
-				if (result == NULL) {
-					break;
-				}
                 __Array *allKeys = result -> allKeys();
                 allKeys->retain();
                 for (int i = 0; i < allKeys -> count(); i++)
@@ -231,9 +225,6 @@ void authResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sha
         case cn::sharesdk::C2DXResponseStateFail:
         {
             log("Fail");
-			if (result == NULL) {
-				break;
-			}
             //回调错误信息
             __Array *allKeys = result->allKeys();
             allKeys->retain();
@@ -280,9 +271,6 @@ void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platT
             //输出信息
             try
             {
-				if (result == NULL) {
-					break;
-				}
                 __Array *allKeys = result -> allKeys();
                 allKeys->retain();
                 for (int i = 0; i < allKeys -> count(); i++)
@@ -316,9 +304,6 @@ void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platT
         {
             log("Fail");
             //回调错误信息
-			if (result == NULL) {
-				break;
-			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -363,10 +348,6 @@ void getFriendListResultHandler(int reqID, C2DXResponseState state, C2DXPlatType
             //输出信息
             try
             {
-				if (result == NULL) {
-					break;
-				}
-				
                 __Array *allKeys = result -> allKeys();
                 allKeys->retain();
                 for (int i = 0; i < allKeys -> count(); i++)
@@ -400,9 +381,6 @@ void getFriendListResultHandler(int reqID, C2DXResponseState state, C2DXPlatType
         {
             log("Fail");
             //回调错误信息
-			if (result == NULL) {
-				break;
-			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -449,9 +427,6 @@ void addFriendResultHandler(int reqID, C2DXResponseState state, C2DXPlatType pla
         {
             log("Fail");
             //回调错误信息
-			if (result == NULL) {
-				break;
-			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -588,7 +563,7 @@ void HelloWorld::addFriendBtnClickHandler(cocos2d::Ref *pSender)
 
 void HelloWorld::shareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
 {
-    C2DXShareSDK::shareWithConfigurationFile("mob", cn::sharesdk::C2DXPlatTypeSinaWeibo, NULL, shareContentResultHandler);
+    C2DXShareSDK::shareWithConfigurationFile("mob", cn::sharesdk::C2DXPlatTypeQQ, NULL, shareContentResultHandler);
 }
 
 void HelloWorld::cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
@@ -596,5 +571,5 @@ void HelloWorld::cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
     __Dictionary *customFields = __Dictionary::create();
     customFields -> setObject(__String::create("http://www.mob.com/mob/images/sharesdk/analysis-logo.png"), "imgUrl");
     
-    C2DXShareSDK::shareWithConfigurationFile("sharesdk", cn::sharesdk::C2DXPlatTypeSinaWeibo, customFields, shareContentResultHandler);
+    C2DXShareSDK::shareWithConfigurationFile("sharesdk", cn::sharesdk::C2DXPlatTypeQQ, customFields, shareContentResultHandler);
 }

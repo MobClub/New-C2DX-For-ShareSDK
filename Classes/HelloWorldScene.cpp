@@ -148,6 +148,9 @@ void shareContentResultHandler(int seqId, cn::sharesdk::C2DXResponseState state,
         {
             log("Fail");
             //回调错误信息
+			if (result == NULL) {
+ 				break;
+			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -191,6 +194,9 @@ void authResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sha
             log("Success");
             
             //输出信息
+			if (result == NULL) {
+ 				break;
+			}
             try
             {
                 __Array *allKeys = result -> allKeys();
@@ -226,6 +232,9 @@ void authResultHandler(int seqId, cn::sharesdk::C2DXResponseState state, cn::sha
         {
             log("Fail");
             //回调错误信息
+			if (result == NULL) {
+ 				break;
+			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -267,7 +276,9 @@ void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platT
         case cn::sharesdk::C2DXResponseStateSuccess:
         {
             log("Success");
-            
+            if (result == NULL) {
+ 				break;
+			}
             //输出信息
             try
             {
@@ -304,6 +315,9 @@ void getUserResultHandler(int reqID, C2DXResponseState state, C2DXPlatType platT
         {
             log("Fail");
             //回调错误信息
+			if (result == NULL) {
+ 				break;
+			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -346,6 +360,9 @@ void getFriendListResultHandler(int reqID, C2DXResponseState state, C2DXPlatType
             log("Success");
             
             //输出信息
+			if (result == NULL) {
+ 				break;
+			}
             try
             {
                 __Array *allKeys = result -> allKeys();
@@ -381,6 +398,9 @@ void getFriendListResultHandler(int reqID, C2DXResponseState state, C2DXPlatType
         {
             log("Fail");
             //回调错误信息
+			if (result == NULL) {
+ 				break;
+			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)
@@ -427,6 +447,9 @@ void addFriendResultHandler(int reqID, C2DXResponseState state, C2DXPlatType pla
         {
             log("Fail");
             //回调错误信息
+			if (result == NULL) {
+ 				break;
+			}
             __Array *allKeys = result->allKeys();
             allKeys->retain();
             for (int i = 0; i < allKeys-> count(); i++)

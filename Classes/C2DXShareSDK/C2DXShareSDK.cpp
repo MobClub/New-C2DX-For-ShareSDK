@@ -319,3 +319,35 @@ int C2DXShareSDK::shareWithConfigurationFile(const char *contentName, C2DXPlatTy
 #endif
     return reqID;
 }
+
+int C2DXShareSDK::showShareMenuWithConfigurationFile(C2DXArray *platTypes, int x, int y, const char* contentName,C2DXDictionary *customFields, C2DXShareResultEvent callback)
+{
+    reqID ++;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    
+    //Andorid
+    
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    
+    //iOS
+    C2DXiOSShareSDK::showShareMenuWithConfigurationFile(reqID, platTypes, C2DXPointMake(x,y), contentName, customFields, callback);
+    
+#endif
+    return reqID;
+}
+
+int C2DXShareSDK::showShareViewWithConfigurationFile(C2DXPlatType platType,const char* contentName,C2DXDictionary *customFields, C2DXShareResultEvent callback)
+{
+    reqID ++;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    
+    //Andorid
+    
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    
+    //iOS
+    C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(reqID,platType,contentName, customFields, callback);
+    
+#endif
+    return reqID;
+}

@@ -13,11 +13,12 @@
 #import <ShareSDKUI/ShareSDKUI.h>
 #import <ShareSDKExtension/ShareSDK+Extension.h>
 #import <ShareSDKExtension/SSEShareHelper.h>
-#import <ShareSDK/SSDKFriendsPaging.h>
+#import <ShareSDKExtension/SSDKFriendsPaging.h>
 #import <MOBFoundation/MOBFRegex.h>
 #import <ShareSDK/NSMutableDictionary+SSDKShare.h>
 
 #import <ShareSDK/ShareSDK+Base.h>
+#import <ShareSDKConfigFile/ShareSDK+XML.h>
 
 #define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
 #define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
@@ -852,6 +853,81 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
 }
 
 #pragma mark 弹出分享编辑框
+
+void C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(int reqID,C2DXPlatType platType, const char *contentName, C2DXDictionary *customFields,C2DXShareResultEvent callback)
+{
+#ifdef IMPORT_SINA_WEIBO_LIB
+    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+#endif
+    
+#ifdef IMPORT_QZONE_QQ_LIB
+    [ShareSDKConnector connectQQ:[QQApiInterface class]
+               tencentOAuthClass:[TencentOAuth class]];
+#endif
+    
+#ifdef IMPORT_RENREN_LIB
+    [ShareSDKConnector connectRenren:[RennClient class]];
+#endif
+    
+#ifdef IMPORT_WECHAT_LIB
+    [ShareSDKConnector connectWeChat:[WXApi class]];
+#endif
+    
+#ifdef IMPORT_ALIPAY_LIB
+    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
+#endif
+    
+#ifdef IMPORT_KAKAO_LIB
+    [ShareSDKConnector connectKaKao:[KOSession class]];
+#endif
+
+    NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
+    NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
+    
+    [ShareSDK showShareEditor:(SSDKPlatformType)platType
+           otherPlatformTypes:nil
+                  contentName:aContentName
+                 customFields:aCustomFields
+          onShareStateChanged:^(SSDKResponseState state,
+                                SSDKPlatformType platformType,
+                                NSDictionary *userData,
+                                SSDKContentEntity *contentEntity,
+                                NSError *error,
+                                BOOL end)
+     {
+         C2DXDictionary *userInfoDict = C2DXDictionary::create();
+         
+         switch (state)
+         {
+             case SSDKResponseStateSuccess:
+                 userInfoDict = convertNSDictToCCDict(userData);
+                 break;
+             case SSDKResponseStateFail:
+                 if (error)
+                 {
+                     NSInteger errCode = [error code];
+                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                     
+                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                     
+                     if (errDesc)
+                     {
+                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                     }
+                 }
+                 break;
+             default:
+                 break;
+         }
+         
+         if (callback)
+         {
+             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
+         }
+     }];
+    
+}
+
 void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
     NSMutableDictionary *shareParams;
@@ -1000,6 +1076,106 @@ void C2DXiOSShareSDK::alertLog(const char *msg)
 //                                              cancelButtonTitle:@"OK"
 //                                              otherButtonTitles:nil, nil];
 //    [alertView show];
+}
+
+void C2DXiOSShareSDK::showShareMenuWithConfigurationFile(int reqID,C2DXArray *platTypes, C2DXPoint pt, const char *contentName, C2DXDictionary *customFields, C2DXShareResultEvent callback)
+{
+#ifdef IMPORT_SINA_WEIBO_LIB
+    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+#endif
+    
+#ifdef IMPORT_QZONE_QQ_LIB
+    [ShareSDKConnector connectQQ:[QQApiInterface class]
+               tencentOAuthClass:[TencentOAuth class]];
+#endif
+    
+#ifdef IMPORT_RENREN_LIB
+    [ShareSDKConnector connectRenren:[RennClient class]];
+#endif
+    
+#ifdef IMPORT_WECHAT_LIB
+    [ShareSDKConnector connectWeChat:[WXApi class]];
+#endif
+    
+#ifdef IMPORT_ALIPAY_LIB
+    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
+#endif
+    
+#ifdef IMPORT_KAKAO_LIB
+    [ShareSDKConnector connectKaKao:[KOSession class]];
+#endif
+    
+    NSMutableArray *shareList = nil;
+    if (platTypes && platTypes -> count() > 0)
+    {
+        shareList = [NSMutableArray array];
+        for (int i = 0; i < platTypes -> count(); i++)
+        {
+            C2DXInteger *type = (C2DXInteger *)platTypes -> C2DXObjectAtIndex(i);
+            [shareList addObject:[NSNumber numberWithInteger:type -> getValue()]];
+        }
+    }
+    
+    //设置iPad菜单位置
+    //    pt = CCDirector::sharedDirector() -> convertToUI(pt);
+    if (!_refView)
+    {
+        _refView = [[UIView alloc] initWithFrame:CGRectMake(pt.x, pt.y, 1, 1)];
+    }
+    _refView.frame = CGRectMake(pt.x, pt.y, 1, 1);
+    [[UIApplication sharedApplication].keyWindow.rootViewController.view addSubview:_refView];
+    
+    NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
+    NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
+    
+    [ShareSDK showShareActionSheet:_refView
+                             items:shareList
+                       contentName:aContentName
+                      customFields:aCustomFields
+               onShareStateChanged:^(SSDKResponseState state,
+                                     SSDKPlatformType platformType,
+                                     NSDictionary *userData,
+                                     SSDKContentEntity *contentEntity,
+                                     NSError *error,
+                                     BOOL end)
+     {
+         C2DXDictionary *userInfoDict = C2DXDictionary::create();
+         
+         switch (state)
+         {
+             case SSDKResponseStateSuccess:
+                 userInfoDict = convertNSDictToCCDict(userData);
+                 break;
+             case SSDKResponseStateFail:
+                 
+                 if (error)
+                 {
+                     NSInteger errCode = [error code];
+                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
+                     
+                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
+                     
+                     if (errDesc)
+                     {
+                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
+                     }
+                 }
+                 break;
+             default:
+                 break;
+         }
+         
+         if (callback)
+         {
+             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
+         }
+         
+         if (_refView)
+         {
+             //移除视图
+             [_refView removeFromSuperview];
+         }
+     }];
 }
 
 void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback)

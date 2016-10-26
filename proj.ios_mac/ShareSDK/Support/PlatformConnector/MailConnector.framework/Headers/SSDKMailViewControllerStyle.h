@@ -1,5 +1,5 @@
 //
-//  SSDKSMSViewControllerStyle.h
+//  SSDKMailViewControllerStyle.h
 //  ShareSDK
 //
 //  Created by 刘靖煌 on 15/12/24.
@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface SSDKSMSViewControllerStyle : NSObject
+@interface SSDKMailViewControllerStyle : NSObject
 
 /**
  *  风格共享实例

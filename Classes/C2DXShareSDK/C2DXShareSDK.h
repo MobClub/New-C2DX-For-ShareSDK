@@ -214,6 +214,28 @@ namespace cn
              *  @return reqID 	流水号
              */
             static int shareWithConfigurationFile(const char* contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            
+            /**
+             *	@brief	显示分享菜单
+             *
+             *	@param 	platTypes 	平台类型列表，值可以为NULL，此时显示所有初始化的平台
+             *  @param contentName  ShareContent.xml内<Content>标签name属性的值
+             *  @param customFields 自定义字段
+             *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
+             */
+            static int showShareMenuWithConfigurationFile(C2DXArray *platTypes, int x, int y, const char* contentName,C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            
+            /**
+             *	@brief	显示分享视图
+             *
+             *	@param 	platType 	平台类型
+             *  @param contentName  ShareContent.xml内<Content>标签name属性的值
+             *  @param customFields 自定义字段
+             *	@param 	callback 	回调方法
+             *	@return 	reqID 	流水号
+             */
+            static int showShareViewWithConfigurationFile(C2DXPlatType platType, const char* contentName,C2DXDictionary *customFields, C2DXShareResultEvent callback);
         };
     }
 }

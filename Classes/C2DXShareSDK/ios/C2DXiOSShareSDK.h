@@ -156,6 +156,31 @@ namespace cn
              *  @param callback     状态变更回调处理
              */
             static void shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            
+            /**
+             *	@brief	显示分享菜单
+             *
+             *	@param 	reqID 	流水号
+             *	@param 	platTypes 	平台类型列表
+             *	@param 	content 	分享内容
+             *	@param 	pt          弹出分享菜单参位置，仅用于设置iPad分享菜单弹出
+             *  @param contentName  ShareContent.xml内<Content>标签name属性的值
+             *  @param customFields 自定义字段
+             *	@param 	callback 	回调方法
+             */
+            static void showShareMenuWithConfigurationFile(int reqID,C2DXArray *platTypes, C2DXPoint pt, const char *contentName, C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            
+            /**
+             *	@brief	显示分享编辑框
+             *
+             *	@param 	reqID 	流水号
+             *	@param 	platType 	平台类型
+             *	@param 	content 	分享内容
+             *  @param contentName  ShareContent.xml内<Content>标签name属性的值
+             *  @param customFields 自定义字段
+             *	@param 	callback 	回调方法
+             */
+            static void showShareEditViewWithConfigurationFile(int reqID,C2DXPlatType platType, const char *contentName, C2DXDictionary *customFields,C2DXShareResultEvent callback);
         };
     }
 }

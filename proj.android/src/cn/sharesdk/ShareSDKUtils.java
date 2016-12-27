@@ -149,6 +149,7 @@ public class ShareSDKUtils {
 			map.put("userGender", db.getUserGender());
 			map.put("userID", db.getUserId());
 			map.put("openID", db.get("openid"));
+			map.put("unionID", db.get("unionid"));
 			map.put("userName", db.getUserName());
 			map.put("userIcon", db.getUserIcon());
 		}

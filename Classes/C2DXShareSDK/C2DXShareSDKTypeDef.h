@@ -93,6 +93,10 @@ namespace cn
     		C2DXPlatTypeFacebookMessenger = 46,/**< FacebookMessenger */
     		C2DXPlatTypeBluetooth = 48,        /**< Bluetooth */
     		C2DXPlatTypeAlipay = 50,           /**< Alipay */
+            C2DXPlatTypeAliPaySocialTimeline=51,/**< AliPaySocial Timeline */
+            C2DXPlatTypeDingTalk = 52,         /**< DingTalk */
+            C2DXPlatTypeYouTube = 53,          /**< YouTube */
+            C2DXPlatTypeMeiPai = 54,           /**< MeiPai */
     		C2DXPlatTypeWechatPlatform = 997,  /**< Wechat Series */
     		C2DXPlatTypeQQPlatform = 998,	   /**< QQ Series */
     		C2DXPlatTypeAny = 999 			   /**< 任意平台 */

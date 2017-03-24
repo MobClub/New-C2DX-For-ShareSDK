@@ -29,6 +29,7 @@
 #define IMPORT_MESSENGER_LIB                //导入Facebook Messenger库，如果不需要Facebook Messenger分享可以注释此行
 #define IMPORT_DINGTALK_LIB                 //导入钉钉（Ding Talk）库，如果不需要钉钉（Ding Talk）分享可以注释此行
 #define IMPORT_MEIPAI_LIB                   //导入美拍库，如果不需要美拍分享可以注释此行
+#define IMPORT_LINE_LIB                     //导入line，如果不需要line授权SDK可以注释此行
 
 #ifdef IMPORT_SINA_WEIBO_LIB
 #import "WeiboSDK.h"
@@ -66,6 +67,10 @@
 
 #ifdef IMPORT_MEIPAI_LIB
 #import <MPShareSDK/MPShareSDK.h>
+#endif
+
+#ifdef IMPORT_LINE_LIB
+#import <LineSDK/LineSDK.h>
 #endif
 
 static UIView *_refView = nil;
@@ -429,6 +434,12 @@ void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDi
                              [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
                              break;
 #endif
+                             
+#ifdef IMPORT_LINE_LIB
+                         case SSDKPlatformTypeLine:
+                             [ShareSDKConnector connectLine:[LineSDKLogin class]];
+                             break;
+#endif
              
                          default:
                          break;
@@ -711,9 +722,13 @@ void C2DXiOSShareSDK::getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserIn
 }
 
 #pragma mark 简单分享
-void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
+void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictionary *content,bool useClientShare, C2DXShareResultEvent callback)
 {
     NSMutableDictionary *parameters = convertPublishContent(content);
+    if(useClientShare)
+    {
+        [parameters SSDKEnableUseClientShare];
+    }
     [ShareSDK share:(SSDKPlatformType)platType
          parameters:parameters
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
@@ -812,7 +827,7 @@ void C2DXiOSShareSDK::oneKeyShareContent(int reqID,C2DXArray *platTypes, C2DXDic
 }
 
 #pragma mark 弹出分享菜单进行分享
-void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXPoint pt, C2DXShareResultEvent callback)
+void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXPoint pt, bool useClientShare , C2DXShareResultEvent callback)
 {
     NSMutableArray *shareList = nil;
     if (platTypes && platTypes -> count() > 0)
@@ -837,7 +852,10 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
     NSMutableDictionary *shareParams;
     //构造分享参数
     shareParams = convertPublishContent(content);
-    
+    if(useClientShare)
+    {
+        [shareParams SSDKEnableUseClientShare];
+    }
     [ShareSDK showShareActionSheet:_refView
                              items:shareList
                        shareParams:shareParams
@@ -927,6 +945,10 @@ void C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(int reqID,C2DXPlatT
 #ifdef IMPORT_MEIPAI_LIB
     [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
 #endif
+    
+#ifdef IMPORT_LINE_LIB
+    [ShareSDKConnector connectLine:[LineSDKLogin class]];
+#endif
 
     NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
     NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
@@ -975,11 +997,15 @@ void C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(int reqID,C2DXPlatT
     
 }
 
-void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback)
+void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, bool useClientShare, C2DXShareResultEvent callback)
 {
     NSMutableDictionary *shareParams;
     //构造分享参数
     shareParams = convertPublishContent(content);
+    if(useClientShare)
+    {
+        [shareParams SSDKEnableUseClientShare];
+    }
     [ShareSDK showShareEditor:(SSDKPlatformType)platType
            otherPlatformTypes:nil
                   shareParams:shareParams
@@ -1164,6 +1190,10 @@ void C2DXiOSShareSDK::showShareMenuWithConfigurationFile(int reqID,C2DXArray *pl
     [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
 #endif
     
+#ifdef IMPORT_LINE_LIB
+    [ShareSDKConnector connectLine:[LineSDKLogin class]];
+#endif
+    
     NSMutableArray *shareList = nil;
     if (platTypes && platTypes -> count() > 0)
     {
@@ -1275,6 +1305,10 @@ void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentN
     
 #ifdef IMPORT_MEIPAI_LIB
     [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
+#endif
+    
+#ifdef IMPORT_LINE_LIB
+    [ShareSDKConnector connectLine:[LineSDKLogin class]];
 #endif
     
     SSDKPlatformType type = (SSDKPlatformType)platType;

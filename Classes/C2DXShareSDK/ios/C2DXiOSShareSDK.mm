@@ -472,6 +472,7 @@ id convertPublishContent(C2DXDictionary *content)
     NSString *extInfo = nil;
     NSData *fileData = nil;
     NSData *emoData = nil;
+    
     SSDKContentType contentType = SSDKContentTypeAuto;
     C2DXContentType temContentType = C2DXContentTypeText;
     
@@ -603,6 +604,25 @@ id convertPublishContent(C2DXDictionary *content)
             }
         }
         
+        C2DXString *clientShare = dynamic_cast<C2DXString *>(content -> objectForKey("client_share"));
+        if (clientShare)
+        {
+            BOOL tempClientShare = clientShare -> boolValue();
+            if(tempClientShare)
+            {
+                [shareContentPara SSDKEnableUseClientShare];
+            }
+        }
+        
+        C2DXString *advancedShare = dynamic_cast<C2DXString *>(content -> objectForKey("advanced_share"));
+        if (advancedShare)
+        {
+            BOOL tempAdvancedShare = advancedShare -> boolValue();
+            if(tempAdvancedShare)
+            {
+                [shareContentPara SSDKEnableAdvancedInterfaceShare];
+            }
+        }
         [shareContentPara SSDKSetupShareParamsByText:text
                                               images:image
                                                  url:[NSURL URLWithString:url]

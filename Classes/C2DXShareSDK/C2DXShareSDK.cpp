@@ -197,7 +197,7 @@ int C2DXShareSDK::shareContent(C2DXPlatType platType, C2DXDictionary *content, C
     //iOS
     C2DXArray *platTypes = C2DXArray::create();
     platTypes->addObject(C2DXInteger::create(platType));
-    C2DXiOSShareSDK::shareContent(reqID,platType, content, true, callback);
+    C2DXiOSShareSDK::shareContent(reqID,platType, content, false, callback);
     
 #endif
     return reqID;
@@ -253,7 +253,7 @@ int C2DXShareSDK::showShareMenu(C2DXArray *platTypes, C2DXDictionary *content, i
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
     //iOS
-    C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, C2DXPointMake(x,y), true , callback);
+    C2DXiOSShareSDK::showShareMenu(reqID,platTypes, content, C2DXPointMake(x,y), false , callback);
     
 #endif
     return reqID;
@@ -288,7 +288,7 @@ int C2DXShareSDK::showShareView(C2DXPlatType platType, C2DXDictionary *content, 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     
     //iOS
-    C2DXiOSShareSDK::showShareEditView(reqID,platType, content, true, callback);
+    C2DXiOSShareSDK::showShareEditView(reqID,platType, content, false, callback);
     
 #endif
     return reqID;

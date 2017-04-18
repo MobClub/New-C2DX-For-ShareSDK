@@ -50,6 +50,10 @@ public:
     
     //根据配置文件分享(可选-自定义字段)
     void cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
+
+    void showShareMenuWithConFileBtnClickHandler(cocos2d::Ref *pSender);
+
+    void showShareViewWithConFileBtnClickHandler(cocos2d::Ref *pSender);
     
     CREATE_FUNC(HelloWorld);
 };

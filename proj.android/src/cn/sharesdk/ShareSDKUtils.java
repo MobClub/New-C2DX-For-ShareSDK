@@ -18,6 +18,7 @@ import cn.sharesdk.framework.PlatformDb;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
+import com.mob.MobSDK;
 import com.mob.tools.utils.Hashon;
 import com.mob.tools.utils.UIHandler;
 
@@ -59,9 +60,9 @@ public class ShareSDKUtils {
 		UIHandler.sendEmptyMessage(1, new Callback() {
 			public boolean handleMessage(Message msg) {	
 				if (!TextUtils.isEmpty(appKey)) {
-					ShareSDK.initSDK(context, appKey);
+					MobSDK.init(context,appKey);
 				} else {
-					ShareSDK.initSDK(context);
+					MobSDK.init(context);
 				}				
 				return true;
 			}
@@ -86,7 +87,7 @@ public class ShareSDKUtils {
 			System.out.println("authorize");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
 		plat.SSOSetting(disableSSO);
@@ -98,7 +99,7 @@ public class ShareSDKUtils {
 			System.out.println("removeAccount");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform( name);
 		plat.removeAccount(true);
 	}
 
@@ -107,7 +108,7 @@ public class ShareSDKUtils {
 			System.out.println("isValid");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		return plat.isAuthValid();
 	}
 	
@@ -116,7 +117,7 @@ public class ShareSDKUtils {
 			System.out.println("isValid");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform( name);
 		return plat.isClientValid();
 	}	
 	
@@ -125,7 +126,7 @@ public class ShareSDKUtils {
 			System.out.println("showUser");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
 		plat.SSOSetting(disableSSO);
@@ -138,9 +139,9 @@ public class ShareSDKUtils {
 		}
 		
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(plat.isValid()){
+		if(plat.isClientValid()){
 			PlatformDb db = plat.getDb();
 			map.put("expiresIn", db.getExpiresIn());
 			map.put("expiresTime", db.getExpiresTime());
@@ -162,7 +163,7 @@ public class ShareSDKUtils {
 			System.out.println("count:" + count + " page:" + page );
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
 		plat.SSOSetting(disableSSO);
@@ -174,7 +175,7 @@ public class ShareSDKUtils {
 			System.out.println("followFriend");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
 		plat.SSOSetting(disableSSO);
@@ -186,7 +187,7 @@ public class ShareSDKUtils {
 			System.out.println("share");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		Platform plat = ShareSDK.getPlatform(context, name);
+		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
 		try {

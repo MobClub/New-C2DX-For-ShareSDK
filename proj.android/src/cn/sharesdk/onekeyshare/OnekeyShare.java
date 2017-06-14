@@ -235,7 +235,7 @@ public class OnekeyShare {
 		shareParamsMap.putAll(params);
 
 		MobSDK.init(context.getApplicationContext());
-		ShareSDK.initSDK(context);
+		MobSDK.init(context);
 
 		// 打开分享菜单的统计
 		ShareSDK.logDemoEvent(1, null);

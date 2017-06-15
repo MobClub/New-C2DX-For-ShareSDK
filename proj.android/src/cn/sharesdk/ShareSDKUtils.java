@@ -51,15 +51,16 @@ public class ShareSDKUtils {
 
 	private static native void onJavaCallback(String resp);
 
-
-	public static void initSDKAndSetPlatfromConfig(final String appKey,final String configs) {
+	public static void initSDKAndSetPlatfromConfig(final String appKey,final String appSecret,final String configs) {
 		if (DEBUG) {
 			System.out.println("initSDKAndSetPlatfromConfig");
 		}
 
 		UIHandler.sendEmptyMessage(1, new Callback() {
 			public boolean handleMessage(Message msg) {	
-				if (!TextUtils.isEmpty(appKey)) {
+				if (!TextUtils.isEmpty(appKey) && !TextUtils.isEmpty(appSecret)) {
+					MobSDK.init(context,appKey,appSecret);
+				} else if(!TextUtils.isEmpty(appKey)){
 					MobSDK.init(context,appKey);
 				} else {
 					MobSDK.init(context);

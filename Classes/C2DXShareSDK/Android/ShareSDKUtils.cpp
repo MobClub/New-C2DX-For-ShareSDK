@@ -94,23 +94,24 @@ void releaseMethod(JniMethodInfo &mi) {
 		mi.env->DeleteLocalRef(mi.classID);
 }
 
-bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos) {
+bool registerAppAndSetPlatformConfigJNI(const char* appKey,const char* appSecret, C2DXDictionary *platformInfos) {
 	JniMethodInfo mi;
 	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {
 		return false;
 	}
-	
+
 	jstring jInfo = NULL;
 	jstring jAppKey = NULL;
+	jstring jAppSecret = NULL;
 	if (platformInfos != NULL) {
 		CCJSONConverter* json = CCJSONConverter::sharedConverter();
 		const char* ccInfo = json->strFrom(platformInfos);
 		jInfo = mi.env->NewStringUTF(ccInfo);
 	}
 	jAppKey = mi.env->NewStringUTF(appKey);
-
-	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jAppKey, jInfo);
+	jAppSecret = mi.env->NewStringUTF(appSecret);
+	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jAppKey,jAppSecret,jInfo);
 	releaseMethod(mi);
 	return true;
 }

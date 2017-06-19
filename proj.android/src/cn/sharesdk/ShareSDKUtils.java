@@ -74,6 +74,7 @@ public class ShareSDKUtils {
 			public boolean handleMessage(Message msg) {					
 				Hashon hashon = new Hashon();
 				HashMap<String, Object> devInfo = hashon.fromJson(configs);
+				ShareSDK.getPlatformList();
 				for(Entry<String, Object> entry: devInfo.entrySet()){
 					String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
 					ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
@@ -87,7 +88,6 @@ public class ShareSDKUtils {
 		if (DEBUG) {
 			System.out.println("authorize");
 		}
-		ShareSDK.getPlatformList();
 		String name = ShareSDK.platformIdToName(platformId);
 		if(TextUtils.isEmpty(name)){
 			ShareSDK.getPlatform(null);

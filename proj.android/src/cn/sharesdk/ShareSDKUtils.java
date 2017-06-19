@@ -87,7 +87,12 @@ public class ShareSDKUtils {
 		if (DEBUG) {
 			System.out.println("authorize");
 		}
+		ShareSDK.getPlatformList();
 		String name = ShareSDK.platformIdToName(platformId);
+		if(TextUtils.isEmpty(name)){
+			ShareSDK.getPlatform(null);
+			name = ShareSDK.platformIdToName(platformId);
+		}
 		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);

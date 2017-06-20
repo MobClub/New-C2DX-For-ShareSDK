@@ -96,7 +96,7 @@ void releaseMethod(JniMethodInfo &mi) {
 
 bool registerAppAndSetPlatformConfigJNI(const char* appKey,const char* appSecret, C2DXDictionary *platformInfos) {
 	JniMethodInfo mi;
-	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
+	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {
 		return false;
 	}

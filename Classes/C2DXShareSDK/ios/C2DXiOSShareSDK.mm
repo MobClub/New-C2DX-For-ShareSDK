@@ -562,6 +562,8 @@ id convertPublishContent(C2DXDictionary *content)
         if (fileDataStr)
         {
             fileData = [NSData dataWithContentsOfFile:[NSString stringWithCString:fileDataStr -> getCString() encoding:NSUTF8StringEncoding]];
+//            NSString *str = [NSString stringWithCString:fileDataStr -> getCString() encoding:NSUTF8StringEncoding];
+//            fileData = [str dataUsingEncoding:NSUTF8StringEncoding];
         }
         
         //emoticonData
@@ -631,6 +633,23 @@ id convertPublishContent(C2DXDictionary *content)
                                                  url:[NSURL URLWithString:url]
                                                title:title
                                                 type:contentType];
+        //应用消息类型
+        if(fileData && contentType == SSDKContentTypeApp)
+        {
+            [shareContentPara SSDKSetupWeChatParamsByText:text
+                                              title:@"App消息"
+                                                url:[NSURL URLWithString:url]
+                                         thumbImage:thumbImg
+                                              image:image
+                                       musicFileURL:nil
+                                            extInfo:nil
+                                           fileData:fileData
+                                       emoticonData:nil
+                                sourceFileExtension:nil
+                                     sourceFileData:nil
+                                               type:SSDKContentTypeApp
+                                 forPlatformSubType:SSDKPlatformSubTypeWechatSession];
+        }
         
         return shareContentPara;
     }

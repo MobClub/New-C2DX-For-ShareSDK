@@ -568,8 +568,12 @@ void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
     content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeImage), "type");
     //iOS 启用客户端分享接口
     content -> setObject(__String::createWithFormat("%d", true), "client_share");
-    //iOS 启用微博高级分享接口 3.6.3以后版本支持
-    content -> setObject(__String::createWithFormat("%d", true), "advanced_share");
+    
+    //    //iOS 启用微博高级分享接口 3.6.3以后版本支持 v4.0.1弃用
+    //    content -> setObject(__String::createWithFormat("%d", true), "advanced_share");
+    
+    //iOS 启用微博API接口进行分享
+    content -> setObject(__String::createWithFormat("%d", true), "api_share");
     
     C2DXShareSDK::showShareView(cn::sharesdk::C2DXPlatTypeSinaWeibo, content, shareContentResultHandler);
     

@@ -619,15 +619,28 @@ id convertPublishContent(C2DXDictionary *content)
             }
         }
         
-        C2DXString *advancedShare = dynamic_cast<C2DXString *>(content -> objectForKey("advanced_share"));
-        if (advancedShare)
+        //v4.0.1 弃用
+        //        C2DXString *advancedShare = dynamic_cast<C2DXString *>(content -> objectForKey("advanced_share"));
+        //        if (advancedShare)
+        //        {
+        //            BOOL tempAdvancedShare = advancedShare -> boolValue();
+        //            if(tempAdvancedShare)
+        //            {
+        //                [shareContentPara SSDKEnableAdvancedInterfaceShare];
+        //            }
+        //        }
+        
+        //v4.0.1 使用微博api进行分享
+        C2DXString *apiShare = dynamic_cast<C2DXString *>(content -> objectForKey("api_share"));
+        if (apiShare)
         {
-            BOOL tempAdvancedShare = advancedShare -> boolValue();
+            BOOL tempAdvancedShare = apiShare -> boolValue();
             if(tempAdvancedShare)
             {
-                [shareContentPara SSDKEnableAdvancedInterfaceShare];
+                [shareContentPara SSDKEnableSinaWeiboAPIShare];
             }
         }
+        
         [shareContentPara SSDKSetupShareParamsByText:text
                                               images:image
                                                  url:[NSURL URLWithString:url]

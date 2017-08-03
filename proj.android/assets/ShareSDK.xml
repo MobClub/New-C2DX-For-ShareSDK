@@ -131,8 +131,8 @@
     <Facebook
         Id="8"
         SortId="8"
-        ConsumerKey="107704292745179"
-        ConsumerSecret="38053202e1a5fe26c80c753071f0b573"
+        ConsumerKey="1412473428822331"
+        ConsumerSecret="a42f4f3f867dc947b9ed6020c2e93558"
         RedirectUrl="fbconnect://success"
 		ShareByAppClient="true"
 		Enable="true" />

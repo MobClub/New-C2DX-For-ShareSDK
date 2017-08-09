@@ -3,7 +3,7 @@ APP_STL := gnustl_static
 
 APP_CPPFLAGS := -frtti -fexceptions -DCC_ENABLE_CHIPMUNK_INTEGRATION=1 -fsigned-char -std=gnu++11 -pthread # -std=c++11
 APP_LDFLAGS := -latomic
-APP_ABI := armeabi armeabi-v7a x86
+APP_ABI := armeabi armeabi-v7a
 
 APP_DEBUG := $(strip $(NDK_DEBUG))
 ifeq ($(APP_DEBUG),1)

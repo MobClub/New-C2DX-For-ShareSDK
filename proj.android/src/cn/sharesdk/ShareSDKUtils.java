@@ -147,7 +147,7 @@ public class ShareSDKUtils {
 		String name = ShareSDK.platformIdToName(platformId);
 		Platform plat = ShareSDK.getPlatform(name);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(plat.isAuthValid()()){
+		if(plat.isAuthValid()){
 			PlatformDb db = plat.getDb();
 			map.put("expiresIn", db.getExpiresIn());
 			map.put("expiresTime", db.getExpiresTime());

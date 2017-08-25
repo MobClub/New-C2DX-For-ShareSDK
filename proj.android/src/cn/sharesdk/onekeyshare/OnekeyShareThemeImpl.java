@@ -8,7 +8,6 @@
 
 package cn.sharesdk.onekeyshare;
 
-import java.io.File;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;

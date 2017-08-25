@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.mob.MobApplication;
 import com.mob.MobSDK;
 import com.mob.tools.utils.BitmapHelper;
 import com.mob.tools.utils.ResHelper;
@@ -192,12 +193,6 @@ public class OnekeyShare {
 		params.put("shareType", Platform.SHARE_VIDEO);
 	}
 
-	/** 设置编辑页面的显示模式为Dialog模式 */
-	@Deprecated
-	public void setDialogMode() {
-		params.put("dialogMode", true);
-	}
-
 	/** 添加一个隐藏的platform */
 	public void addHiddenPlatform(String platform) {
 		HashMap<String, String> hiddenPlatforms = ResHelper.forceCast(params.get("hiddenPlatforms"));
@@ -234,8 +229,9 @@ public class OnekeyShare {
 		HashMap<String, Object> shareParamsMap = new HashMap<String, Object>();
 		shareParamsMap.putAll(params);
 
-		MobSDK.init(context.getApplicationContext());
-		MobSDK.init(context);
+		if (!(context instanceof MobApplication)) {
+			MobSDK.init(context.getApplicationContext());
+		}
 
 		// 打开分享菜单的统计
 		ShareSDK.logDemoEvent(1, null);

@@ -272,5 +272,9 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>MOBAppKey</key>
+	<string>iosv1101</string>
+	<key>MOBAppSecret</key>
+	<string></string>
 </dict>
 </plist>

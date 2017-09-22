@@ -51,16 +51,15 @@ public class ShareSDKUtils {
 
 	private static native void onJavaCallback(String resp);
 
-	public static void initSDKAndSetPlatfromConfig(final String appKey,final String appSecret,final String configs) {
+
+	public static void initSDKAndSetPlatfromConfig(final String appKey,final String configs) {
 		if (DEBUG) {
 			System.out.println("initSDKAndSetPlatfromConfig");
 		}
 
 		UIHandler.sendEmptyMessage(1, new Callback() {
 			public boolean handleMessage(Message msg) {	
-				if (!TextUtils.isEmpty(appKey) && !TextUtils.isEmpty(appSecret)) {
-					MobSDK.init(context,appKey,appSecret);
-				} else if(!TextUtils.isEmpty(appKey)){
+				if (!TextUtils.isEmpty(appKey)) {
 					MobSDK.init(context,appKey);
 				} else {
 					MobSDK.init(context);
@@ -74,7 +73,6 @@ public class ShareSDKUtils {
 			public boolean handleMessage(Message msg) {					
 				Hashon hashon = new Hashon();
 				HashMap<String, Object> devInfo = hashon.fromJson(configs);
-				ShareSDK.getPlatformList();
 				for(Entry<String, Object> entry: devInfo.entrySet()){
 					String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
 					ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
@@ -89,10 +87,6 @@ public class ShareSDKUtils {
 			System.out.println("authorize");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
-		if(TextUtils.isEmpty(name)){
-			ShareSDK.getPlatform(null);
-			name = ShareSDK.platformIdToName(platformId);
-		}
 		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
@@ -147,7 +141,7 @@ public class ShareSDKUtils {
 		String name = ShareSDK.platformIdToName(platformId);
 		Platform plat = ShareSDK.getPlatform(name);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(plat.isAuthValid()){
+		if(plat.isClientValid()){
 			PlatformDb db = plat.getDb();
 			map.put("expiresIn", db.getExpiresIn());
 			map.put("expiresTime", db.getExpiresTime());

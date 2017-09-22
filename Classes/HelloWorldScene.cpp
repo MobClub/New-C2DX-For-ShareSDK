@@ -481,6 +481,7 @@ void HelloWorld::showShareMenuClickHandler(cocos2d::Ref* pSender)
     //iOS 启用微博高级分享接口 3.6.3以后版本支持
     content -> setObject(__String::createWithFormat("%d", true), "advanced_share");
     
+    
     C2DXShareSDK::showShareMenu(NULL,content,100,100, shareContentResultHandler);
     
 }
@@ -552,7 +553,6 @@ void HelloWorld::oneKeyShareContentClickHandler(cocos2d::Ref *pSender)
     platforms->addObject(sina);
     __Integer *tencent = new __Integer(cn::sharesdk::C2DXPlatTypeTencentWeibo);
     platforms->addObject(tencent);
-    
     //一键分享
     C2DXShareSDK::oneKeyShareContent(platforms, content, shareContentResultHandler);
 }
@@ -569,8 +569,8 @@ void HelloWorld::showShareViewClickHandler(cocos2d::Ref *pSender)
     //iOS 启用客户端分享接口
     content -> setObject(__String::createWithFormat("%d", true), "client_share");
     
-    //    //iOS 启用微博高级分享接口 3.6.3以后版本支持 v4.0.1弃用
-    //    content -> setObject(__String::createWithFormat("%d", true), "advanced_share");
+//    //iOS 启用微博高级分享接口 3.6.3以后版本支持 v4.0.1弃用
+//    content -> setObject(__String::createWithFormat("%d", true), "advanced_share");
     
     //iOS 启用微博API接口进行分享
     content -> setObject(__String::createWithFormat("%d", true), "api_share");
@@ -596,6 +596,8 @@ void HelloWorld::shareWithConFileBtnClickHandler(cocos2d::Ref *pSender)
     C2DXShareSDK::shareWithConfigurationFile("ShareSDK", cn::sharesdk::C2DXPlatTypeQQ, NULL, shareContentResultHandler);
 }
 
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+
 void HelloWorld::showShareMenuWithConFileBtnClickHandler(cocos2d::Ref *pSender)
 {
     __Dictionary *customFields = __Dictionary::create();
@@ -611,3 +613,5 @@ void HelloWorld::showShareViewWithConFileBtnClickHandler(cocos2d::Ref *pSender)
     
     C2DXShareSDK::showShareViewWithConfigurationFile(cn::sharesdk::C2DXPlatTypeSinaWeibo, "ShareSDK", customFields, shareContentResultHandler);
 }
+
+#endif

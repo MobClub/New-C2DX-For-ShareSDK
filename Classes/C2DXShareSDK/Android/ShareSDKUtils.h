@@ -43,12 +43,11 @@ bool getMethod(JniMethodInfo &mi, const char *methodName, const char *paramCode)
 void releaseMethod(JniMethodInfo &mi);
 
 //jni methods
-
-bool initSDKJNI(const char* appKey,const char* appSecret);
+bool initSDKJNI(const char* appKey);
 
 bool setPlatformConfigJNI(int platformId, C2DXDictionary *platConfig);
 
-bool registerAppAndSetPlatformConfigJNI(const char* appKey,const char* appSecret, C2DXDictionary *platformInfos);
+bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos);
 
 bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback);
 

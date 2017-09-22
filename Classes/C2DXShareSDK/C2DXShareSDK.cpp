@@ -69,13 +69,13 @@ const char* PlatId::Any = "999"; 			 /**< 任意平台 */
 
 int reqID = 0;
 
-void C2DXShareSDK::registerAppAndSetPlatformConfig(const char *appKey,const char *appSecret, C2DXDictionary *configInfo)
+void C2DXShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     
     //Andorid
     // This is not a necessary method for Android, you can setup your platform configs more efficiently in "assets/ShareSDK.xml"
-    registerAppAndSetPlatformConfigJNI(appKey,appSecret, configInfo);
+    registerAppAndSetPlatformConfigJNI(appKey, configInfo);
     
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     

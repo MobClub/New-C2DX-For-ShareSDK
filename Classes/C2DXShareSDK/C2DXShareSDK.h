@@ -82,8 +82,8 @@ namespace cn
              *	@param 	platType 	平台类型
              *	@param 	configInfo 	配置信息
              */
+            static void registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo);
             
-            static void registerAppAndSetPlatformConfig(const char *appKey,const char *appSecret, C2DXDictionary *configInfo);
             /**
              *	@brief	用户授权
              *

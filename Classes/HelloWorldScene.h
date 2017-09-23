@@ -45,18 +45,21 @@ public:
     //加为好友
     void addFriendBtnClickHandler(cocos2d::Ref* pSender);
     
+    //短信登陆
+    void authToSMS(cocos2d::Ref *pSender);
+
     //根据配置文件分享
     void shareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
     
     //根据配置文件分享(可选-自定义字段)
-    void customShareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
-    
-    //使用分享菜单栏＋配置文件分享
+    void cuntomShareWithConFileBtnClickHandler(cocos2d::Ref *pSender);
+
     void showShareMenuWithConFileBtnClickHandler(cocos2d::Ref *pSender);
-    
-    //使用分享编辑页面＋配置文件分享
+
     void showShareViewWithConFileBtnClickHandler(cocos2d::Ref *pSender);
     
+
+
     CREATE_FUNC(HelloWorld);
 };
 

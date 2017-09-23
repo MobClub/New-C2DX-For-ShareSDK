@@ -14,6 +14,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import com.mob.MobApplication;
 import com.mob.MobSDK;
 import com.mob.tools.utils.BitmapHelper;
 import com.mob.tools.utils.ResHelper;
@@ -81,6 +82,13 @@ public class OnekeyShare {
 		}
 	}
 
+	/** imageData是bitmap图片，微信、易信支持此字段 */
+	public void setImageData(String iamgeData) {
+		if(!TextUtils.isEmpty(iamgeData)) {
+			params.put("imageData", iamgeData);
+		}
+	}
+
 	/** url在微信（包括好友、朋友圈收藏）和易信（包括好友和朋友圈）中使用，否则可以不提供 */
 	public void setUrl(String url) {
 		params.put("url", url);
@@ -129,6 +137,10 @@ public class OnekeyShare {
 	/** 是否直接分享 */
 	public void setSilent(boolean silent) {
 		params.put("silent", silent);
+	}
+
+	public void setDialogMode(boolean isDialog) {
+		params.put("dialogMode", isDialog);
 	}
 
 	/** 设置编辑页的初始化选中平台 */
@@ -192,12 +204,6 @@ public class OnekeyShare {
 		params.put("shareType", Platform.SHARE_VIDEO);
 	}
 
-	/** 设置编辑页面的显示模式为Dialog模式 */
-	@Deprecated
-	public void setDialogMode() {
-		params.put("dialogMode", true);
-	}
-
 	/** 添加一个隐藏的platform */
 	public void addHiddenPlatform(String platform) {
 		HashMap<String, String> hiddenPlatforms = ResHelper.forceCast(params.get("hiddenPlatforms"));
@@ -234,8 +240,9 @@ public class OnekeyShare {
 		HashMap<String, Object> shareParamsMap = new HashMap<String, Object>();
 		shareParamsMap.putAll(params);
 
-		MobSDK.init(context.getApplicationContext());
-		MobSDK.init(context);
+		if (!(context instanceof MobApplication)) {
+			MobSDK.init(context.getApplicationContext());
+		}
 
 		// 打开分享菜单的统计
 		ShareSDK.logDemoEvent(1, null);

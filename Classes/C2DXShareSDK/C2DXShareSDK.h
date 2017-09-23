@@ -82,8 +82,8 @@ namespace cn
              *	@param 	platType 	平台类型
              *	@param 	configInfo 	配置信息
              */
-            static void registerAppAndSetPlatformConfig(const char *appKey, C2DXDictionary *configInfo);
             
+            static void registerAppAndSetPlatformConfig(const char *appKey,const char *appSecret, C2DXDictionary *configInfo);
             /**
              *	@brief	用户授权
              *
@@ -229,6 +229,15 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int addFriend(C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback);
+
+            /**
+			 *	@brief	关闭SSO授权信息
+			 *
+			 *	@param 	platType 	平台类型
+			 *	@param 	account 	呢称
+			 *	@return 	reqID 	流水号
+                         */
+            static void disableSSOWhenAuthorize(bool isDiaableSSO);
 
             /**
              * @brief 显示一个消息

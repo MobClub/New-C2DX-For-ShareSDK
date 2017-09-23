@@ -43,11 +43,12 @@ bool getMethod(JniMethodInfo &mi, const char *methodName, const char *paramCode)
 void releaseMethod(JniMethodInfo &mi);
 
 //jni methods
-bool initSDKJNI(const char* appKey);
+
+bool initSDKJNI(const char* appKey,const char* appSecret);
 
 bool setPlatformConfigJNI(int platformId, C2DXDictionary *platConfig);
 
-bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos);
+bool registerAppAndSetPlatformConfigJNI(const char* appKey,const char* appSecret, C2DXDictionary *platformInfos);
 
 bool authorizeJNI(int reqID, int platformId, C2DXAuthResultEvent callback);
 
@@ -68,6 +69,8 @@ bool shareContentJNI(int reqID, C2DXArray *platTypes, C2DXDictionary *content, C
 bool getFriendListJNI(int reqID, int platformId, int count, int page, C2DXGetFriendsResultEvent callback);
 
 bool onekeyShareJNI(int reqID, int platformId, C2DXDictionary *content, C2DXShareResultEvent callback);
+
+bool disableSSOWhenAuthorizeJNI(bool isDiaableSSO);
 
 void toastShowJNI(const char* msg);
 

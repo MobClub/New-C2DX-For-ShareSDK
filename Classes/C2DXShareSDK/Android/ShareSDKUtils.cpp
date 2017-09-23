@@ -45,7 +45,7 @@ JNIEXPORT void JNICALL Java_cn_sharesdk_ShareSDKUtils_onJavaCallback
 void callBackComplete(int reqID, int action, int platformId, C2DXDictionary* res){
 	//CCLog("complete callback");
 	if (action == 1 && NULL != authCb) { // 1 = ACTION_AUTHORIZING
-		authCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, NULL);
+		authCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
 	} else if (action == 8 && NULL != infoCb) { // 8 = ACTION_USER_INFOR 
 		infoCb(reqID, C2DXResponseStateSuccess, (C2DXPlatType) platformId, res);
 	} else if (action == 9 && NULL != shareCb) { // 9 = ACTION_SHARE
@@ -94,23 +94,24 @@ void releaseMethod(JniMethodInfo &mi) {
 		mi.env->DeleteLocalRef(mi.classID);
 }
 
-bool registerAppAndSetPlatformConfigJNI(const char* appKey, C2DXDictionary *platformInfos) {
+bool registerAppAndSetPlatformConfigJNI(const char* appKey,const char* appSecret, C2DXDictionary *platformInfos) {
 	JniMethodInfo mi;
-	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;)V");
+	bool isHave = getMethod(mi, "initSDKAndSetPlatfromConfig", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
 	if (!isHave) {
 		return false;
 	}
-	
+
 	jstring jInfo = NULL;
 	jstring jAppKey = NULL;
+	jstring jAppSecret = NULL;
 	if (platformInfos != NULL) {
 		CCJSONConverter* json = CCJSONConverter::sharedConverter();
 		const char* ccInfo = json->strFrom(platformInfos);
 		jInfo = mi.env->NewStringUTF(ccInfo);
 	}
 	jAppKey = mi.env->NewStringUTF(appKey);
-
-	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jAppKey, jInfo);
+	jAppSecret = mi.env->NewStringUTF(appSecret);
+	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, jAppKey,jAppSecret,jInfo);
 	releaseMethod(mi);
 	return true;
 }
@@ -252,11 +253,23 @@ bool onekeyShareJNI(int reqID, int platformId, C2DXDictionary *content, C2DXShar
 	CCJSONConverter* json = CCJSONConverter::sharedConverter();
 	const char* ccContent = json->strFrom(content);
 	jstring jContent = mi.env->NewStringUTF(ccContent);
-
+	log("Share Content= %s", ccContent);
 	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, reqID, platformId, jContent);
 	releaseMethod(mi);
 	
 	shareCb = callback;
+	return true;
+}
+
+bool disableSSOWhenAuthorizeJNI(bool isDiaableSSO) {
+	JniMethodInfo mi;
+	bool isHave = getMethod(mi, "disableSSOWhenAuthorize", "(Z)V");
+	if (!isHave) {
+		return false;
+	}
+
+	mi.env->CallStaticVoidMethod(mi.classID, mi.methodID, isDiaableSSO);
+	releaseMethod(mi);
 	return true;
 }
 

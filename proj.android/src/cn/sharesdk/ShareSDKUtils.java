@@ -1,5 +1,6 @@
 package cn.sharesdk;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -51,15 +52,16 @@ public class ShareSDKUtils {
 
 	private static native void onJavaCallback(String resp);
 
-
-	public static void initSDKAndSetPlatfromConfig(final String appKey,final String configs) {
+	public static void initSDKAndSetPlatfromConfig(final String appKey,final String appSecret,final String configs) {
 		if (DEBUG) {
 			System.out.println("initSDKAndSetPlatfromConfig");
 		}
 
 		UIHandler.sendEmptyMessage(1, new Callback() {
 			public boolean handleMessage(Message msg) {	
-				if (!TextUtils.isEmpty(appKey)) {
+				if (!TextUtils.isEmpty(appKey) && !TextUtils.isEmpty(appSecret)) {
+					MobSDK.init(context,appKey,appSecret);
+				} else if(!TextUtils.isEmpty(appKey)){
 					MobSDK.init(context,appKey);
 				} else {
 					MobSDK.init(context);
@@ -73,6 +75,7 @@ public class ShareSDKUtils {
 			public boolean handleMessage(Message msg) {					
 				Hashon hashon = new Hashon();
 				HashMap<String, Object> devInfo = hashon.fromJson(configs);
+				ShareSDK.getPlatformList();
 				for(Entry<String, Object> entry: devInfo.entrySet()){
 					String p = ShareSDK.platformIdToName(Integer.parseInt(entry.getKey()));
 					ShareSDK.setPlatformDevInfo(p, (HashMap<String, Object>)entry.getValue());
@@ -87,6 +90,10 @@ public class ShareSDKUtils {
 			System.out.println("authorize");
 		}
 		String name = ShareSDK.platformIdToName(platformId);
+		if(TextUtils.isEmpty(name)){
+			ShareSDK.getPlatform(null);
+			name = ShareSDK.platformIdToName(platformId);
+		}
 		Platform plat = ShareSDK.getPlatform(name);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
 		plat.setPlatformActionListener(paListaner);
@@ -141,7 +148,7 @@ public class ShareSDKUtils {
 		String name = ShareSDK.platformIdToName(platformId);
 		Platform plat = ShareSDK.getPlatform(name);
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		if(plat.isClientValid()){
+		if(plat.isAuthValid()){
 			PlatformDb db = plat.getDb();
 			map.put("expiresIn", db.getExpiresIn());
 			map.put("expiresTime", db.getExpiresTime());
@@ -202,17 +209,19 @@ public class ShareSDKUtils {
 	}
 	
 	public static void disableSSOWhenAuthorize(boolean disable){
+		System.out.println("disableSSOWhenAuthorize:" + disable);
 		disableSSO = disable;
 	}
 
 	public static void onekeyShare(int reqID, int platformId, String contentJson) {
 		if (DEBUG) {
-			System.out.println("OnekeyShare");
+			System.out.println("OnekeyShare" + contentJson);
 		}
+		
 		HashMap<String, Object> content = hashon.fromJson(contentJson);
 		HashMap<String, Object> map = nativeMapToJavaMap(content);
 		Cocos2dPlatformActionListener paListaner = new Cocos2dPlatformActionListener(reqID, cb);
-
+		
 		OnekeyShare oks = new OnekeyShare();
 		if (map.containsKey("text")) {
 			oks.setText(String.valueOf(map.get("text")));
@@ -222,6 +231,12 @@ public class ShareSDKUtils {
 		}
 		if (map.containsKey("imageUrl")) {
 			oks.setImageUrl(String.valueOf(map.get("imageUrl")));
+		}
+		if (content.containsKey("imageArray")) {
+			@SuppressWarnings("unchecked")
+			ArrayList<String> imageList = (ArrayList<String>)content.get("imageArray");
+			String[] str = (String[])imageList.toArray(new String[imageList.size()]);
+			oks.setImageArray(str);
 		}
 		if (map.containsKey("title")) {
 			oks.setTitle(String.valueOf(map.get("title")));
@@ -266,6 +281,7 @@ public class ShareSDKUtils {
 	private static HashMap<String, Object> nativeMapToJavaMap(
 			HashMap<String, Object> content) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
+		
 		if (content.get("content") != null) {
 			map.put("text", content.get("content"));
 		} else if (content.get("text") != null) {
@@ -278,6 +294,9 @@ public class ShareSDKUtils {
 			} else if (!TextUtils.isEmpty(image)) {
 				map.put("imageUrl", image);
 			}
+		}
+		if (content.containsKey("imageArray")) {
+			map.put("imageArray", content.get("imageArray"));
 		}
 		if (content.get("title") != null) {
 			map.put("title", content.get("title"));

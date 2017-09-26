@@ -1,0 +1,3 @@
+include ':libcocos2dx', ':libcocos2dx'
+include ':MyTest'
+project(':MyTest').projectDir = new File(settingsDir, 'app')

@@ -59,6 +59,7 @@ const char* PlatId::WhatsApp = "43";         /**< Whats App */
 const char* PlatId::KakaoTalk = "44";        /**< KakaoTalk */
 const char* PlatId::KakaoStory = "45";       /**< KakaoStory */ 
 const char* PlatId::FacebookMessenger = "46";/**< FacebookMessenger */
+const char* PlatId::Telegram = "47";         /**< Telegram */
 const char* PlatId::Bluetooth = "48";        /**< Bluetooth */
 const char* PlatId::Alipay = "50";           /**< Alipay */
 const char* PlatId::KakaoPlatform = "995";   /**< Kakao Series */

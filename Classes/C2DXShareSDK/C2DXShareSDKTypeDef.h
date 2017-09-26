@@ -91,7 +91,7 @@ namespace cn
     		C2DXPlatTypeKakaoTalk = 44,        /**< KakaoTalk */
     		C2DXPlatTypeKakaoStory = 45,       /**< KakaoStory */ 
     		C2DXPlatTypeFacebookMessenger = 46,/**< FacebookMessenger */
-    		C2DXPlatTypeTelegram = 54,           /**< MeiPai */
+    		C2DXPlatTypeTelegram = 47,         /**< Telegram */
     		C2DXPlatTypeBluetooth = 48,        /**< Bluetooth */
     		C2DXPlatTypeAlipay = 50,           /**< Alipay */
             C2DXPlatTypeAliPaySocialTimeline=51,/**< AliPaySocial Timeline */

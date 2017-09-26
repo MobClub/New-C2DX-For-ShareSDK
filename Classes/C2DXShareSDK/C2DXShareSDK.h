@@ -61,6 +61,7 @@ namespace cn
     			static const char* KakaoTalk;   
     			static const char* KakaoStory;   
     			static const char* FacebookMessenger;
+    			static const char* Telegram;
     			static const char* Bluetooth;
     			static const char* Alipay;
                 static const char* KakaoPlatform;

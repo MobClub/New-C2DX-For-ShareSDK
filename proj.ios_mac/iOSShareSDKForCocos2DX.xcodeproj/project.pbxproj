@@ -19,7 +19,6 @@
 		4438399F1ED8138000A43603 /* ShareSDKExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438394D1ED8138000A43603 /* ShareSDKExtension.framework */; };
 		443839A01ED8138000A43603 /* ShareSDKUI.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4438394E1ED8138000A43603 /* ShareSDKUI.bundle */; };
 		443839A11ED8138000A43603 /* ShareSDKUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438394F1ED8138000A43603 /* ShareSDKUI.framework */; };
-		443839A21ED8138000A43603 /* AliPayConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839511ED8138000A43603 /* AliPayConnector.framework */; };
 		443839A31ED8138000A43603 /* CopyConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839521ED8138000A43603 /* CopyConnector.framework */; };
 		443839A41ED8138000A43603 /* DingTalkConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839531ED8138000A43603 /* DingTalkConnector.framework */; };
 		443839A51ED8138000A43603 /* DropboxConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839541ED8138000A43603 /* DropboxConnector.framework */; };
@@ -42,8 +41,6 @@
 		443839B61ED8138000A43603 /* WhatsAppConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839651ED8138000A43603 /* WhatsAppConnector.framework */; };
 		443839B71ED8138000A43603 /* YiXinConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839661ED8138000A43603 /* YiXinConnector.framework */; };
 		443839B81ED8138000A43603 /* YouTubeConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839671ED8138000A43603 /* YouTubeConnector.framework */; };
-		443839B91ED8138000A43603 /* libAPOpenSdk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438396C1ED8138000A43603 /* libAPOpenSdk.a */; };
-		443839BA1ED8138000A43603 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = 4438396D1ED8138000A43603 /* README.md */; };
 		443839BB1ED8138000A43603 /* DTShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438396F1ED8138000A43603 /* DTShareKit.framework */; };
 		443839BC1ED8138000A43603 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839711ED8138000A43603 /* Bolts.framework */; };
 		443839BD1ED8138000A43603 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839721ED8138000A43603 /* FBSDKCoreKit.framework */; };
@@ -52,7 +49,6 @@
 		443839C01ED8138000A43603 /* LineSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839771ED8138000A43603 /* LineSDK.framework */; };
 		443839C11ED8138000A43603 /* MPShareSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 443839791ED8138000A43603 /* MPShareSDK.framework */; };
 		443839C21ED8138000A43603 /* TencentOpenAPI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438397B1ED8138000A43603 /* TencentOpenAPI.framework */; };
-		443839C31ED8138000A43603 /* TencentOpenApi_IOS_Bundle.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4438397C1ED8138000A43603 /* TencentOpenApi_IOS_Bundle.bundle */; };
 		443839C41ED8138000A43603 /* RennSDK.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 4438397E1ED8138000A43603 /* RennSDK.bundle */; };
 		443839C51ED8138000A43603 /* RennSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438397F1ED8138000A43603 /* RennSDK.framework */; };
 		443839C81ED8138000A43603 /* libWeChatSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4438398F1ED8138000A43603 /* libWeChatSDK.a */; };
@@ -155,7 +151,6 @@
 		4438394D1ED8138000A43603 /* ShareSDKExtension.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKExtension.framework; sourceTree = "<group>"; };
 		4438394E1ED8138000A43603 /* ShareSDKUI.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = ShareSDKUI.bundle; sourceTree = "<group>"; };
 		4438394F1ED8138000A43603 /* ShareSDKUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ShareSDKUI.framework; sourceTree = "<group>"; };
-		443839511ED8138000A43603 /* AliPayConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AliPayConnector.framework; sourceTree = "<group>"; };
 		443839521ED8138000A43603 /* CopyConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CopyConnector.framework; sourceTree = "<group>"; };
 		443839531ED8138000A43603 /* DingTalkConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DingTalkConnector.framework; sourceTree = "<group>"; };
 		443839541ED8138000A43603 /* DropboxConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxConnector.framework; sourceTree = "<group>"; };
@@ -178,10 +173,6 @@
 		443839651ED8138000A43603 /* WhatsAppConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhatsAppConnector.framework; sourceTree = "<group>"; };
 		443839661ED8138000A43603 /* YiXinConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YiXinConnector.framework; sourceTree = "<group>"; };
 		443839671ED8138000A43603 /* YouTubeConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = YouTubeConnector.framework; sourceTree = "<group>"; };
-		4438396A1ED8138000A43603 /* APOpenAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APOpenAPI.h; sourceTree = "<group>"; };
-		4438396B1ED8138000A43603 /* APOpenAPIObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = APOpenAPIObject.h; sourceTree = "<group>"; };
-		4438396C1ED8138000A43603 /* libAPOpenSdk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libAPOpenSdk.a; sourceTree = "<group>"; };
-		4438396D1ED8138000A43603 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4438396F1ED8138000A43603 /* DTShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DTShareKit.framework; sourceTree = "<group>"; };
 		443839711ED8138000A43603 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		443839721ED8138000A43603 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
@@ -326,7 +317,6 @@
 				52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */,
 				1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */,
 				443839A71ED8138000A43603 /* FacebookConnector.framework in Frameworks */,
-				443839B91ED8138000A43603 /* libAPOpenSdk.a in Frameworks */,
 				443839A61ED8138000A43603 /* EvernoteConnector.framework in Frameworks */,
 				443839C81ED8138000A43603 /* libWeChatSDK.a in Frameworks */,
 				D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */,
@@ -347,7 +337,6 @@
 				4438399E1ED8138000A43603 /* ShareSDKConfigFile.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
 				443839BE1ED8138000A43603 /* FBSDKMessengerShareKit.framework in Frameworks */,
-				443839A21ED8138000A43603 /* AliPayConnector.framework in Frameworks */,
 				D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */,
 				443839B81ED8138000A43603 /* YouTubeConnector.framework in Frameworks */,
 				443839C01ED8138000A43603 /* LineSDK.framework in Frameworks */,
@@ -503,7 +492,6 @@
 		443839501ED8138000A43603 /* PlatformConnector */ = {
 			isa = PBXGroup;
 			children = (
-				443839511ED8138000A43603 /* AliPayConnector.framework */,
 				443839521ED8138000A43603 /* CopyConnector.framework */,
 				443839531ED8138000A43603 /* DingTalkConnector.framework */,
 				443839541ED8138000A43603 /* DropboxConnector.framework */,
@@ -534,7 +522,6 @@
 			isa = PBXGroup;
 			children = (
 				44C4A9841EEFCB05003AEDB9 /* SinaWeiboSDK */,
-				443839691ED8138000A43603 /* APSocialSDK */,
 				4438396E1ED8138000A43603 /* DingTalkSDK */,
 				443839701ED8138000A43603 /* FacebookMessengerSDK */,
 				443839741ED8138000A43603 /* KaKaoSDK */,
@@ -546,17 +533,6 @@
 				443839941ED8138000A43603 /* YiXinSDK */,
 			);
 			path = PlatformSDK;
-			sourceTree = "<group>";
-		};
-		443839691ED8138000A43603 /* APSocialSDK */ = {
-			isa = PBXGroup;
-			children = (
-				4438396A1ED8138000A43603 /* APOpenAPI.h */,
-				4438396B1ED8138000A43603 /* APOpenAPIObject.h */,
-				4438396C1ED8138000A43603 /* libAPOpenSdk.a */,
-				4438396D1ED8138000A43603 /* README.md */,
-			);
-			path = APSocialSDK;
 			sourceTree = "<group>";
 		};
 		4438396E1ED8138000A43603 /* DingTalkSDK */ = {
@@ -847,7 +823,6 @@
 				46880B8119C43A67006E1F66 /* HelloWorld.png in Resources */,
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
-				443839C31ED8138000A43603 /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
 				443839C41ED8138000A43603 /* RennSDK.bundle in Resources */,
 				443839C91ED8138000A43603 /* README.txt in Resources */,
@@ -884,7 +859,6 @@
 				DED9EDDE1C294D7100183B2F /* C2DXShareSDK.cpp in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
-				443839BA1ED8138000A43603 /* README.md in Sources */,
 				DED9EDDF1C294D7100183B2F /* C2DXiOSShareSDK.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

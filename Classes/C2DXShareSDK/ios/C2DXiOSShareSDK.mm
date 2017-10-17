@@ -24,7 +24,7 @@
 #define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
 #define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
 #define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
-#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
+//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
 #define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
 #define IMPORT_MESSENGER_LIB                //导入Facebook Messenger库，如果不需要Facebook Messenger分享可以注释此行
 #define IMPORT_DINGTALK_LIB                 //导入钉钉（Ding Talk）库，如果不需要钉钉（Ding Talk）分享可以注释此行

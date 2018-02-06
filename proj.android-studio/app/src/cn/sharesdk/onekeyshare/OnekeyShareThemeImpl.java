@@ -9,8 +9,6 @@
 package cn.sharesdk.onekeyshare;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
 import android.os.Handler.Callback;
@@ -40,10 +38,11 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 	protected boolean silent;
 	protected ArrayList<CustomerLogo> customerLogos;
 	protected HashMap<String, String> hiddenPlatforms;
-	protected PlatformActionListener callback;
 	protected ShareContentCustomizeCallback customizeCallback;
 	protected boolean disableSSO;
 	protected Context context;
+
+	public PlatformActionListener callback;
 
 	public OnekeyShareThemeImpl() {
 		callback = this;
@@ -105,7 +104,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 	/** 判断指定平台是否只能使用客户端分享 */
 	final boolean isUseClientToShare(Platform platform) {
 		String name = platform.getName();
-		if ("Wechat".equals(name) || "WechatMoments".equals(name)
+		if ("SinaWeibo".equals(name) || "Wechat".equals(name) || "WechatMoments".equals(name)
 				|| "WechatFavorite".equals(name) || "ShortMessage".equals(name)
 				|| "Email".equals(name) || "Qzone".equals(name)
 				|| "QQ".equals(name) || "Pinterest".equals(name)
@@ -126,23 +125,14 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 			if ("true".equals(platform.getDevinfo("ShareByAppClient"))) {
 				return true;
 			}
-		} else if ("SinaWeibo".equals(name)) {
-			if ("true".equals(platform.getDevinfo("ShareByAppClient"))) {
-
-				Intent test = new Intent(Intent.ACTION_SEND);
-				test.setPackage("com.sina.weibo");
-				test.setType("image/*");
-				ResolveInfo ri = MobSDK.getContext().getPackageManager().resolveActivity(test, 0);
-				if(ri == null) {
-					test = new Intent(Intent.ACTION_SEND);
-					test.setPackage("com.sina.weibog3");
-					test.setType("image/*");
-					ri = MobSDK.getContext().getPackageManager().resolveActivity(test, 0);
-				}
-				return (ri != null);
+		} else if ("Facebook".equals(name)){
+			boolean shareByAppClient = "true".equals(platform.getDevinfo("ShareByAppClient"));
+			if(shareByAppClient && platform.isClientValid()){
+				return true;
+			} else if(shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))){
+				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -159,6 +149,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 				}
 				platform.setPlatformActionListener(callback);
 				platform.share(sp);
+				callback = null;
 			}
 		}
 	}
@@ -264,9 +255,9 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 				shareType = Platform.SHARE_IMAGE;
 				if (imagePath.endsWith(".gif") && isWechat) {
 					shareType = Platform.SHARE_EMOJI;
-				} else if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty(shareParamsMap.get("url").toString())) {
+				} else if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))) {
 					shareType = Platform.SHARE_WEBPAGE;
-					if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty(shareParamsMap.get("musicUrl").toString()) && isWechat) {
+					if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty((String)shareParamsMap.get("musicUrl")) && isWechat) {
 						shareType = Platform.SHARE_MUSIC;
 					}
 				}
@@ -274,9 +265,9 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 				Bitmap viewToShare = ResHelper.forceCast(shareParamsMap.get("viewToShare"));
 				if (viewToShare != null && !viewToShare.isRecycled()) {
 					shareType = Platform.SHARE_IMAGE;
-					if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty(shareParamsMap.get("url").toString())) {
+					if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))) {
 						shareType = Platform.SHARE_WEBPAGE;
-						if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty(shareParamsMap.get("musicUrl").toString()) && isWechat) {
+						if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty((String)shareParamsMap.get("musicUrl")) && isWechat) {
 							shareType = Platform.SHARE_MUSIC;
 						}
 					}
@@ -286,10 +277,23 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 						shareType = Platform.SHARE_IMAGE;
 						if (String.valueOf(imageUrl).endsWith(".gif") && isWechat) {
 							shareType = Platform.SHARE_EMOJI;
-						} else if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty(shareParamsMap.get("url").toString())) {
+						} else if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))) {
 							shareType = Platform.SHARE_WEBPAGE;
-							if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty(shareParamsMap.get("musicUrl").toString()) && isWechat) {
+							if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty((String)shareParamsMap.get("musicUrl")) && isWechat) {
 								shareType = Platform.SHARE_MUSIC;
+							}
+						}
+					} else {
+						Bitmap imageData = (Bitmap)shareParamsMap.get("imageData");
+						if(imageData != null){
+							shareType = Platform.SHARE_IMAGE;
+							if (String.valueOf(imageUrl).endsWith(".gif") && isWechat) {
+								shareType = Platform.SHARE_EMOJI;
+							} else if (shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))) {
+								shareType = Platform.SHARE_WEBPAGE;
+								if (shareParamsMap.containsKey("musicUrl") && !TextUtils.isEmpty((String)shareParamsMap.get("musicUrl")) && isWechat) {
+									shareType = Platform.SHARE_MUSIC;
+								}
 							}
 						}
 					}

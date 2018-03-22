@@ -322,6 +322,18 @@ public class ShareSDKUtils {
 		if (content.get("extInfo") != null) {
 			map.put("extInfo", content.get("extInfo"));
 		}
+		if (content.get("wxUserName") != null) {
+			map.put("wxUserName", content.get("wxUserName"));
+		}
+		if (content.get("wxPath") != null) {
+			map.put("wxPath", content.get("wxPath"));
+		}
+		if (content.get("wxWithShareTicket") != null) {
+			map.put("wxWithShareTicket", content.get("wxWithShareTicket"));
+		}
+		if (content.get("wxMiniProgramType") != null) {
+			map.put("wxMiniProgramType", content.get("wxMiniProgramType"));
+		}
 		if (content.get("type") != null) {
 			String type = (String) content.get("type");
 			int shareType = Integer.parseInt(type);

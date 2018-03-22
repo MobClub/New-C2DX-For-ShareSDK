@@ -81,7 +81,11 @@
     SortId="4"
     AppId="wx4868b35061f87885"
     AppSecret="64020361b8ec4c99936c0e3999a9f249"
+    UserName="gh_b0c6a9ca668a"
+    Path="pages/index/index?id=mob"
     BypassApproval="false"
+    WithShareTicket = "true"
+    MiniprogramType = "2"
     Enable="true" />
 
     <WechatMoments

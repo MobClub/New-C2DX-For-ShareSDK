@@ -116,7 +116,9 @@ namespace cn
             C2DXContentTypeVideo = 6, /**< 视频 */
             C2DXContentTypeApp = 7, /**< 应用,仅供微信使用 */
             C2DXContentTypeFile = 8, /**< 文件消息,仅供微信使用 */
-            C2DXContentTypeEmoji = 9 /**< 表情消息,仅供微信使用 */
+            C2DXContentTypeEmoji = 9, /**< 表情消息,仅供微信使用 */
+            C2DXContentTypeMiniProgram = 11, /**< 分享小程序,仅供微信使用 */
+            C2DXContentTypeOpenMiniProgram = 12 /**< 打开小程序,仅供Android 微信使用 */
         };
         
         /**

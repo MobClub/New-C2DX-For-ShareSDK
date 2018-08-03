@@ -69,6 +69,7 @@ namespace cn
     			static const char* WechatPlatform;
     			static const char* QQPlatform;
     			static const char* Any; 
+				static const char* Cmcc;
 		};
 
         /**

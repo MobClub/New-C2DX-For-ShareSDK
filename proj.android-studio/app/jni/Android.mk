@@ -2,9 +2,9 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-$(call import-add-path,D:/C2DConfiguration/310/Cocos2d-x/cocos2d-x-3.10)
-$(call import-add-path,D:/C2DConfiguration/310/Cocos2d-x/cocos2d-x-3.10/external)
-$(call import-add-path,D:/C2DConfiguration/310/Cocos2d-x/cocos2d-x-3.10/cocos)
+$(call import-add-path,D:/Dev/COCOS/cocos2d-x-3.17)
+$(call import-add-path,D:/Dev/COCOS/cocos2d-x-3.17/external)
+$(call import-add-path,D:/Dev/COCOS/cocos2d-x-3.17/cocos)
 
 
 LOCAL_MODULE := cocos2dcpp_shared

@@ -55,10 +55,10 @@ MobSDK {
                 sortId 4
                 appId "wx4868b35061f87885"
                 appSecret "64020361b8ec4c99936c0e3999a9f249"
-                userName "gh_afb25ac019c9"
-                path "pages/index/index.html?id=1"
+                userName "gh_b0c6a9ca668a"
+                path "pages/index/index?id=mob"
                 withShareTicket true
-                miniprogramType 0
+                miniprogramType 2
                 bypassApproval false
                 enable true
             }
@@ -104,8 +104,8 @@ MobSDK {
             Twitter {
                 id 9
                 sortId 9
-                appKey "LRBM0H75rWrU9gNHvlEAA2aOy"
-                appSecret "gbeWsZvA9ELJSdoBzJ5oLKX0TU09UOwrzdGfo9Tg7DjyGuMe8G"
+                appKey "viOnkeLpHBKs6KXV7MPpeGyzE"
+                appSecret "NJEglQUy2rqZ9Io9FcAU9p17omFqbORknUpRrCDOK46aAbIiey"
                 callbackUri "http://mob.com"
                 enable true
             }
@@ -385,6 +385,16 @@ MobSDK {
                 shareByAppClient true
                 enable true
             }
+
+            Cmcc {
+                Id = "55"
+                SortId = "55"
+                AppId = "300011860247"
+                AppKey = "2D464D8BFCE73A44B4F9DF95A2FDBE1C"
+                Eneble = "true"
+            }
+
+
         }
     }
 }

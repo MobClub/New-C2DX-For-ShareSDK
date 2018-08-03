@@ -208,6 +208,13 @@ void AppDelegate::initShareSDKConfig()
     totalDict -> setObject(youTubeConf, youTube.str());
      */
     
+	__Dictionary *CmccConf =  __Dictionary::create();
+	CmccConf->setObject(__String::create("300011860247"), "app_id");
+	CmccConf->setObject(__String::create("2D464D8BFCE73A44B4F9DF95A2FDBE1C"), "api_key");
+	stringstream Cmcc;    
+	Cmcc << cn::sharesdk::C2DXPlatTypeCmcc;
+	totalDict->setObject(CmccConf, Cmcc.str());
+	
     
     //Share iOS SDK4.0.0及以上版本 appkey 及 appSecret 在Info.plist 中设置
     //<key>MOBAppKey</key>

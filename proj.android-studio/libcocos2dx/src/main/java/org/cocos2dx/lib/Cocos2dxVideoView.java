@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * Copyright (c) 2014 Chukong Technologies Inc.
+ * Copyright (c) 2014-2016 Chukong Technologies Inc.
+ * Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,8 +34,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 import android.widget.MediaController.MediaPlayerControl;
-
-import com.chukong.cocosplay.client.CocosPlayClient;
 
 import java.io.IOException;
 import java.util.Map;
@@ -219,10 +218,6 @@ public class Cocos2dxVideoView extends SurfaceView implements MediaPlayerControl
         if (path.startsWith(AssetResourceRoot)) {
             path = path.substring(AssetResourceRoot.length());
         }
-        if (CocosPlayClient.isEnabled() && !CocosPlayClient.isDemo()) {
-            CocosPlayClient.updateAssets(path);
-        }
-        CocosPlayClient.notifyFileLoaded(path);
         if (path.startsWith("/")) {
             mIsAssetRouse = false;
             setVideoURI(Uri.parse(path),null);
@@ -446,11 +441,11 @@ public class Cocos2dxVideoView extends SurfaceView implements MediaPlayerControl
     
     public interface OnVideoEventListener
     {
-        void onVideoEvent(int tag,int event);
+        void onVideoEvent(int tag, int event);
     }
 
-    private MediaPlayer.OnErrorListener mErrorListener =
-        new MediaPlayer.OnErrorListener() {
+    private OnErrorListener mErrorListener =
+        new OnErrorListener() {
         public boolean onError(MediaPlayer mp, int framework_err, int impl_err) {
             Log.d(TAG, "Error: " + framework_err + "," + impl_err);
             mCurrentState = STATE_ERROR;

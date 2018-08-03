@@ -1,5 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2014 cocos2d-x.org
+Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
 
 http://www.cocos2d-x.org
 
@@ -389,15 +390,15 @@ public class Cocos2dxHttpURLConnection
 
     private static String str2Seconds(String strTime) {
         Calendar c = Calendar.getInstance();
-        long millisSecond = 0;
+        long milliseconds = 0;
 
         try {
             c.setTime(new SimpleDateFormat("EEE, dd-MMM-yy hh:mm:ss zzz", Locale.US).parse(strTime));
-            millisSecond = c.getTimeInMillis()/1000;
+            milliseconds = c.getTimeInMillis() / 1000;
         } catch (ParseException e) {
             Log.e("URLConnection exception", e.toString());
         }
 
-        return Long.toString(millisSecond);
+        return Long.toString(milliseconds);
     }
 }

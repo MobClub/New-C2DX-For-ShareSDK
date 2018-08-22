@@ -169,7 +169,7 @@ namespace cn
              *  @param customFields 自定义字段
              *	@param 	callback 	回调方法
              */
-            static void showShareMenuWithConfigurationFile(int reqID,C2DXArray *platTypes, C2DXPoint pt, const char *contentName, C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            static void showShareMenuWithConfigurationFile(int reqID, C2DXArray *platTypes, C2DXPoint pt, const char *contentName, C2DXDictionary *customFields, C2DXShareResultEvent callback);
             
             /**
              *	@brief	显示分享编辑框

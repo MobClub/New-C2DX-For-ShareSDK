@@ -13,62 +13,13 @@
 #import <ShareSDKUI/ShareSDKUI.h>
 #import <ShareSDKExtension/ShareSDK+Extension.h>
 #import <ShareSDKExtension/SSEShareHelper.h>
-#import <ShareSDKExtension/SSDKFriendsPaging.h>
+#import <ShareSDKExtension/SSEFriendsPaging.h>
 #import <MOBFoundation/MOBFRegex.h>
 #import <ShareSDK/NSMutableDictionary+SSDKShare.h>
 
 #import <ShareSDK/ShareSDK+Base.h>
 #import <ShareSDKConfigFile/ShareSDK+XML.h>
 
-#define IMPORT_SINA_WEIBO_LIB               //导入新浪微博库，如果不需要新浪微博客户端分享可以注释此行
-#define IMPORT_QZONE_QQ_LIB                 //导入腾讯开发平台库，如果不需要QQ空间分享、SSO或者QQ好友分享可以注释此行
-#define IMPORT_RENREN_LIB                   //导入人人库，如果不需要人人SSO，可以注释此行
-#define IMPORT_WECHAT_LIB                   //导入微信库，如果不需要微信分享可以注释此行
-//#define IMPORT_ALIPAY_LIB                   //导入支付宝分享库，如果不需要支付宝分享可以注释此行
-#define IMPORT_KAKAO_LIB                    //导入Kakao库，如果不需要Kakao分享可以注释此行
-#define IMPORT_DINGTALK_LIB                 //导入钉钉（Ding Talk）库，如果不需要钉钉（Ding Talk）分享可以注释此行
-#define IMPORT_MEIPAI_LIB                   //导入美拍库，如果不需要美拍分享可以注释此行
-#define IMPORT_LINE_LIB                     //导入line，如果不需要line授权SDK可以注释此行
-
-//#define UseShareSDKConfigFileRegister       //使用配置文件方式进行平台注册的话 需要打开此行
-
-#ifdef IMPORT_SINA_WEIBO_LIB
-#import "WeiboSDK.h"
-#endif
-
-#ifdef IMPORT_QZONE_QQ_LIB
-#import <TencentOpenAPI/TencentOAuth.h>
-#import <TencentOpenAPI/QQApiInterface.h>
-#endif
-
-#ifdef IMPORT_RENREN_LIB
-#import <RennSDK/RennSDK.h>
-#endif
-
-#ifdef IMPORT_WECHAT_LIB
-#import "WXApi.h"
-#endif
-
-#ifdef IMPORT_ALIPAY_LIB
-#import "APOpenAPI.h"
-#endif
-
-#ifdef IMPORT_KAKAO_LIB
-#import <KakaoOpenSDK/KakaoOpenSDK.h>
-#endif
-
-#ifdef IMPORT_DINGTALK_LIB
-#import <DTShareKit/DTOpenAPI.h>
-#endif
-
-
-#ifdef IMPORT_MEIPAI_LIB
-#import <MPShareSDK/MPShareSDK.h>
-#endif
-
-#ifdef IMPORT_LINE_LIB
-#import <LineSDK/LineSDK.h>
-#endif
 
 static UIView *_refView = nil;
 
@@ -372,84 +323,11 @@ void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDi
         }
     }
     
-    [ShareSDK registerActivePlatforms:activePlatforms
-                             onImport:^(SSDKPlatformType platformType)
-     {
-         switch (platformType)
-         {
-#ifdef IMPORT_SINA_WEIBO_LIB
-             case SSDKPlatformTypeSinaWeibo:
-                 [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_QZONE_QQ_LIB
-             case SSDKPlatformTypeQQ:
-                 [ShareSDKConnector connectQQ:[QQApiInterface class]
-                            tencentOAuthClass:[TencentOAuth class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_RENREN_LIB
-             case SSDKPlatformTypeRenren:
-                 [ShareSDKConnector connectRenren:[RennClient class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_WECHAT_LIB
-             case SSDKPlatformTypeWechat:
-                 [ShareSDKConnector connectWeChat:[WXApi class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_ALIPAY_LIB
-             case SSDKPlatformTypeAliPaySocial:
-                 [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_KAKAO_LIB
-             case SSDKPlatformTypeKakao:
-                 [ShareSDKConnector connectKaKao:[KOSession class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_DINGTALK_LIB
-             case SSDKPlatformTypeDingTalk:
-                 [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-                 break;
-                 
-#endif
-                 
-#ifdef IMPORT_MEIPAI_LIB
-             case SSDKPlatformTypeMeiPai:
-                 [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-                 break;
-#endif
-                 
-#ifdef IMPORT_LINE_LIB
-             case SSDKPlatformTypeLine:
-                 [ShareSDKConnector connectLine:[LineSDKLogin class]];
-                 break;
-#endif
-                 
-             default:
-                 break;
-         }
-     }
-                      onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo)
-     {
-         NSMutableDictionary * dict = [platformsDic objectForKey:[NSString stringWithFormat:@"%zi",platformType]];
-         
-         if (platformType == SSDKPlatformTypeFacebook)
-         {
-             [dict setObject:@"sso" forKey:@"auth_type"];
-         }
-         [appInfo addEntriesFromDictionary:dict];
-         
-         //        [appInfo setObject:@"both" forKey:@"auth"];
-         
-     }];
+    [ShareSDK registPlatforms:^(SSDKRegister *platformsRegister) {
+        
+        NSMutableDictionary *platformInfos = platformsRegister.platformsInfo;
+        [platformInfos addEntriesFromDictionary:platformsDic];
+    }];
 }
 
 id convertPublishContent(C2DXDictionary *content)
@@ -598,36 +476,6 @@ id convertPublishContent(C2DXDictionary *content)
             }
         }
         
-        C2DXString *clientShare = dynamic_cast<C2DXString *>(content -> objectForKey("client_share"));
-        if (clientShare)
-        {
-            BOOL tempClientShare = clientShare -> boolValue();
-            if(tempClientShare)
-            {
-                [shareContentPara SSDKEnableUseClientShare];
-            }
-        }
-        //        //v4.0.1 弃用
-        //        C2DXString *advancedShare = dynamic_cast<C2DXString *>(content -> objectForKey("advanced_share"));
-        //        if (advancedShare)
-        //        {
-        //            BOOL tempAdvancedShare = advancedShare -> boolValue();
-        //            if(tempAdvancedShare)
-        //            {
-        //                [shareContentPara SSDKEnableAdvancedInterfaceShare];
-        //            }
-        //        }
-        //v4.0.1 使用微博api进行分享
-        C2DXString *apiShare = dynamic_cast<C2DXString *>(content -> objectForKey("api_share"));
-        if (apiShare)
-        {
-            BOOL tempAdvancedShare = apiShare -> boolValue();
-            if(tempAdvancedShare)
-            {
-                [shareContentPara SSDKEnableSinaWeiboAPIShare];
-            }
-        }
-        
         [shareContentPara SSDKSetupShareParamsByText:text
                                               images:image
                                                  url:[NSURL URLWithString:url]
@@ -660,47 +508,6 @@ id convertPublishContent(C2DXDictionary *content)
 #pragma mark 分享平台授权
 void C2DXiOSShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    
     [ShareSDK authorize:(SSDKPlatformType)platType
                settings:nil
          onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error) {
@@ -746,7 +553,7 @@ void C2DXiOSShareSDK::authorize(int reqID, C2DXPlatType platType, C2DXAuthResult
 #pragma mark 取消授权
 void C2DXiOSShareSDK::cancelAuthorize(C2DXPlatType platType)
 {
-    [ShareSDK cancelAuthorize:(SSDKPlatformType)platType];
+    [ShareSDK cancelAuthorize:(SSDKPlatformType)platType result:nil];
 }
 
 #pragma mark 用户是否授权
@@ -763,47 +570,6 @@ bool C2DXiOSShareSDK::isClientInstalled(C2DXPlatType platType)
 #pragma mark 获取授权用户信息
 void C2DXiOSShareSDK::getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserInfoResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    
     [ShareSDK getUserInfo:(SSDKPlatformType)platType
            onStateChanged:^(SSDKResponseState state, SSDKUser *user, NSError *error)
      {
@@ -848,51 +614,8 @@ void C2DXiOSShareSDK::getUserInfo(int reqID,C2DXPlatType platType, C2DXGetUserIn
 #pragma mark 简单分享
 void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictionary *content,bool useClientShare, C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
     NSMutableDictionary *parameters = convertPublishContent(content);
-    if(useClientShare)
-    {
-        [parameters SSDKEnableUseClientShare];
-    }
+    
     [ShareSDK share:(SSDKPlatformType)platType
          parameters:parameters
      onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
@@ -933,146 +656,12 @@ void C2DXiOSShareSDK::shareContent(int reqID,C2DXPlatType platType, C2DXDictiona
 #pragma mark 一键分享
 void C2DXiOSShareSDK::oneKeyShareContent(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    NSMutableArray *shareList = nil;
-    if (platTypes && platTypes -> count() > 0)
-    {
-        shareList = [NSMutableArray array];
-        for (int i = 0; i < platTypes -> count(); i++)
-        {
-            C2DXInteger *type = (C2DXInteger *)platTypes -> C2DXObjectAtIndex(i);
-            [shareList addObject:[NSNumber numberWithInteger:type -> getValue()]];
-        }
-    }
-    
-    NSMutableDictionary *shareParams;
-    //构造分享参数
-    shareParams = convertPublishContent(content);
-    [SSEShareHelper oneKeyShare:shareList
-                     parameters:shareParams
-                 onStateChanged:^(SSDKPlatformType platformType,
-                                  SSDKResponseState state,
-                                  NSDictionary *userData,
-                                  SSDKContentEntity *contentEntity,
-                                  NSError *error,
-                                  BOOL end)
-     {
-         C2DXDictionary *userInfoDict = C2DXDictionary::create();
-         
-         switch (state)
-         {
-             case SSDKResponseStateSuccess:
-                 userInfoDict = convertNSDictToCCDict(userData);
-                 break;
-             case SSDKResponseStateFail:
-                 
-                 if (error)
-                 {
-                     NSInteger errCode = [error code];
-                     NSString *errDesc = [NSString stringWithFormat:@"%@",[error userInfo]];
-                     
-                     userInfoDict->setObject(C2DXInteger::create((int)errCode), "error_code");
-                     
-                     if (errDesc)
-                     {
-                         userInfoDict->setObject(C2DXString::create([errDesc UTF8String]), "error_msg");
-                     }
-                 }
-                 break;
-                 
-             default:
-                 break;
-         }
-         
-         if (callback)
-         {
-             callback(reqID,(C2DXResponseState)state,(C2DXPlatType)platformType,userInfoDict);
-         }
-     }];
+    NSLog(@"[ShareSDK Warning]: Method deprecate !");
 }
 
 #pragma mark 弹出分享菜单进行分享
 void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictionary *content, C2DXPoint pt, bool useClientShare , C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
     NSMutableArray *shareList = nil;
     if (platTypes && platTypes -> count() > 0)
     {
@@ -1096,10 +685,6 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
     NSMutableDictionary *shareParams;
     //构造分享参数
     shareParams = convertPublishContent(content);
-    if(useClientShare)
-    {
-        [shareParams SSDKEnableUseClientShare];
-    }
     
     [ShareSDK showShareActionSheet:_refView
                        customItems:shareList
@@ -1155,53 +740,12 @@ void C2DXiOSShareSDK::showShareMenu(int reqID,C2DXArray *platTypes, C2DXDictiona
 
 void C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(int reqID,C2DXPlatType platType, const char *contentName, C2DXDictionary *customFields,C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    
     NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
     NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
     NSDictionary *params = [ShareSDK getShareParamsWithContentName:aContentName customFields:aCustomFields];
     [ShareSDK showShareEditor:(SSDKPlatformType)platType
                otherPlatforms:nil
-                  shareParams:params
+                  shareParams:params.mutableCopy
           editorConfiguration:nil
                onStateChanged:^(SSDKResponseState state,
                                 SSDKPlatformType platformType,
@@ -1245,53 +789,9 @@ void C2DXiOSShareSDK::showShareEditViewWithConfigurationFile(int reqID,C2DXPlatT
 
 void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDictionary *content, bool useClientShare, C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
     NSMutableDictionary *shareParams;
     //构造分享参数
     shareParams = convertPublishContent(content);
-    if(useClientShare)
-    {
-        [shareParams SSDKEnableUseClientShare];
-    }
     [ShareSDK showShareEditor:(SSDKPlatformType)platType
                otherPlatforms:nil
                   shareParams:shareParams
@@ -1337,50 +837,10 @@ void C2DXiOSShareSDK::showShareEditView(int reqID,C2DXPlatType platType, C2DXDic
 
 void C2DXiOSShareSDK::getFriendList(int reqID,C2DXPlatType platType,int count, int page, C2DXAddFriendResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
     [ShareSDK getFriends:(SSDKPlatformType)platType
                   cursor:page
                     size:count
-          onStateChanged:^(SSDKResponseState state, SSDKFriendsPaging *paging, NSError *error) {
+          onStateChanged:^(SSDKResponseState state, SSEFriendsPaging *paging, NSError *error) {
               
               C2DXDictionary *userInfoDict = C2DXDictionary::create();
               NSMutableDictionary *useDic = [NSMutableDictionary dictionary];
@@ -1425,46 +885,6 @@ void C2DXiOSShareSDK::getFriendList(int reqID,C2DXPlatType platType,int count, i
 
 void C2DXiOSShareSDK::addFriend(int reqID,C2DXPlatType platType,const char* account ,C2DXGetFriendsResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
     SSDKPlatformType type = (SSDKPlatformType)platType;
     SSDKUser *user = [[SSDKUser alloc] init];
     
@@ -1520,47 +940,6 @@ void C2DXiOSShareSDK::alertLog(const char *msg)
 
 void C2DXiOSShareSDK::showShareMenuWithConfigurationFile(int reqID,C2DXArray *platTypes, C2DXPoint pt, const char *contentName, C2DXDictionary *customFields, C2DXShareResultEvent callback)
 {
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    
     NSMutableArray *shareList = nil;
     if (platTypes && platTypes -> count() > 0)
     {
@@ -1588,7 +967,7 @@ void C2DXiOSShareSDK::showShareMenuWithConfigurationFile(int reqID,C2DXArray *pl
     
     [ShareSDK showShareActionSheet:_refView
                        customItems:shareList
-                       shareParams:params
+                       shareParams:params.mutableCopy
                 sheetConfiguration:nil
                     onStateChanged:^(SSDKResponseState state,
                                      SSDKPlatformType platformType,
@@ -1638,49 +1017,6 @@ void C2DXiOSShareSDK::showShareMenuWithConfigurationFile(int reqID,C2DXArray *pl
 
 void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentName, C2DXPlatType platType, C2DXDictionary *customFields, C2DXShareResultEvent callback)
 {
-    
-#ifdef UseShareSDKConfigFileRegister
-    
-#ifdef IMPORT_SINA_WEIBO_LIB
-    [ShareSDKConnector connectWeibo:[WeiboSDK class]];
-#endif
-    
-#ifdef IMPORT_QZONE_QQ_LIB
-    [ShareSDKConnector connectQQ:[QQApiInterface class]
-               tencentOAuthClass:[TencentOAuth class]];
-#endif
-    
-#ifdef IMPORT_RENREN_LIB
-    [ShareSDKConnector connectRenren:[RennClient class]];
-#endif
-    
-#ifdef IMPORT_WECHAT_LIB
-    [ShareSDKConnector connectWeChat:[WXApi class]];
-#endif
-    
-#ifdef IMPORT_ALIPAY_LIB
-    [ShareSDKConnector connectAliPaySocial:[APOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_KAKAO_LIB
-    [ShareSDKConnector connectKaKao:[KOSession class]];
-#endif
-    
-#ifdef IMPORT_DINGTALK_LIB
-    [ShareSDKConnector connectDingTalk:[DTOpenAPI class]];
-#endif
-    
-#ifdef IMPORT_MEIPAI_LIB
-    [ShareSDKConnector connectMeiPai:[MPShareSDK class]];
-#endif
-    
-#ifdef IMPORT_LINE_LIB
-    [ShareSDKConnector connectLine:[LineSDKLogin class]];
-#endif
-    
-#endif
-    
-    SSDKPlatformType type = (SSDKPlatformType)platType;
     NSString *aContentName = convertC2DXStringToNSString(C2DXString::create(contentName));
     NSDictionary *aCustomFields = convertC2DXDictionaryToNSDictionary(customFields);
     
@@ -1688,7 +1024,7 @@ void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentN
     
     [ShareSDK showShareActionSheet:_refView
                        customItems:nil
-                       shareParams:params
+                       shareParams:params.mutableCopy
                 sheetConfiguration:nil
                     onStateChanged:^(SSDKResponseState state,
                                      SSDKPlatformType platformType,

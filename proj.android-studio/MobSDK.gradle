@@ -393,6 +393,13 @@ MobSDK {
                 AppKey = "2D464D8BFCE73A44B4F9DF95A2FDBE1C"
                 Eneble = "true"
             }
+			
+			Reddit {
+                Id="56"
+                SortId="56"
+                AppKey="MExDxPuTCtFiRw"
+                RedirectUrl="http://www.sharesdk.cn"
+            }
 
 
         }

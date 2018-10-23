@@ -70,6 +70,7 @@ namespace cn
     			static const char* QQPlatform;
     			static const char* Any; 
 				static const char* Cmcc;
+				static const char* Reddit;
 		};
 
         /**

@@ -62,8 +62,8 @@ const char* PlatId::FacebookMessenger = "46";/**< FacebookMessenger */
 const char* PlatId::Telegram = "47";         /**< Telegram */
 const char* PlatId::Bluetooth = "48";        /**< Bluetooth */
 const char* PlatId::Alipay = "50";           /**< Alipay */
-
 const char* PlatId::Cmcc = "55";             /**< 中国移动 */
+const char* PlatId::Reddit = "56";           /**< Reddit*/
 
 const char* PlatId::KakaoPlatform = "995";   /**< Kakao Series */
 const char* PlatId::EvernotePlatform = "996";/**< Evernote Series */

@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B85BDE821A8010600029EFA /* HTMLResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0B85BDE221A8010600029EFA /* HTMLResource.bundle */; };
+		0B85BDE921A8010600029EFA /* EAccountSDKArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */; };
+		0B85BDEA21A8010600029EFA /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */; };
+		0B85BDEB21A8010600029EFA /* AccountKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B85BDE721A8010600029EFA /* AccountKit.framework */; };
 		1AC6FB30180E99EB004C840B /* libcocos2d iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1AC6FB07180E9839004C840B /* libcocos2d iOS.a */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -155,6 +159,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B85BDE221A8010600029EFA /* HTMLResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HTMLResource.bundle; sourceTree = "<group>"; };
+		0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EAccountSDKArchive.framework; sourceTree = "<group>"; };
+		0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AccountKitStrings.bundle; sourceTree = "<group>"; };
+		0B85BDE721A8010600029EFA /* AccountKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AccountKit.framework; sourceTree = "<group>"; };
 		1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2d_libs.xcodeproj; path = ../cocos2d/build/cocos2d_libs.xcodeproj; sourceTree = "<group>"; };
 		1ACB3243164770DE00914215 /* libcurl.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libcurl.a; path = ../../cocos2dx/platform/third_party/ios/libraries/libcurl.a; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -349,6 +357,7 @@
 				50B3E282215C6BA700F9D41E /* libWeiboSDK.a in Frameworks */,
 				DE5977E01C294E32007238D8 /* AdSupport.framework in Frameworks */,
 				DE5977DE1C294E2C007238D8 /* ImageIO.framework in Frameworks */,
+				0B85BDEB21A8010600029EFA /* AccountKit.framework in Frameworks */,
 				50B3E28C215C6BA700F9D41E /* KakaoCommon.framework in Frameworks */,
 				50B3E290215C6BA700F9D41E /* libYixinSDK.a in Frameworks */,
 				50B3E29A215C6BA700F9D41E /* DropboxConnector.framework in Frameworks */,
@@ -399,6 +408,7 @@
 				50B3E2A8215C6BA700F9D41E /* MingDaoConnector.framework in Frameworks */,
 				50B3E2AA215C6BA700F9D41E /* TencentWeiboConnector.framework in Frameworks */,
 				50B3E2BC215C6BA700F9D41E /* SinaWeiboConnector.framework in Frameworks */,
+				0B85BDE921A8010600029EFA /* EAccountSDKArchive.framework in Frameworks */,
 				D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -419,6 +429,24 @@
 			);
 			name = ios;
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		0B85BDE121A8010600029EFA /* ESurfingSDK */ = {
+			isa = PBXGroup;
+			children = (
+				0B85BDE221A8010600029EFA /* HTMLResource.bundle */,
+				0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */,
+			);
+			path = ESurfingSDK;
+			sourceTree = "<group>";
+		};
+		0B85BDE521A8010600029EFA /* FacebookAccountSDK */ = {
+			isa = PBXGroup;
+			children = (
+				0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */,
+				0B85BDE721A8010600029EFA /* AccountKit.framework */,
+			);
+			path = FacebookAccountSDK;
 			sourceTree = "<group>";
 		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
@@ -601,6 +629,8 @@
 		50B3E225215C6BA700F9D41E /* PlatformSDK */ = {
 			isa = PBXGroup;
 			children = (
+				0B85BDE121A8010600029EFA /* ESurfingSDK */,
+				0B85BDE521A8010600029EFA /* FacebookAccountSDK */,
 				50B3E226215C6BA700F9D41E /* RenRenSDK */,
 				50B3E229215C6BA700F9D41E /* SinaWeiboSDK */,
 				50B3E22E215C6BA700F9D41E /* WeChatSDK */,
@@ -905,6 +935,7 @@
 				46880B7D19C43A67006E1F66 /* CloseSelected.png in Resources */,
 				5087E77D17EB970100C73F5D /* Default-568h@2x.png in Resources */,
 				5087E78517EB970100C73F5D /* Icon-72.png in Resources */,
+				0B85BDEA21A8010600029EFA /* AccountKitStrings.bundle in Resources */,
 				521A8E6519F0C34300D177D7 /* Default-736h@3x.png in Resources */,
 				521A8EA919F11F5000D177D7 /* fonts in Resources */,
 				50EF62A317ECD613001EB2F8 /* Icon-50.png in Resources */,
@@ -920,6 +951,7 @@
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
 				50B3E293215C6BA700F9D41E /* ShareSDKUI.bundle in Resources */,
+				0B85BDE821A8010600029EFA /* HTMLResource.bundle in Resources */,
 				50B3E27F215C6BA700F9D41E /* RennSDK.bundle in Resources */,
 				5087E77E17EB970100C73F5D /* Default.png in Resources */,
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
@@ -993,6 +1025,8 @@
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/RenRenSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/Required",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/CMCCSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/ESurfingSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/FacebookAccountSDK",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
@@ -1072,6 +1106,8 @@
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/RenRenSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/Required",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/CMCCSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/ESurfingSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/FacebookAccountSDK",
 				);
 				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;

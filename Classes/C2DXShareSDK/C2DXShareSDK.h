@@ -71,6 +71,8 @@ namespace cn
     			static const char* Any; 
 				static const char* Cmcc;
 				static const char* Reddit;
+                static const char* FacebookAccount;
+                static const char* ESurfing;
 		};
 
         /**

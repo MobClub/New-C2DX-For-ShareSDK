@@ -73,6 +73,7 @@ namespace cn
 				static const char* Reddit;
                 static const char* FacebookAccount;
                 static const char* ESurfing;
+				static const char* Douyin;
 		};
 
         /**

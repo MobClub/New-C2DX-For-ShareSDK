@@ -421,6 +421,12 @@ MobSDK {
                 enable true
             }
 
+            Douyin {
+                id 59
+                sortId 59
+                enable true
+            }
+
         }
     }
 }

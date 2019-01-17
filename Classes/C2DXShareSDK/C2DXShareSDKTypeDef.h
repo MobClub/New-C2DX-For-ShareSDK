@@ -101,6 +101,9 @@ namespace cn
 			C2DXPlatTypeCmcc = 55,             /**<中国移动 */
 			C2DXPlatTypeReddit = 56,           /**<Reddit */
 			C2DXPlatTypeDouyin = 59,           /**抖音 */
+            C2DXPlatTypeYiXinPlatform = 994,   /**< 易信 Series */
+            C2DXPlatTypeKakaoPlatform = 995,   /**< kakao Series */
+            C2DXPlatTypeEvernotePlatform = 996,/**< 印象笔记国际版 */
     		C2DXPlatTypeWechatPlatform = 997,  /**< Wechat Series */
     		C2DXPlatTypeQQPlatform = 998,	   /**< QQ Series */
     		C2DXPlatTypeAny = 999 			   /**< 任意平台 */

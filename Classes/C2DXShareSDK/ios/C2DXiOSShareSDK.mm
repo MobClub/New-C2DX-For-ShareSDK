@@ -320,6 +320,39 @@ void C2DXiOSShareSDK::registerAppAndSetPlatformConfig(const char *appKey, C2DXDi
         if ([platformStr isKindOfClass:[NSString class]])
         {
             [activePlatforms addObject:@([platformStr integerValue])];
+            
+            
+            
+            // 容错处理 注册平台 子平台转成对应的平台
+            NSInteger platformId = [platformStr integerValue];
+            
+            if(platformId == C2DXPlatTypeWeChat || platformId == C2DXPlatTypeWeChatMoments || platformId == C2DXPlatTypeWeChatFavorites)
+            {
+                NSString *platform = [NSString stringWithFormat:@"%lu",(unsigned long)C2DXPlatTypeWechatPlatform];
+                platformsDic[platform] = platformsDic[platformStr];
+            }
+            else if(platformId == C2DXPlatTypeQZone || platformId == C2DXPlatTypeQQ)
+            {
+                NSString *platform = [NSString stringWithFormat:@"%lu",(unsigned long)C2DXPlatTypeQQPlatform];
+                platformsDic[platform] = platformsDic[platformStr];
+            }
+            else if(platformId == C2DXPlatTypeYiXinSession || platformId == C2DXPlatTypeYiXinTimeline || platformId == C2DXPlatTypeYiXinFav)
+            {
+                NSString *platform = [NSString stringWithFormat:@"%lu",(unsigned long)C2DXPlatTypeYiXinPlatform];
+                platformsDic[platform] = platformsDic[platformStr];
+            }
+            else if(platformId == C2DXPlatTypeKakaoTalk || platformId == C2DXPlatTypeKakaoStory)
+            {
+                NSString *platform = [NSString stringWithFormat:@"%lu",(unsigned long)C2DXPlatTypeKakaoPlatform];
+                platformsDic[platform] = platformsDic[platformStr];
+            }
+            else if(platformId == C2DXPlatTypeEvernotePlatform)
+            {
+                NSString *platform = [NSString stringWithFormat:@"%lu",(unsigned long)C2DXPlatTypeEvernote];
+                platformsDic[platform] = platformsDic[platformStr];
+            }
+            
+            
         }
     }
     

@@ -1061,7 +1061,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mob.cocos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mob.product.ShareSDK;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = MobProvisioningProfiles;
 				SDKROOT = iphoneos;
@@ -1140,7 +1140,7 @@
 					"$(_COCOS_LIB_IOS_END)",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.mob.cocos;
+				PRODUCT_BUNDLE_IDENTIFIER = com.mob.product.ShareSDK;
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = MobProvisioningProfiles;
 				SDKROOT = iphoneos;

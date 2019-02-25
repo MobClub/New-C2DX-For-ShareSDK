@@ -376,6 +376,10 @@ id convertPublishContent(C2DXDictionary *content)
     NSData *fileData = nil;
     NSData *emoData = nil;
     
+    BOOL sina_linkCard = NO;
+    NSString *sina_cardTitle = nil;
+    NSString *sina_cardSummary = nil;
+    
     SSDKContentType contentType = SSDKContentTypeAuto;
     C2DXContentType temContentType = C2DXContentTypeText;
     
@@ -514,6 +518,9 @@ id convertPublishContent(C2DXDictionary *content)
                                                  url:[NSURL URLWithString:url]
                                                title:title
                                                 type:contentType];
+        
+        
+        
         //应用消息类型
         if(fileData && contentType == SSDKContentTypeApp)
         {
@@ -531,6 +538,32 @@ id convertPublishContent(C2DXDictionary *content)
                                                      type:SSDKContentTypeApp
                                        forPlatformSubType:SSDKPlatformSubTypeWechatSession];
         }
+        //sina linkCard
+        C2DXString *sina_linkCardVal = dynamic_cast<C2DXString *>(content -> objectForKey("sina_linkCard"));
+        if (sina_linkCardVal)
+        {
+            int linkCardVal = sina_linkCardVal -> intValue();
+            if (linkCardVal > 0)
+            {
+                sina_linkCard = YES;
+                [shareContentPara setObject:@(sina_linkCard) forKey:@"sina_linkCard"];
+                [shareContentPara setObject:[MobSDK appKey] forKey:@"mob_appkey"];
+            }
+        }
+        C2DXString *sina_cardTitleStr = dynamic_cast<C2DXString *>(content -> objectForKey("sina_cardTitle"));
+        if (sina_cardTitleStr)
+        {
+            sina_cardTitle = [NSString stringWithCString:sina_cardTitleStr -> getCString() encoding:NSUTF8StringEncoding];
+            [shareContentPara setObject:sina_cardTitle forKey:@"sina_cardTitle"];
+        }
+        
+        C2DXString *sina_cardSummaryStr = dynamic_cast<C2DXString *>(content -> objectForKey("sina_cardSummary"));
+        if (sina_cardSummaryStr)
+        {
+            sina_cardSummary = [NSString stringWithCString:sina_cardSummaryStr -> getCString() encoding:NSUTF8StringEncoding];
+            [shareContentPara setObject:sina_cardSummary forKey:@"sina_cardSummary"];
+        }
+        
         
         return shareContentPara;
     }

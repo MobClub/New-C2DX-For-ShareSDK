@@ -1,4 +1,4 @@
-# New-Unity-For-ShareSDK
+# New-C2DX-For-ShareSDK
 ### 这是基于[ShareSDK](http://sharesdk.mob.com/)支持Coco2dx的一套插件。目的是为Coco2dx开发者更快速方便地集成使用ShareSDK。
 **支持的 ShareSDK 版本**
 

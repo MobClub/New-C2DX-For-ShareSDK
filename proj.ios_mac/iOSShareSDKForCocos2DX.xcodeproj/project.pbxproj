@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0B57A8BC226F0795006F1DEA /* DouyinConnector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B57A8BA226F0795006F1DEA /* DouyinConnector.framework */; };
+		0B57A8C1226F07B6006F1DEA /* libDouyinOpenSDK.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B57A8BF226F07B6006F1DEA /* libDouyinOpenSDK.a */; };
 		0B85BDE821A8010600029EFA /* HTMLResource.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0B85BDE221A8010600029EFA /* HTMLResource.bundle */; };
 		0B85BDE921A8010600029EFA /* EAccountSDKArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */; };
 		0B85BDEA21A8010600029EFA /* AccountKitStrings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */; };
@@ -159,6 +161,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0B57A8BA226F0795006F1DEA /* DouyinConnector.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DouyinConnector.framework; sourceTree = "<group>"; };
+		0B57A8BE226F07B6006F1DEA /* DouyinOpenSDKApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DouyinOpenSDKApiObject.h; sourceTree = "<group>"; };
+		0B57A8BF226F07B6006F1DEA /* libDouyinOpenSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDouyinOpenSDK.a; sourceTree = "<group>"; };
+		0B57A8C0226F07B6006F1DEA /* DouyinOpenSDKApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DouyinOpenSDKApi.h; sourceTree = "<group>"; };
 		0B85BDE221A8010600029EFA /* HTMLResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HTMLResource.bundle; sourceTree = "<group>"; };
 		0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EAccountSDKArchive.framework; sourceTree = "<group>"; };
 		0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AccountKitStrings.bundle; sourceTree = "<group>"; };
@@ -354,6 +360,7 @@
 				50B3E296215C6BA700F9D41E /* ShareSDKUI.framework in Frameworks */,
 				50B3E2B4215C6BA700F9D41E /* TwitterConnector.framework in Frameworks */,
 				50B3E287215C6BA700F9D41E /* TYRZSDK.framework in Frameworks */,
+				0B57A8C1226F07B6006F1DEA /* libDouyinOpenSDK.a in Frameworks */,
 				50B3E282215C6BA700F9D41E /* libWeiboSDK.a in Frameworks */,
 				DE5977E01C294E32007238D8 /* AdSupport.framework in Frameworks */,
 				DE5977DE1C294E2C007238D8 /* ImageIO.framework in Frameworks */,
@@ -401,6 +408,7 @@
 				50B3E2BB215C6BA700F9D41E /* KakaoConnector.framework in Frameworks */,
 				50B3E2A2215C6BA700F9D41E /* KaiXinConnector.framework in Frameworks */,
 				50B3E2B2215C6BA700F9D41E /* DingTalkConnector.framework in Frameworks */,
+				0B57A8BC226F0795006F1DEA /* DouyinConnector.framework in Frameworks */,
 				BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */,
 				50B3E2A0215C6BA700F9D41E /* CMCCConnector.framework in Frameworks */,
 				D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */,
@@ -429,6 +437,16 @@
 			);
 			name = ios;
 			path = Classes;
+			sourceTree = "<group>";
+		};
+		0B57A8BD226F07B6006F1DEA /* DouyinOpenSDK */ = {
+			isa = PBXGroup;
+			children = (
+				0B57A8BE226F07B6006F1DEA /* DouyinOpenSDKApiObject.h */,
+				0B57A8BF226F07B6006F1DEA /* libDouyinOpenSDK.a */,
+				0B57A8C0226F07B6006F1DEA /* DouyinOpenSDKApi.h */,
+			);
+			path = DouyinOpenSDK;
 			sourceTree = "<group>";
 		};
 		0B85BDE121A8010600029EFA /* ESurfingSDK */ = {
@@ -629,6 +647,7 @@
 		50B3E225215C6BA700F9D41E /* PlatformSDK */ = {
 			isa = PBXGroup;
 			children = (
+				0B57A8BD226F07B6006F1DEA /* DouyinOpenSDK */,
 				0B85BDE121A8010600029EFA /* ESurfingSDK */,
 				0B85BDE521A8010600029EFA /* FacebookAccountSDK */,
 				50B3E226215C6BA700F9D41E /* RenRenSDK */,
@@ -774,6 +793,7 @@
 		50B3E255215C6BA700F9D41E /* PlatformConnector */ = {
 			isa = PBXGroup;
 			children = (
+				0B57A8BA226F0795006F1DEA /* DouyinConnector.framework */,
 				50B3E256215C6BA700F9D41E /* PrintConnector.framework */,
 				50B3E257215C6BA700F9D41E /* SMSConnector.framework */,
 				50B3E258215C6BA700F9D41E /* DropboxConnector.framework */,
@@ -1055,6 +1075,7 @@
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/YiXinSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/DouyinOpenSDK",
 				);
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
@@ -1075,10 +1096,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = Q87QUX3533;
+				DEVELOPMENT_TEAM = LW5266U92D;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1134,6 +1155,7 @@
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/SinaWeiboSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/WeChatSDK",
 					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/YiXinSDK",
+					"$(PROJECT_DIR)/SDK/ShareSDK/Support/PlatformSDK/DouyinOpenSDK",
 				);
 				OTHER_LDFLAGS = (
 					"$(_COCOS_LIB_IOS_BEGIN)",
@@ -1142,7 +1164,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mob.product.ShareSDK;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = MobProvisioningProfiles;
+				PROVISIONING_PROFILE_SPECIFIER = ShareSDK;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_IOS_BEGIN) $(_COCOS_HEADER_IOS_END)";

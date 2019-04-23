@@ -216,6 +216,14 @@ void AppDelegate::initShareSDKConfig()
 	totalDict->setObject(CmccConf, Cmcc.str());
 	
     
+    __Dictionary *DouyinConf =  __Dictionary::create();
+    DouyinConf->setObject(__String::create("aw9ivykfjvi4hpwo"), "app_key");
+    DouyinConf->setObject(__String::create("42b4caa6bda60bd49f05f06d0a4956e1"), "app_secret");
+    stringstream Douyin;
+    Douyin << cn::sharesdk::C2DXPlatTypeDouyin;
+    totalDict->setObject(DouyinConf, Douyin.str());
+    
+    
     //Share iOS SDK4.0.0及以上版本 appkey 及 appSecret 在Info.plist 中设置
     //<key>MOBAppKey</key>
     // <string>iosv1101</string>

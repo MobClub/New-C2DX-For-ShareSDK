@@ -102,6 +102,16 @@
 				<string>line3rdp.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>douyin</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>aw9ivykfjvi4hpwo</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
@@ -116,6 +126,7 @@
 		<string>line3rdp.$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<string>fbauth2</string>
 		<string>fbauth</string>
+		<string>fbapi</string>
 		<string>youtube</string>
 		<string>mpsharesdk11</string>
 		<string>mpsharesdk10</string>
@@ -166,6 +177,8 @@
 		<string>sinaweibosso</string>
 		<string>wechat</string>
 		<string>weixin</string>
+		<string>douyinsharesdk</string>
+		<string>douyinopensdk</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

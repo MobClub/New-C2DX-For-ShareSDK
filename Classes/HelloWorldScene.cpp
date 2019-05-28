@@ -535,12 +535,12 @@ void HelloWorld::getAuthInfoBtnClickHandler(cocos2d::Ref *pSender)
 
 void HelloWorld::shareContentClickHandler(cocos2d::Ref *pSender)
 {    
-//    //分享内容
+    //分享内容
 //    __Dictionary *content = __Dictionary::create();
 //    content -> setObject(__String::create("分享文本"), "text");
-//    content -> setObject(__String::create("http://www.mob.com/mob/img/navproducts_03.png"), "image");
+//    content -> setObject(__String::create("http://www.mob.com/assets/images/ShareSDK_pic_1-09d293a6.png"), "image");
 //    content -> setObject(__String::create("测试标题"), "title");
-//    content -> setObject(__String::create("http://www.mob.com"), "url");
+//    //content -> setObject(__String::create("http://www.mob.com"), "url");
 //    content -> setObject(__String::createWithFormat("%d", cn::sharesdk::C2DXContentTypeAuto), "type");
 //    //iOS 启用客户端分享接口
 //    content -> setObject(__String::createWithFormat("%d", true), "client_share");

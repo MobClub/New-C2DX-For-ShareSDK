@@ -15,6 +15,7 @@
 #import <ShareSDKExtension/SSEShareHelper.h>
 #import <ShareSDKExtension/SSEFriendsPaging.h>
 #import <MOBFoundation/MOBFRegex.h>
+#import <MOBFoundation/MOBFoundation.h>
 #import <ShareSDK/NSMutableDictionary+SSDKShare.h>
 
 #import <ShareSDK/ShareSDK+Base.h>

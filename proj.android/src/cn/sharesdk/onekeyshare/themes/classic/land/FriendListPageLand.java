@@ -8,10 +8,10 @@
 
 package cn.sharesdk.onekeyshare.themes.classic.land;
 
+import com.mob.tools.utils.ResHelper;
+
 import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
 import cn.sharesdk.onekeyshare.themes.classic.FriendListPage;
-
-import com.mob.tools.utils.ResHelper;
 
 /** 横屏的好友列表 */
 public class FriendListPageLand extends FriendListPage {

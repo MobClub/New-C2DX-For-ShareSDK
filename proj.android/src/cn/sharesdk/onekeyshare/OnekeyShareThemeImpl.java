@@ -132,6 +132,11 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 			} else if(shareParamsMap.containsKey("url") && !TextUtils.isEmpty((String)shareParamsMap.get("url"))){
 				return true;
 			}
+		} else if ("LinkedIn".equals(name)) {
+			boolean shareByAppClient = "true".equals(platform.getDevinfo("ShareByAppClient"));
+			if (shareByAppClient && platform.isClientValid()) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -354,7 +359,7 @@ public abstract class OnekeyShareThemeImpl implements PlatformActionListener, Ca
 	protected abstract void showEditPage(Context context, Platform platform, ShareParams sp);
 
 	public final void onComplete(Platform platform, int action,
-			HashMap<String, Object> res) {
+									HashMap<String, Object> res) {
 		Message msg = new Message();
 		msg.arg1 = 1;
 		msg.arg2 = action;

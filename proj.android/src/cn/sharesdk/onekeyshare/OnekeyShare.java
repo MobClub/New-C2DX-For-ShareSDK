@@ -8,6 +8,7 @@
 
 package cn.sharesdk.onekeyshare;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.text.TextUtils;
@@ -38,6 +39,10 @@ public class OnekeyShare {
 		params = new HashMap<String, Object>();
 		params.put("customers", new ArrayList<CustomerLogo>());
 		params.put("hiddenPlatforms", new HashMap<String, String>());
+	}
+
+	public void setActivity(Activity activity) {
+		params.put("activity", activity);
 	}
 
 	/** address是接收人地址，仅在信息和邮件使用，否则可以不提供 */
@@ -158,9 +163,26 @@ public class OnekeyShare {
 		params.put("executeurl", executeurl);
 	}
 
+	/**
+	 * 领英分享URL的时候需要此参数
+	 * **/
+	public void setLinkedinDescription(String description) {
+		params.put("linkedinDescription", description);
+	}
+
 	/** 设置微信分享的音乐的地址 */
 	public void setMusicUrl(String musicUrl) {
 		params.put("musicUrl", musicUrl);
+	}
+
+	/** facebook 引文分享所需参数 **/
+	public void setQuote(String quote) {
+		params.put("QUOTE", quote);
+	}
+
+	/** facebook 话题分享所需参数 **/
+	public void setHashtag(String hashtag) {
+		params.put("HASHTAG", hashtag);
 	}
 
 	/** 设置自定义的外部回调 */

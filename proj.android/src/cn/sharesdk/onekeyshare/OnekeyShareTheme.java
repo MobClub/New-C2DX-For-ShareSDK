@@ -8,10 +8,10 @@
 
 package cn.sharesdk.onekeyshare;
 
-import cn.sharesdk.onekeyshare.themes.classic.ClassicTheme;
-
 /** 快捷分享的主题样式  */
+import cn.sharesdk.onekeyshare.themes.classic.ClassicTheme;
 public enum OnekeyShareTheme {
+	//test please igronre
 	/** 九格宫的主题样式 ,对应的实现类ClassicTheme */
 	CLASSIC(0, new ClassicTheme());
 

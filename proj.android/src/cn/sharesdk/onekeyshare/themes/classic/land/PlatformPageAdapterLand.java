@@ -8,13 +8,14 @@
 
 package cn.sharesdk.onekeyshare.themes.classic.land;
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import cn.sharesdk.onekeyshare.themes.classic.PlatformPage;
-import cn.sharesdk.onekeyshare.themes.classic.PlatformPageAdapter;
 
 import com.mob.tools.utils.ResHelper;
+
+import java.util.ArrayList;
+
+import cn.sharesdk.onekeyshare.themes.classic.PlatformPage;
+import cn.sharesdk.onekeyshare.themes.classic.PlatformPageAdapter;
 
 /** 横屏的九宫格页面适配器 */
 public class PlatformPageAdapterLand extends PlatformPageAdapter {

@@ -10,6 +10,7 @@ package cn.sharesdk.onekeyshare.themes.classic;
 
 import android.content.Context;
 import android.content.res.Configuration;
+
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.Platform.ShareParams;
 import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;

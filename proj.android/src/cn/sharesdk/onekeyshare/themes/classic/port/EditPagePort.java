@@ -8,8 +8,6 @@
 
 package cn.sharesdk.onekeyshare.themes.classic.port;
 
-import java.io.File;
-
 import android.graphics.Bitmap;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -21,16 +19,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
-import cn.sharesdk.onekeyshare.themes.classic.EditPage;
-import cn.sharesdk.onekeyshare.themes.classic.XView;
 
 import com.mob.tools.gui.AsyncImageView;
 import com.mob.tools.utils.BitmapHelper;
 import com.mob.tools.utils.ResHelper;
 
+import java.io.File;
+
+import cn.sharesdk.onekeyshare.OnekeyShareThemeImpl;
+import cn.sharesdk.onekeyshare.themes.classic.EditPage;
+import cn.sharesdk.onekeyshare.themes.classic.XView;
+
 /** 竖屏的编辑页 */
-public class EditPagePort extends EditPage  {
+public class EditPagePort extends EditPage {
 	private static final int DESIGN_SCREEN_HEIGHT= 1280;
 	private static final int DESIGN_TITLE_HEIGHT = 96;
 	private static final int DESIGN_BOTTOM_HEIGHT = 75;

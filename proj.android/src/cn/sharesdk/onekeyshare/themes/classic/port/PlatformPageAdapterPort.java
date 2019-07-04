@@ -8,13 +8,14 @@
 
 package cn.sharesdk.onekeyshare.themes.classic.port;
 
-import java.util.ArrayList;
-
 import android.content.Context;
-import cn.sharesdk.onekeyshare.themes.classic.PlatformPage;
-import cn.sharesdk.onekeyshare.themes.classic.PlatformPageAdapter;
 
 import com.mob.tools.utils.ResHelper;
+
+import java.util.ArrayList;
+
+import cn.sharesdk.onekeyshare.themes.classic.PlatformPage;
+import cn.sharesdk.onekeyshare.themes.classic.PlatformPageAdapter;
 
 /** 竖屏的九宫格页面适配器 */
 public class PlatformPageAdapterPort extends PlatformPageAdapter {

@@ -106,6 +106,7 @@ void AppDelegate::initShareSDKConfig()
     __Dictionary *wechatConf = __Dictionary::create();
     wechatConf->setObject(__String::create("wx4868b35061f87885"), "app_id");
     wechatConf->setObject(__String::create("64020361b8ec4c99936c0e3999a9f249"), "app_secret");
+    wechatConf->setObject(__String::create("https://www.sandslee.com/"), "app_universalLink");
     stringstream wechat;
     wechat << cn::sharesdk::C2DXPlatTypeWechatPlatform;
     totalDict->setObject(wechatConf, wechat.str());

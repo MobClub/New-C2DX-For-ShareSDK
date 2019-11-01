@@ -165,6 +165,7 @@
 		0B57A8BE226F07B6006F1DEA /* DouyinOpenSDKApiObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DouyinOpenSDKApiObject.h; sourceTree = "<group>"; };
 		0B57A8BF226F07B6006F1DEA /* libDouyinOpenSDK.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libDouyinOpenSDK.a; sourceTree = "<group>"; };
 		0B57A8C0226F07B6006F1DEA /* DouyinOpenSDKApi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DouyinOpenSDKApi.h; sourceTree = "<group>"; };
+		0B789DFC235D93FA002FEDF3 /* iOSShareSDKForCocos2DX-mobile.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "iOSShareSDKForCocos2DX-mobile.entitlements"; sourceTree = "<group>"; };
 		0B85BDE221A8010600029EFA /* HTMLResource.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = HTMLResource.bundle; sourceTree = "<group>"; };
 		0B85BDE321A8010600029EFA /* EAccountSDKArchive.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EAccountSDKArchive.framework; sourceTree = "<group>"; };
 		0B85BDE621A8010600029EFA /* AccountKitStrings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = AccountKitStrings.bundle; sourceTree = "<group>"; };
@@ -487,6 +488,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0B789DFC235D93FA002FEDF3 /* iOSShareSDKForCocos2DX-mobile.entitlements */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
@@ -894,7 +896,7 @@
 				LastUpgradeCheck = 0500;
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
-						DevelopmentTeam = Q87QUX3533;
+						DevelopmentTeam = LW5266U92D;
 						ProvisioningStyle = Manual;
 					};
 				};
@@ -1014,10 +1016,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_ENTITLEMENTS = "iOSShareSDKForCocos2DX-mobile.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;
-				DEVELOPMENT_TEAM = Q87QUX3533;
+				DEVELOPMENT_TEAM = LW5266U92D;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1084,7 +1087,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.mob.product.ShareSDK;
 				PROVISIONING_PROFILE = "";
-				PROVISIONING_PROFILE_SPECIFIER = MobProvisioningProfiles;
+				PROVISIONING_PROFILE_SPECIFIER = ShareSDKDomainDev;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(_COCOS_HEADER_IOS_BEGIN) $(_COCOS_HEADER_IOS_END)";
@@ -1096,6 +1099,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = YES;
+				CODE_SIGN_ENTITLEMENTS = "iOSShareSDKForCocos2DX-mobile.entitlements";
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				COMPRESS_PNG_FILES = NO;

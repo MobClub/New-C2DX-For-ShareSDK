@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="cn.sharesdk.hellocpp"
+      package="cn.sharesdk.demo"
       android:versionCode="1"
       android:versionName="1.0">
 
@@ -10,7 +10,7 @@
     <application
         android:label="@string/app_name"
         android:icon="@drawable/ic_launcher"
-        android:name="com.mob.MobApplication">
+        android:name="cn.sharesdk.App">
 		<!-- Tell Cocos2dxActivity the name of our .so -->
         <meta-data android:name="android.app.lib_name" android:value="cocos2dcpp" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="107704292745179"/>
@@ -138,8 +138,42 @@
                 <category android:name="android.intent.category.DEFAULT"></category>
             </intent-filter>
         </activity>
-        <meta-data android:name="Mob-AppKey" android:value="moba6b6c6d6"/>
-        <meta-data android:name="Mob-AppSecret" android:value="b89d2427a3bc7ad1aea1e1e8c1d36bf3"/>
+        
+        <!-- 闭环分享 -->
+        <activity
+            android:name="cn.sharesdk.loopshare.LoopShareActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!--android:host="cn.sharesdk.demo"-->
+                <!--android:scheme="moba0b0c0d0" />-->
+                <data
+                    android:scheme="ssdkmoba0b0c0d0"
+                    android:host="cn.sharesdk.loop"/>
+            </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="cn.sharesdk.framework.loopshare.RestoreTempActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+                
+                
+                
+         
+        
+        <!-- <meta-data android:name="Mob-AppKey" android:value="moba6b6c6d6"/>
+        <meta-data android:name="Mob-AppSecret" android:value="b89d2427a3bc7ad1aea1e1e8c1d36bf3"/> -->
+        
+        <meta-data android:name="Mob-AppKey" android:value="moba0b0c0d0"/>
+        <meta-data android:name="Mob-AppSecret" android:value="5713f0d88511f9f4cf100cade0610a34"/>
+        
             
     </application>
     

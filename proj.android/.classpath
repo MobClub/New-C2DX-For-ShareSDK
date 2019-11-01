@@ -1,62 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
-	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="lib" path="libs/libPluginProtocol.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="lib" path="libs/MobCommons-2019.0703.1704.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/MobTools-2019.0703.1704.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Accountkit-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Alipay-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Alipay-Core-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Alipay-Moments-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Cmcc-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Core-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Dingding-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Douban-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Dropbox-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Email-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Evernote-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Facebook-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-FacebookMessenger-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Flickr-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Foursquare-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-GooglePlus-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Instagram-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Instapaper-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-KaiXin-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Kakao-Core-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-KakaoStory-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-KakaoTalk-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Line-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Linkedin-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Meipai-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Mingdao-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Pinterest-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Pocket-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-QQ-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-QZone-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Reddit-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Renren-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-ShortMessage-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-SinaWeibo-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Telecom-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Telegram-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-TencentWeibo-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Tumblr-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Twitter-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-VKontakte-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Core-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Favorite-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Wechat-Moments-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-WhatsApp-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Yixin-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Yixin-Core-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Yixin-Moments-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-YouDao-3.6.1.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/ShareSDK-Youtube-3.6.1.jar"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK/libcocos2dx"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -86,6 +86,8 @@ public class ShareSDKUtils {
 	}
 	
 	public static void authorize(int reqID, int platformId) {
+		Log.e("qqq", " ShareSDKUtils===>  authorize() ");
+
 		if (DEBUG) {
 			System.out.println("authorize");
 		}
@@ -129,6 +131,7 @@ public class ShareSDKUtils {
 	}	
 	
 	public static void showUser(int reqID, int platformId) {
+		Log.e("qqq", " ShareSDKUtils===>  showUser() ");
 		if (DEBUG) {
 			System.out.println("showUser");
 		}

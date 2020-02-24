@@ -15,67 +15,68 @@
 USING_NS_CC;
 
 namespace cn
-{
-    namespace sharesdk
     {
-		class PlatId
-		{
-			public:
-				static const char* Unknown;
-            	static const char* SinaWeibo;         
-            	static const char* TencentWeibo;  
-            	static const char* DouBan;
-           		static const char* QZone; 
-            	static const char* Renren;
-            	static const char* Kaixin;
-            	static const char* Pengyou;
-            	static const char* Facebook;
-            	static const char* Twitter;
-            	static const char* Evernote;
-            	static const char* Foursquare;
-            	static const char* GooglePlus;
-            	static const char* Instagram;
-            	static const char* LinkedIn;
-            	static const char* Tumblr;        
-           		static const char* Mail;             
-            	static const char* SMS;              
-            	static const char* AirPrint;         
-            	static const char* Copy;             
-            	static const char* WeixiSession;     
-            	static const char* WeixiTimeline; 
-            	static const char* QQ;            
-            	static const char* Instapaper;       
-            	static const char* Pocket;           
-            	static const char* YouDaoNote;
-            	static const char* Pinterest;   
-            	static const char* Flickr;      
-            	static const char* Dropbox;    
-            	static const char* VKontakte;   
-            	static const char* WeixiFav;     
-            	static const char* YiXinSession;    
-            	static const char* YiXinTimeline; 
-            	static const char* YiXinFav;  
-            	static const char* MingDao;    
-    			static const char* Line;      
-    			static const char* WhatsApp;  
-    			static const char* KakaoTalk;   
-    			static const char* KakaoStory;   
-    			static const char* FacebookMessenger;
-    			static const char* Telegram;
-    			static const char* Bluetooth;
-    			static const char* Alipay;
-                static const char* KakaoPlatform;
-                static const char* EvernotePlatform;
-    			static const char* WechatPlatform;
-    			static const char* QQPlatform;
-    			static const char* Any; 
-				static const char* Cmcc;
-				static const char* Reddit;
-                static const char* FacebookAccount;
-                static const char* ESurfing;
-				static const char* Douyin;
-		};
-
+    namespace sharesdk
+        {
+        class PlatId
+        {
+        public:
+            static const char* Unknown;
+            static const char* SinaWeibo;
+            static const char* TencentWeibo;
+            static const char* DouBan;
+            static const char* QZone;
+            static const char* Renren;
+            static const char* Kaixin;
+            static const char* Pengyou;
+            static const char* Facebook;
+            static const char* Twitter;
+            static const char* Evernote;
+            static const char* Foursquare;
+            static const char* GooglePlus;
+            static const char* Instagram;
+            static const char* LinkedIn;
+            static const char* Tumblr;
+            static const char* Mail;
+            static const char* SMS;
+            static const char* AirPrint;
+            static const char* Copy;
+            static const char* WeixiSession;
+            static const char* WeixiTimeline;
+            static const char* QQ;
+            static const char* Instapaper;
+            static const char* Pocket;
+            static const char* YouDaoNote;
+            static const char* Pinterest;
+            static const char* Flickr;
+            static const char* Dropbox;
+            static const char* VKontakte;
+            static const char* WeixiFav;
+            static const char* YiXinSession;
+            static const char* YiXinTimeline;
+            static const char* YiXinFav;
+            static const char* MingDao;
+            static const char* Line;
+            static const char* WhatsApp;
+            static const char* KakaoTalk;
+            static const char* KakaoStory;
+            static const char* FacebookMessenger;
+            static const char* Telegram;
+            static const char* Bluetooth;
+            static const char* Alipay;
+            static const char* KakaoPlatform;
+            static const char* EvernotePlatform;
+            static const char* WechatPlatform;
+            static const char* QQPlatform;
+            static const char* Any;
+            static const char* Cmcc;
+            static const char* Reddit;
+            static const char* FacebookAccount;
+            static const char* ESurfing;
+            static const char* Douyin;
+            static const char* Apple;
+        };
+        
         /**
          *	@brief	ShareSDK
          */
@@ -105,7 +106,7 @@ namespace cn
              *	@param 	platType 	平台类型
              */
             static void cancelAuthorize(C2DXPlatType platType);
-
+            
             /**
              *	@brief	用户是否授权
              *
@@ -122,7 +123,7 @@ namespace cn
              *
              *	@return	true 已安装客户端， false 尚未安装客户端
              */
-			static bool isClientValid(C2DXPlatType platType);
+            static bool isClientValid(C2DXPlatType platType);
             
             /**
              *	@brief	获取用户信息
@@ -132,7 +133,7 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int getUserInfo(C2DXPlatType platType, C2DXGetUserInfoResultEvent callback);
-
+            
             /**
              *	@brief	获取用户授权信息
              *
@@ -151,7 +152,7 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int shareContent(C2DXPlatType platType, C2DXDictionary *content, C2DXShareResultEvent callback);
-
+            
             /**
              *	@brief	分享内容
              *
@@ -215,7 +216,7 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int showShareView(C2DXPlatType platType, C2DXDictionary *content, bool useClientShare, C2DXShareResultEvent callback);
-
+            
             /**
              *	@brief	获得好友列表
              *
@@ -226,7 +227,7 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int getFriendList(C2DXPlatType platType, int count, int page, C2DXGetFriendsResultEvent callback);
-
+            
             /**
              *	@brief	关注好友
              *
@@ -235,16 +236,16 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int addFriend(C2DXPlatType platType, const char* account, C2DXAddFriendResultEvent callback);
-
+            
             /**
-			 *	@brief	关闭SSO授权信息
-			 *
-			 *	@param 	platType 	平台类型
-			 *	@param 	account 	呢称
-			 *	@return 	reqID 	流水号
-                         */
+             *	@brief	关闭SSO授权信息
+             *
+             *	@param 	platType 	平台类型
+             *	@param 	account 	呢称
+             *	@return 	reqID 	流水号
+             */
             static void disableSSOWhenAuthorize(bool isDiaableSSO);
-
+            
             /**
              * @brief 显示一个消息
              * @param msg 消息内容
@@ -284,6 +285,19 @@ namespace cn
              *	@return 	reqID 	流水号
              */
             static int showShareViewWithConfigurationFile(C2DXPlatType platType, const char* contentName,C2DXDictionary *customFields, C2DXShareResultEvent callback);
+            
+            /**
+             添加闭环分享
+             */
+            static void shareLinkConfigure();
+            
+            
+            /**
+             *    @brief    闭环分享回调
+             *
+             *    @param     callback     回调方法
+             */
+            static void shareLinkRestoreInfo(C2DXShareLinksResultEvent callback);
         };
     }
 }

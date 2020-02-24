@@ -12,7 +12,6 @@ public:
     virtual bool applicationDidFinishLaunching();
     virtual void applicationDidEnterBackground();
     virtual void applicationWillEnterForeground();
-    
     //初始化ShareSDK
     void initShareSDKConfig();
 };

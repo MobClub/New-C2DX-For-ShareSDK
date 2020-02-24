@@ -17,10 +17,9 @@
 #import <MOBFoundation/MOBFRegex.h>
 #import <MOBFoundation/MOBFoundation.h>
 #import <ShareSDK/NSMutableDictionary+SSDKShare.h>
-
 #import <ShareSDK/ShareSDK+Base.h>
 #import <ShareSDKConfigFile/ShareSDK+XML.h>
-
+#import <objc/message.h>
 
 static UIView *_refView = nil;
 
@@ -1133,3 +1132,67 @@ void C2DXiOSShareSDK::shareWithConfigurationFile(int reqID, const char *contentN
      }];
 }
 
+@interface C2DXShareLinkRestoreDelegate : NSObject <ISSERestoreSceneDelegate>
+{
+    @package
+    C2DXShareLinksResultEvent _event;
+}
+@end
+
+@implementation C2DXShareLinkRestoreDelegate
++ (id)shareInstance{
+    static  C2DXShareLinkRestoreDelegate *obj = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        obj = [[C2DXShareLinkRestoreDelegate alloc] init];
+    });
+    return obj;
+}
+
+- (void)ISSEWillRestoreScene:(SSERestoreScene *)scene error:(NSError *)error{
+    if(!_event) return;
+    C2DXDictionary *sceneInfo = C2DXDictionary::create();
+    C2DXDictionary *errorInfo = C2DXDictionary::create();
+    if(scene.path){
+        sceneInfo->setObject(C2DXString::create(scene.path.UTF8String), "path");
+    }
+    if(scene.className){
+        sceneInfo->setObject(C2DXString::create(scene.className.UTF8String), "className");
+    }
+    if(scene.params){
+        sceneInfo->setObject(convertNSDictToCCDict(scene.params), "params");
+    }
+    
+    errorInfo->setObject(C2DXInteger::create((int)error.code), "error_code");
+    
+    if(error.domain){
+        errorInfo->setObject(C2DXString::create(error.domain.UTF8String), "domain");
+    }
+    if(error.userInfo){
+        errorInfo->setObject(convertNSDictToCCDict(error.userInfo), "userInfo");
+    }
+    _event(sceneInfo,errorInfo);
+}
+
+- (void)setEvent:(C2DXShareLinksResultEvent)event{
+    _event = event;
+}
+
+@end
+
+void C2DXiOSShareSDK::shareLinkConfigure(){
+    [ShareSDK setRestoreSceneDelegate:[C2DXShareLinkRestoreDelegate shareInstance]];
+}
+void C2DXiOSShareSDK::shareLinkRestoreInfo(C2DXShareLinksResultEvent callBack){
+    [[C2DXShareLinkRestoreDelegate shareInstance] setEvent:callBack];
+}
+__attribute__((constructor)) static void SSDKC2DXiOSApplicationExcImp(){
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SEL sel = sel_registerName("addChannelWithSdkName:channel:");
+        Method method = class_getClassMethod([MobSDK class],sel) ;
+        if (method && method_getImplementation(method) != _objc_msgForward) {
+        ((void (*)(id, SEL,id,id))objc_msgSend)([MobSDK class],sel,@"SHARESDK",@"1");
+        }
+    });
+}

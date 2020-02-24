@@ -10,13 +10,13 @@
 using namespace cocos2d;
 
 //cocos3.6版本以下，编译
-//void cocos_android_app_init (JNIEnv* env, jobject thiz) {
-//    LOGD("cocos_android_app_init");
-//    AppDelegate *pAppDelegate = new AppDelegate();
-//}
-
-//cocos3.6版本以上，编译
-void cocos_android_app_init (JNIEnv* env) {
+void cocos_android_app_init (JNIEnv* env, jobject thiz) {
     LOGD("cocos_android_app_init");
     AppDelegate *pAppDelegate = new AppDelegate();
 }
+
+//cocos3.6版本以上，编译
+//void cocos_android_app_init (JNIEnv* env) {
+//    LOGD("cocos_android_app_init");
+//    AppDelegate *pAppDelegate = new AppDelegate();
+//}

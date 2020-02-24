@@ -7,7 +7,7 @@ android {
 
 
     defaultConfig {
-        applicationId "cn.sharesdk.hellocpp"
+        applicationId "cn.sharesdk.demo"
         minSdkVersion 19
         targetSdkVersion 21
         versionCode 1
@@ -24,13 +24,27 @@ android {
 
     signingConfigs {
 
-       release {
+        config {
+            keyAlias 'demokey.keystore'
+            keyPassword '123456'
+            storeFile file('../demokey.keystore')
+            storePassword '123456'
+        }
+
+        release {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 storeFile file(RELEASE_STORE_FILE)
                 storePassword RELEASE_STORE_PASSWORD
                 keyAlias RELEASE_KEY_ALIAS
                 keyPassword RELEASE_KEY_PASSWORD
             }
+        }
+
+        debug {
+            keyAlias 'demokey.keystore'
+            keyPassword '123456'
+            storeFile file('../demokey.keystore')
+            storePassword '123456'
         }
     }
 
@@ -41,6 +55,14 @@ android {
             if (project.hasProperty("RELEASE_STORE_FILE")) {
                 signingConfig signingConfigs.release
             }
+        }
+
+        debug {
+            debuggable true
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //signingConfig signingConfigs.release
+            signingConfig signingConfigs.debug
         }
     }
 }

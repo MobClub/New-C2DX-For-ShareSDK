@@ -67,7 +67,7 @@ const char* PlatId::Reddit = "56";           /**< Reddit*/
 const char* PlatId::ESurfing = "57";         /**< 天翼*/
 const char* PlatId::FacebookAccount = "58";  /**< FacebookAccount*/
 const char* PlatId::Douyin = "59";  		 /**< 抖音*/
-
+const char* PlatId::Apple = "61";           /**< 苹果*/
 const char* PlatId::KakaoPlatform = "995";   /**< Kakao Series */
 const char* PlatId::EvernotePlatform = "996";/**< Evernote Series */
 const char* PlatId::WechatPlatform = "997";  /**< Wechat Series */
@@ -428,4 +428,37 @@ int C2DXShareSDK::showShareViewWithConfigurationFile(C2DXPlatType platType,const
     
 #endif
     return reqID;
+}
+void C2DXShareSDK::shareLinkConfigure(){
+    reqID ++;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+         
+    //Andorid
+         
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+         
+    //iOS
+    C2DXiOSShareSDK::shareLinkConfigure();
+         
+#endif
+}
+
+
+/**
+ *    @brief    闭环分享回调
+ *
+ *    @param     callback     回调方法
+ */
+void C2DXShareSDK::shareLinkRestoreInfo(C2DXShareLinksResultEvent callback){
+    reqID ++;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+         
+    //Andorid
+         
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+         
+    //iOS
+    C2DXiOSShareSDK::shareLinkRestoreInfo(callback);
+         
+#endif
 }

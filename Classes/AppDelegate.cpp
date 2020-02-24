@@ -77,6 +77,8 @@ bool AppDelegate::applicationDidFinishLaunching()
     return true;
 }
 
+
+
 void AppDelegate::applicationDidEnterBackground()
 {
     Director::getInstance()->stopAnimation();
@@ -85,6 +87,10 @@ void AppDelegate::applicationDidEnterBackground()
 void AppDelegate::applicationWillEnterForeground()
 {
     Director::getInstance()->startAnimation();
+}
+
+void ShareLinkRestoreCallBack(__Dictionary *res,__Dictionary *error){
+    
 }
 
 void AppDelegate::initShareSDKConfig()
@@ -230,5 +236,8 @@ void AppDelegate::initShareSDKConfig()
     // <string>iosv1101</string>
     // <key>MOBAppSecret</key>
     // <string></string>
-    cn::sharesdk::C2DXShareSDK::registerAppAndSetPlatformConfig("moba6b6c6d6","b89d2427a3bc7ad1aea1e1e8c1d36bf3",totalDict);
+ 
+  cn::sharesdk::C2DXShareSDK::registerAppAndSetPlatformConfig("moba0b0c0d0","5713f0d88511f9f4cf100cade0610a34",totalDict);
+    cn::sharesdk::C2DXShareSDK::shareLinkConfigure();
+    cn::sharesdk::C2DXShareSDK::shareLinkRestoreInfo(ShareLinkRestoreCallBack);
 }

@@ -100,6 +100,22 @@ static AppDelegate s_sharedApplication;
     cocos2d::Application::getInstance()->applicationWillEnterForeground();
 }
 
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options{
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(nullable NSString *)sourceApplication annotation:(id)annotation{
+    return YES;
+}
+
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler{
+    return YES;
+}
+
 - (void)dealloc {
     [window release];
     [super dealloc];

@@ -182,6 +182,20 @@ namespace cn
              *	@param 	callback 	回调方法
              */
             static void showShareEditViewWithConfigurationFile(int reqID,C2DXPlatType platType, const char *contentName, C2DXDictionary *customFields,C2DXShareResultEvent callback);
+            
+            /**
+             添加闭环分享
+             */
+            static void shareLinkConfigure();
+            
+            
+            /**
+            *    @brief    闭环分享回调
+            *
+            *    @param     callback     回调方法
+            */
+            static void shareLinkRestoreInfo(C2DXShareLinksResultEvent callback);
+
         };
     }
 }

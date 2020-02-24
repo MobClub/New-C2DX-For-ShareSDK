@@ -101,6 +101,7 @@ namespace cn
 			C2DXPlatTypeCmcc = 55,             /**<中国移动 */
 			C2DXPlatTypeReddit = 56,           /**<Reddit */
 			C2DXPlatTypeDouyin = 59,           /**抖音 */
+            C2DXPlatTypeApple = 61,             /**苹果 */
             C2DXPlatTypeYiXinPlatform = 994,   /**< 易信 Series */
             C2DXPlatTypeKakaoPlatform = 995,   /**< kakao Series */
             C2DXPlatTypeEvernotePlatform = 996,/**< 印象笔记国际版 */
@@ -162,6 +163,11 @@ namespace cn
          *	@brief	获取好友列表回调事件
          */
         typedef void(*C2DXGetFriendsResultEvent) (int reqID, C2DXResponseState state, C2DXPlatType platType,  C2DXDictionary *res);
+    
+        /**
+         *    @brief    闭环分享代理回调
+         */
+         typedef void(*C2DXShareLinksResultEvent) (C2DXDictionary *res,  C2DXDictionary *error);
     }
 }
 
